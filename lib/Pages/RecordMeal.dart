@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:inner_peace_v1/DatabaseHelper.dart';
-import 'package:inner_peace_v1/main.dart';
-import 'package:inner_peace_v1/mealData.dart';
-import 'package:inner_peace_v1/Pages/navigationMenu.dart';
-import 'package:inner_peace_v1/guiElements.dart';
-import 'package:inner_peace_v1/Pages/recordSymptoms.dart';
+import 'package:inner_peace_v1/Database/DatabaseHelper.dart';
+import 'package:inner_peace_v1/Database/IngredientData.dart';
+import 'package:inner_peace_v1/Main.dart';
+import 'package:inner_peace_v1/Database/MealData.dart';
+import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
+import 'package:inner_peace_v1/GuiElements.dart';
+import 'package:inner_peace_v1/Pages/RecordSymptoms.dart';
 
 // ignore: camel_case_types
-class recordMeal extends StatelessWidget {
+class RecordMeal extends StatelessWidget {
 
   var mealName = TextEditingController();
   var ingredients = TextEditingController();
   List<String> ingredientsArray = [];
-  List<mealData> taskList = [];
+  List<MealData> taskList = [];
 
-  String symptoms = "";
   final double width = 10.0;
   final double height = 20;
 
-  final formKey = new GlobalKey<FormState>();
+  set id(int id) {}
+  set meal(String meal) {}
+
+  //final formKey = new GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -49,19 +52,6 @@ class recordMeal extends StatelessWidget {
             description: 'Zutaten mit Komma trennen',
             textController: ingredients,
           ),
-          // Expanded(
-          //   child: Container(
-          //     child: taskList.isEmpty
-          //         ? Container()
-          //         : ListView.builder(itemBuilder: (ctx, index) {
-          //             //if (index == taskList.length) return null;
-          //             return ListTile(
-          //               title: Text(taskList[index].gericht),
-          //               leading: Text(taskList[index].id.toString()),
-          //             );
-          //           }),
-          //   ),
-          // ),
           Flexible(
             child: Row(
               children: <Widget>[
@@ -89,8 +79,9 @@ class recordMeal extends StatelessWidget {
                       ingredientsArray = ingredients.text.split(',');
                       print(mealName.text);
                       print(ingredientsArray);
+                      //var ingredientID =
                       addEntry();
-                      print(await DatabaseHelper.instance.meals());
+                      //print(await DatabaseHelper.instance.allMeals());
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           //toDo save inputs
@@ -110,19 +101,23 @@ class recordMeal extends StatelessWidget {
     ),
   );
 
-
   Future addEntry() async {
 
-    var note = mealData(
-      meal: mealName.text,
-      ingredients: ingredients.text,
-      // symptomTotal: symptomTotal,
-      // generalWellbeing: generalWellbeing,
-      // cramps: cramps,
-      // flatulence: flatulence,
-      // bowel: bowel,
+    var note = MealData(
+        id : 0,
+        meal : mealName.text,
     );
+    var mealID = await DatabaseHelper.instance.insertMeal(note);
+    //var maxIdResult = await db.rawQuery("SELECT MAX(id) as last_inserted_id FROM meal");
+    //var id = maxIdResult.first["last_inserted_id"];
 
-    await DatabaseHelper.instance.insertMeal(note);
+
+    for(int i = 0; i ==ingredientsArray.length; i++){
+      var ingredientList = IngredientData(
+        //todo make id change
+          ingredientID: 0,
+          ingredient: ingredientsArray[i],
+      );
+    }
   }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:inner_peace_v1/Pages/recordedMeals.dart';
-import 'package:inner_peace_v1/Pages/infos.dart';
-import 'package:inner_peace_v1/Pages/recordMeal.dart';
-import 'package:inner_peace_v1/Pages/pickMealForSymptoms.dart';
-import 'package:inner_peace_v1/Pages/intolerances.dart';
+import 'package:inner_peace_v1/Pages/RecordedMeals.dart';
+import 'package:inner_peace_v1/Pages/Infos.dart';
+import 'package:inner_peace_v1/Pages/RecordMeal.dart';
+import 'package:inner_peace_v1/Pages/PickMealForSymptoms.dart';
+import 'package:inner_peace_v1/Pages/Intolerances.dart';
 // ignore: camel_case_types
 class menu extends StatelessWidget {
   @override
@@ -22,7 +22,7 @@ class menu extends StatelessWidget {
                   title: Text('Mahlzeit erfassen'),
                   onTap: (){
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => recordMeal(),
+                      builder: (context) => RecordMeal(),
                     ));
                   }
                 ),
@@ -62,7 +62,7 @@ class menu extends StatelessWidget {
                   title: Text('Infos'),
                     onTap: (){
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => info(),
+                        builder: (context) => infos(),
                       ));
                     }
                 ),

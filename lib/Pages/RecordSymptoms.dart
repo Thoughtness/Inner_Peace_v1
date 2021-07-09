@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inner_peace_v1/Pages/navigationMenu.dart';
-import 'package:inner_peace_v1/guiElements.dart';
+import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
+import 'package:inner_peace_v1/GuiElements.dart';
 // ignore: camel_case_types
 class recordSymptoms extends StatelessWidget {
   @override

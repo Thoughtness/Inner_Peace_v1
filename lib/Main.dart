@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inner_peace_v1/Pages/navigationMenu.dart';
+import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 import 'package:flutter/widgets.dart';
 
 void main() async {

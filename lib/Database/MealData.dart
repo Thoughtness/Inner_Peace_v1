@@ -1,37 +1,34 @@
-// ignore: camel_case_types
-class mealData{
-  int? id;
-  String meal;
-  String ingredients;
-  //List<String> ingredients;
-  double? symptomTotal;
-  double? generalWellbeing;
-  double? cramps;
-  double? flatulence;
-  double? bowel;
-
-  mealData({
-    this.id,
+class MealData {
+  late int id;
+  late String meal;
+  //int? symptomID;
+  //int? ingredientID;
+  //static final columns = ["id", "meal"];
+  MealData({
+    required this.id,
     required this.meal,
-    required this.ingredients,
-    this.symptomTotal,
-    this.generalWellbeing,
-    this.cramps,
-    this.flatulence,
-    this.bowel,
+    //this.symptomID,
+    //this.ingredientID,
   });
 
-  // String get _meal => meal;
+  // factory MealData.fromMap(Map<String, dynamic> data) {
+  //   return MealData(
+  //     data['id'],
+  //     data['meal'],
+  //   );
+  // }
+
+  MealData.fromMap(Map<String, dynamic> map) {
+    this.id = map['id'];
+    this.meal = map['meal'];
+  }
 
   Map<String, dynamic> toMap() {
     return {
-      'id' : id,
+      'id': id,
       'meal': meal,
-      'ingredients': ingredients,
-      'generalWellbeing': generalWellbeing,
-      'cramps': cramps,
-      'flatulence': flatulence,
-      'bowel': bowel,
+      'symptomID': id,
+      'ingredientsID': id,
     };
   }
 
