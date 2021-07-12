@@ -1,14 +1,14 @@
 class MealData {
-  late int id;
+  //late int id;
   late String meal;
-  //int? symptomID;
-  //int? ingredientID;
+  int? symptomID;
+  int? mealIngredientID;
   //static final columns = ["id", "meal"];
   MealData({
-    required this.id,
+    //required this.id,
     required this.meal,
-    //this.symptomID,
-    //this.ingredientID,
+    this.symptomID,
+    this.mealIngredientID,
   });
 
   // factory MealData.fromMap(Map<String, dynamic> data) {
@@ -19,16 +19,16 @@ class MealData {
   // }
 
   MealData.fromMap(Map<String, dynamic> map) {
-    this.id = map['id'];
+    //this.id = map['id'];
     this.meal = map['meal'];
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      //'id': id,
       'meal': meal,
-      'symptomID': id,
-      'ingredientsID': id,
+      //'symptomID': id,
+      //'ingredientsID': id,
     };
   }
 

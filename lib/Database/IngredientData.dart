@@ -1,6 +1,6 @@
 class IngredientData {
-  int? id;
-  int ingredientID;
+  //int? id;
+  int? ingredientID;
   String ingredient;
   double? symptomTotal;
   double? generalWellbeingAverage;
@@ -9,8 +9,8 @@ class IngredientData {
   double? bowelAverage;
 
   IngredientData({
-    this.id,
-    required this.ingredientID,
+    //this.id,
+    this.ingredientID,
     required this.ingredient,
     this.symptomTotal,
     this.generalWellbeingAverage,
@@ -21,13 +21,13 @@ class IngredientData {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      //'id': id,
       'ingredientID': ingredientID,
-      'ingredients': ingredient,
-      'generalWellbeing': generalWellbeingAverage,
-      'cramps': crampsAverage,
-      'flatulence': flatulenceAverage,
-      'bowel': bowelAverage,
+      'ingredient': ingredient,
+      'generalWellbeingAverage': generalWellbeingAverage,
+      'crampsAverage': crampsAverage,
+      'flatulenceAverage': flatulenceAverage,
+      'bowelAverage': bowelAverage,
     };
   }
 }

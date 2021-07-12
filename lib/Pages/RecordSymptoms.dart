@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 import 'package:inner_peace_v1/GuiElements.dart';
 // ignore: camel_case_types
-class recordSymptoms extends StatelessWidget {
+class RecordSymptoms extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
+    backgroundColor: Colors.teal[100],
         endDrawer: menu(),
         appBar: AppBar(
           title: Text(
@@ -15,12 +16,22 @@ class recordSymptoms extends StatelessWidget {
           ),
           backgroundColor: Colors.cyanAccent,
         ),
-        body: Column(
+        body: Stack(
           children: <Widget>[
-            new customSlider(title: 'Allgemeines Wohlbefinden', good: "Gut", bad: "Schlecht"),
-            new customSlider(title: 'Krämpfe', good: "Keine", bad: "Extrem"),
-            new customSlider(title: 'Blähungen', good: "Keine", bad: "Extrem"),
-            new customSlider(title: 'Stuhlgang', good: "Fest", bad: "Flüssig"),
+            Positioned.fill(
+              child: Image(
+                image: AssetImage('assets/Inner_Peace.png'),
+                fit: BoxFit.fill,
+              ),
+            ),
+            Column(
+              children: <Widget>[
+                new customSlider(title: 'Allgemeines Wohlbefinden', good: "Gut", bad: "Schlecht"),
+                new customSlider(title: 'Krämpfe', good: "Keine", bad: "Extrem"),
+                new customSlider(title: 'Blähungen', good: "Keine", bad: "Extrem"),
+                new customSlider(title: 'Stuhlgang', good: "Fest", bad: "Flüssig"),
+              ],
+            ),
           ],
         ),
       );

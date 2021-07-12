@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+
 // ignore: camel_case_types
 class customRow extends StatelessWidget {
   final textController;
   final String description;
   final String title;
-
+  final double left = 10.0;
+  final double top = 10.0;
+  final double right = 10.0;
+  final double bottom = 0.0;
 
   customRow({
     required this.title,
@@ -16,51 +20,55 @@ class customRow extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = 10.0;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      padding: EdgeInsets.fromLTRB(this.left, this.top, this.right, this.bottom),
       child: Row(
-      children: <Widget>[
-        //SizedBox(width: width),
-        Flexible(
-          flex: 1,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              border: Border.all(width: 1.0),
-              borderRadius: BorderRadius.all(Radius.circular(5.0) //
-                  ),
-            ),
-            //height: 49,
-            child: ListTile(
-              title: Text(title),
-            ),
-          ),
-        ),
-        SizedBox(width: width),
-        Flexible(
-          flex: 3,
-          child: Container(
-            height: 58,
-            child: TextField(
-              decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(),
-                  hintText: description),
-              controller: textController,
+        children: <Widget>[
+          //SizedBox(width: width),
+          Flexible(
+            flex: 1,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.cyanAccent,
+                border: Border.all(width: 1.0),
+                borderRadius: BorderRadius.all(Radius.circular(5.0) //
+                    ),
+              ),
+              //height: 49,
+              child: ListTile(
+                title: Text(title),
+              ),
             ),
           ),
-        ),
-        //SizedBox(width: width),
-      ],
-    ),
+          SizedBox(width: width),
+          Flexible(
+            flex: 3,
+            child: Container(
+              height: 58,
+              child: TextField(
+                decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: OutlineInputBorder(),
+                    hintText: description),
+                controller: textController,
+              ),
+            ),
+          ),
+          //SizedBox(width: width),
+        ],
+      ),
     );
   }
 }
+
 // ignore: camel_case_types
 class customButton extends StatelessWidget {
   final VoidCallback onClick;
   final String text;
-
+  final double left = 10.0;
+  final double top = 10.0;
+  final double right = 10.0;
+  final double bottom = 0.0;
 
   customButton({
     required this.text,
@@ -69,22 +77,28 @@ class customButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        ElevatedButton(
-          onPressed: onClick,
-          child: Text(text),
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.cyanAccent,
-            minimumSize: Size(200, 45),
-            primary: Colors.black,
-          ),
-        )
-      ],
+    return Container(
+      padding: EdgeInsets.fromLTRB(this.left, this.top, this.right, this.bottom),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          ElevatedButton(
+            onPressed: onClick,
+            child: Text(text),
+            style: TextButton.styleFrom(
+              side: BorderSide(width: 2.0, color: Colors.black),
+              backgroundColor: Colors.cyanAccent,
+              minimumSize: Size(0, 45),
+              primary: Colors.black,
+            ),
+          )
+        ],
+      ),
     );
   }
 }
+
 // ignore: camel_case_types
 class customSlider extends StatefulWidget {
   final String title;
@@ -102,6 +116,7 @@ class customSlider extends StatefulWidget {
     return _customSlider(title: title, good: good, bad: bad);
   }
 }
+
 // ignore: camel_case_types
 class _customSlider extends State<customSlider> {
   String title = "";
@@ -119,21 +134,17 @@ class _customSlider extends State<customSlider> {
   @override
   Widget build(BuildContext context) {
     return Container(
-
       padding: EdgeInsets.symmetric(horizontal: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           SizedBox(height: height),
           Container(
-            //width: MediaQuery.of(context).copyWith().size.width / 1.1,
-
             height: 110,
             decoration: myBoxDecoration(),
             child: Column(
               children: <Widget>[
                 Container(
-                  //color: Colors.cyanAccent,
                   decoration: BoxDecoration(
                     color: Colors.cyanAccent,
                     border: Border.all(width: 1.0),
@@ -207,6 +218,7 @@ class _customSlider extends State<customSlider> {
 
 BoxDecoration myBoxDecoration() {
   return BoxDecoration(
+    color: Colors.teal[50],
     border: Border.all(width: 2.0),
     borderRadius: BorderRadius.all(Radius.circular(7.0)),
   );

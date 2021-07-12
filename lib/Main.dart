@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:inner_peace_v1/GuiElements.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 import 'package:flutter/widgets.dart';
+import 'package:inner_peace_v1/Pages/RecordMeal.dart';
+import 'package:inner_peace_v1/Pages/RecordedMeals.dart';
+import 'package:inner_peace_v1/Pages/PickMealForSymptoms.dart';
+import 'package:inner_peace_v1/Pages/Intolerances.dart';
+import 'package:inner_peace_v1/Pages/Infos.dart';
 
 void main() async {
   runApp(MyApp());
@@ -22,17 +28,88 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) => Scaffold(
+        backgroundColor: Colors.teal[100],
         endDrawer: menu(),
         appBar: AppBar(
-          title: Text('Hauptmenü',
+          title: Text(
+            'Hauptmenü',
             style: TextStyle(
               color: Colors.black,
             ),
           ),
           backgroundColor: Colors.cyanAccent,
+        ),
+        body: Stack(
+          children: <Widget>[
+            Positioned.fill(
+              child: Image(
+                image: AssetImage('assets/Inner_Peace.png'),
+                fit: BoxFit.fill,
+              ),
+            ),
+            Column(
+              children: <Widget>[
+                customButton(
+                  text: "Mahlzeit erfassen",
+                  onClick: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        //toDo save inputs
+                        builder: (context) => RecordMeal(),
+                      ),
+                    );
+                  },
+                ),
+                customButton(
+                  text: "Erfasste Mahlzeiten",
+                  onClick: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        //toDo save inputs
+                        builder: (context) => RecordedMeals(),
+                      ),
+                    );
+                  },
+                ),
+                customButton(
+                  text: "Symptome erfassen",
+                  onClick: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        //toDo save inputs
+                        builder: (context) => PickMealForSymptoms(),
+                      ),
+                    );
+                  },
+                ),
+                customButton(
+                  text: "Unverträglichkeiten",
+                  onClick: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        //toDo save inputs
+                        builder: (context) => Intolerances(),
+                      ),
+                    );
+                  },
+                ),
+                customButton(
+                  text: "Infos",
+                  onClick: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        //toDo save inputs
+                        builder: (context) => Infos(),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+
+          ],
         ),
       );
 }

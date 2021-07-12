@@ -32,7 +32,7 @@ class menu extends StatelessWidget {
                   title: Text('Erfasste Mahlzeiten'),
                     onTap: (){
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => erfassteMahlzeiten(),
+                        builder: (context) => RecordedMeals(),
                       ));
                     }
                 ),
@@ -42,7 +42,7 @@ class menu extends StatelessWidget {
                   title: Text('Symptome erfassen'),
                     onTap: (){
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => pickMealForSymptoms(),
+                        builder: (context) => PickMealForSymptoms(),
                       ));
                     }
                 ),
@@ -52,7 +52,7 @@ class menu extends StatelessWidget {
                   title: Text('Unverträglichkeiten'),
                     onTap: (){
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => unvertraeglichkeiten(),
+                        builder: (context) => Intolerances(),
                       ));
                     }
                 ),
@@ -62,7 +62,7 @@ class menu extends StatelessWidget {
                   title: Text('Infos'),
                     onTap: (){
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => infos(),
+                        builder: (context) => Infos(),
                       ));
                     }
                 ),

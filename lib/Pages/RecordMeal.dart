@@ -7,9 +7,7 @@ import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 import 'package:inner_peace_v1/GuiElements.dart';
 import 'package:inner_peace_v1/Pages/RecordSymptoms.dart';
 
-// ignore: camel_case_types
 class RecordMeal extends StatelessWidget {
-
   var mealName = TextEditingController();
   var ingredients = TextEditingController();
   List<String> ingredientsArray = [];
@@ -20,104 +18,151 @@ class RecordMeal extends StatelessWidget {
 
   set id(int id) {}
   set meal(String meal) {}
+  final double left = 10.0;
+  final double top = 10.0;
+  final double right = 10.0;
+  final double bottom = 0.0;
 
   //final formKey = new GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: Colors.teal[100],
-    endDrawer: menu(),
-    appBar: AppBar(
-      title: Text(
-        'Mahlzeit erfassen',
-        style: TextStyle(
-          color: Colors.black,
-        ),
-      ),
-      backgroundColor: Colors.cyanAccent,
-    ),
-    body: Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          SizedBox(height: height),
-          customRow(
-            title: 'Gericht',
-            description: 'Gericht hier benennen',
-            textController: mealName,
-          ),
-          SizedBox(height: height),
-          customRow(
-            title: 'Zutaten',
-            description: 'Zutaten mit Komma trennen',
-            textController: ingredients,
-          ),
-          Flexible(
-            child: Row(
-              children: <Widget>[
-                const SizedBox(width: 10),
-                Flexible(
-                  flex: 20,
-                  child: customButton(
-                    text: 'Symptome hinzufügen',
-                    onClick: (){
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          //toDo save inputs
-                          builder: (context) => recordSymptoms(),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(width: width),
-                Flexible(
-                  flex: 20,
-                  child: customButton(
-                    text: 'Mahlzeit speichern',
-                    onClick: () async {
-                      ingredientsArray = ingredients.text.split(',');
-                      print(mealName.text);
-                      print(ingredientsArray);
-                      //var ingredientID =
-                      addEntry();
-                      //print(await DatabaseHelper.instance.allMeals());
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          //toDo save inputs
-                          builder: (context) => MyApp(),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(width: width),
-              ],
+        backgroundColor: Colors.teal[100],
+        endDrawer: menu(),
+        appBar: AppBar(
+          title: Text(
+            'Mahlzeit erfassen',
+            style: TextStyle(
+              color: Colors.black,
             ),
           ),
-          SizedBox(height: height),
-        ],
-      ),
-    ),
-  );
+          backgroundColor: Colors.cyanAccent,
+        ),
+        body: Stack(
+          children: <Widget>[
+            Positioned.fill(
+              child: Image(
+                image: AssetImage('assets/Inner_Peace.png'),
+                fit: BoxFit.fill,
+              ),
+            ),
+            Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  customRow(
+                    title: 'Gericht',
+                    description: 'Gericht hier benennen',
+                    textController: mealName,
+                  ),
+                  customRow(
+                    title: 'Zutaten',
+                    description: 'Zutaten einzeln hinzufügen',
+                    textController: ingredients,
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(
+                        this.left, this.top, this.right, this.bottom),
+                    child: ElevatedButton(
+                      onPressed: () async{
+                        //todo save into DB
+                        addIngredient();
+                        ingredients.clear();
+                        List<IngredientData> ingredient = await DatabaseHelper.instance.allIngredients();
+                        for(var i in ingredient){
+                          print(i.ingredient);
+                        }
+                      },
+                      child: Text("Zutat hinzufügen"),
+                      style: TextButton.styleFrom(
+                        side: BorderSide(width: 2.0, color: Colors.black),
+                        backgroundColor: Colors.cyanAccent,
+                        minimumSize: Size(0, 45),
+                        primary: Colors.black,
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    child: Row(
+                      children: <Widget>[
+                        Flexible(
+                          flex: 20,
+                          child: customButton(
+                            text: 'Symptome hinzufügen',
+                            onClick: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  //toDo save inputs
+                                  builder: (context) => RecordSymptoms(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        Flexible(
+                          flex: 20,
+                          child: customButton(
+                            text: 'Mahlzeit speichern',
+                            onClick: () async {
+                              ingredientsArray = ingredients.text.split(',');
+                              print(mealName.text);
+                              print(ingredientsArray);
+                              //var ingredientID =
+                              addMeal();
+                              List<MealData> meals = await DatabaseHelper.instance.allMeals();
+                              for(var i in meals){
+                                print(i.meal);
+                              }
+                              //print(await DatabaseHelper.instance.allMeals());
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  //toDo save inputs
+                                  builder: (context) => MyApp(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: height),
+                ],
+              ),
+            ),
 
-  Future addEntry() async {
+          ],
+        ),
+      );
 
-    var note = MealData(
-        id : 0,
-        meal : mealName.text,
+  Future addMeal() async {
+    var meal = MealData(
+      meal: mealName.text,
     );
-    var mealID = await DatabaseHelper.instance.insertMeal(note);
+
+    await DatabaseHelper.instance.insertMeal(meal);
     //var maxIdResult = await db.rawQuery("SELECT MAX(id) as last_inserted_id FROM meal");
     //var id = maxIdResult.first["last_inserted_id"];
 
+    // for (int i = 0; i == ingredientsArray.length; i++) {
+    //   var ingredientList = IngredientData(
+    //     //todo make id change
+    //     ingredientID: 0,
+    //     ingredient: ingredientsArray[i],
+    //   );
+    // }
+  }
+  Future addIngredient() async {
+    var ingredient = IngredientData(
+      ingredient: ingredients.text,
+    );
+    await DatabaseHelper.instance.insertIngredient(ingredient);
 
-    for(int i = 0; i ==ingredientsArray.length; i++){
-      var ingredientList = IngredientData(
-        //todo make id change
-          ingredientID: 0,
-          ingredient: ingredientsArray[i],
-      );
-    }
+    // for (int i = 0; i == ingredientsArray.length; i++) {
+    //   var ingredients = IngredientData(
+    //     ingredient: ingredientsArray[i],
+    //   );
+    //   await DatabaseHelper.instance.insertIngredient(ingredients);
+    // }
   }
 }
