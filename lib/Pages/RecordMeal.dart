@@ -10,18 +10,18 @@ import 'package:inner_peace_v1/Pages/RecordSymptoms.dart';
 class RecordMeal extends StatelessWidget {
   var mealName = TextEditingController();
   var ingredients = TextEditingController();
-  List<String> ingredientsArray = [];
-  List<MealData> taskList = [];
 
   final double width = 10.0;
   final double height = 20;
-
-  set id(int id) {}
-  set meal(String meal) {}
+  List<IngredientData> ingredient = [];
+  List<String> ingredientList = [];
+  //set id(int id) {}
+  //set meal(String meal) {}
   final double left = 10.0;
   final double top = 10.0;
   final double right = 10.0;
   final double bottom = 0.0;
+
 
   //final formKey = new GlobalKey<FormState>();
 
@@ -64,14 +64,14 @@ class RecordMeal extends StatelessWidget {
                     padding: EdgeInsets.fromLTRB(
                         this.left, this.top, this.right, this.bottom),
                     child: ElevatedButton(
-                      onPressed: () async{
-                        //todo save into DB
-                        addIngredient();
-                        ingredients.clear();
-                        List<IngredientData> ingredient = await DatabaseHelper.instance.allIngredients();
-                        for(var i in ingredient){
-                          print(i.ingredient);
+                      onPressed: () async {
+                        if(ingredients.text.length > 1) {
+                          ingredientList.insert(0,ingredients.text);
                         }
+                        //addIngredient();
+                        ingredients.clear();
+                        //ingredient = await DatabaseHelper.instance.allIngredients();
+                        print(ingredientList);
                       },
                       child: Text("Zutat hinzufügen"),
                       style: TextButton.styleFrom(
@@ -82,6 +82,23 @@ class RecordMeal extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Expanded(
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: ingredientList.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: ListTile(
+                            title: Text(ingredientList[index].toString())
+                          ),
+                        );
+
+                        // return ListTile(
+                        //   title: Text('${ingredient[index]}'),
+                        // );
+                      },
+                    ),
+                  ),
                   Flexible(
                     child: Row(
                       children: <Widget>[
@@ -90,9 +107,9 @@ class RecordMeal extends StatelessWidget {
                           child: customButton(
                             text: 'Symptome hinzufügen',
                             onClick: () {
+                              addMeal();
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  //toDo save inputs
                                   builder: (context) => RecordSymptoms(),
                                 ),
                               );
@@ -104,19 +121,15 @@ class RecordMeal extends StatelessWidget {
                           child: customButton(
                             text: 'Mahlzeit speichern',
                             onClick: () async {
-                              ingredientsArray = ingredients.text.split(',');
                               print(mealName.text);
-                              print(ingredientsArray);
-                              //var ingredientID =
                               addMeal();
-                              List<MealData> meals = await DatabaseHelper.instance.allMeals();
-                              for(var i in meals){
+                              List<MealData> meals =
+                                  await DatabaseHelper.instance.allMeals();
+                              for (var i in meals) {
                                 print(i.meal);
                               }
-                              //print(await DatabaseHelper.instance.allMeals());
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  //toDo save inputs
                                   builder: (context) => MyApp(),
                                 ),
                               );
@@ -130,7 +143,6 @@ class RecordMeal extends StatelessWidget {
                 ],
               ),
             ),
-
           ],
         ),
       );
@@ -152,11 +164,14 @@ class RecordMeal extends StatelessWidget {
     //   );
     // }
   }
+
   Future addIngredient() async {
-    var ingredient = IngredientData(
-      ingredient: ingredients.text,
-    );
-    await DatabaseHelper.instance.insertIngredient(ingredient);
+    if(ingredients.text.length > 1) {
+      var ingredient = IngredientData(
+        ingredient: ingredients.text,
+      );
+      await DatabaseHelper.instance.insertIngredient(ingredient);
+    }
 
     // for (int i = 0; i == ingredientsArray.length; i++) {
     //   var ingredients = IngredientData(
@@ -164,5 +179,8 @@ class RecordMeal extends StatelessWidget {
     //   );
     //   await DatabaseHelper.instance.insertIngredient(ingredients);
     // }
+  }
+  void addIngredientToList(){
+      ingredientList.insert(0,ingredients.text);
   }
 }
