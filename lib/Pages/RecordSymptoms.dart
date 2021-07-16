@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 import 'package:inner_peace_v1/GuiElements.dart';
+import 'package:inner_peace_v1/Main.dart';
+
 // ignore: camel_case_types
 class RecordSymptoms extends StatelessWidget {
   @override
@@ -30,6 +32,38 @@ class RecordSymptoms extends StatelessWidget {
                 new customSlider(title: 'Krämpfe', good: "Keine", bad: "Extrem"),
                 new customSlider(title: 'Blähungen', good: "Keine", bad: "Extrem"),
                 new customSlider(title: 'Stuhlgang', good: "Fest", bad: "Flüssig"),
+                Container(
+                  child: Row(
+                    children: <Widget>[
+                      Flexible(
+                        flex: 20,
+                        child: customButton(
+                          text: 'Symptome hinzufügen',
+                          onClick: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => RecordSymptoms(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Flexible(
+                        flex: 20,
+                        child: customButton(
+                          text: 'Mahlzeit speichern',
+                          onClick: () async {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => MyApp(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ],

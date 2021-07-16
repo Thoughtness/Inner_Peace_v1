@@ -28,5 +28,4 @@ class RecordedMeals extends StatelessWidget{
       ],
     ),
   );
-
 }

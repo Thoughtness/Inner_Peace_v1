@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 
-// ignore: camel_case_types
 class Intolerances extends StatelessWidget{
   @override
   Widget build(BuildContext context) => Scaffold(

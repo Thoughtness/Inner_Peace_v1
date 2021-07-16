@@ -1,3 +1,4 @@
+import 'package:inner_peace_v1/Database/MealIngredientData.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:inner_peace_v1/Database/MealData.dart';
@@ -11,7 +12,7 @@ class DatabaseHelper {
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('mealData14.db');
+    _database = await _initDB('mealData23.db');
     return _database!;
   }
 
@@ -24,7 +25,7 @@ class DatabaseHelper {
   Future _createDB(Database db, int version) async {
     await db.execute("""
     CREATE TABLE meal(
-    id INTEGER PRIMARY KEY,
+    mealID INTEGER PRIMARY KEY,
     meal TEXT,
     symptomsID INTEGER,
     mealingredientID INTEGER,
@@ -47,7 +48,8 @@ class DatabaseHelper {
     flatulenceAverage REAL,
     bowelAverage REAL,
     generalWellbeingAverage REAL,
-    crampsAverage REAL
+    crampsAverage REAL,
+    UNIQUE(ingredient)    
     )""");
     await db.execute("""
     CREATE TABLE symptoms(
@@ -66,27 +68,61 @@ class DatabaseHelper {
 
   Future<void> insertMeal(MealData meal) async {
     final db = await database;
-    // var maxIdResult = await db.rawQuery("SELECT MAX(id) as last_inserted_id FROM meal");
-    // var id = maxIdResult.first["last_inserted_id"];
-    // await db.rawInsert(
-    //     "INSERT Into meal (id, meal)"
-    //         " VALUES (?, ?)",
-    //     [id, meal.meal]
-    // );
-    // return result;
     await db.insert(
       'meal',
       meal.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
+  getMealID() async {
+    final db = await database;
+    List<Map<String, dynamic>> lastInsertedMeal = await db.rawQuery('SELECT * FROM meal ORDER BY mealID DESC LIMIT 1');
+    var mealID = lastInsertedMeal.toList();
+    return mealID;
+  }
+
+
   Future<void> insertIngredient(IngredientData ingredient) async {
     final db = await database;
     await db.insert(
       'ingredient',
       ingredient.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      conflictAlgorithm: ConflictAlgorithm.ignore,
     );
+  }
+
+  Future<List<IngredientData>> getIngredientID() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('ingredient');
+
+    return List.generate(maps.length, (i) {
+      return IngredientData(
+        ingredientID: maps[i]['ingredientID'],
+        ingredient: maps[i]['ingredient'],
+      );
+    });
+  }
+
+  Future<void> createMealIngredient(MealIngredientData mealIngredient) async {
+    final db = await database;
+    await db.insert(
+      'mealingredient',
+      mealIngredient.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
+  }
+
+  Future<List<MealIngredientData>> getMealIngredient() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('mealingredient');
+
+    return List.generate(maps.length, (i) {
+      return MealIngredientData(
+        mealID: maps[i]['mealID'],
+        ingredientID: maps[i]['ingredientID'],
+      );
+    });
   }
 
   // Future<void> updateMeal(MealData meal) async {
@@ -103,15 +139,8 @@ class DatabaseHelper {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('meal');
 
-    // List<MealData> meals = [];
-    // maps.forEach((result) {
-    //   MealData meal = MealData.fromMap(result);
-    //   meals.add(meal);
-    // });
-    // return meals;
     return List.generate(maps.length, (i) {
       return MealData(
-        //id: maps[i]['id'],
         meal: maps[i]['meal'],
         mealIngredientID: maps[i][
             'ingredientID'], //ToDo hier muss nicht die ID sondern alle Zutaten mit der ingredientID ausgegeben werden
