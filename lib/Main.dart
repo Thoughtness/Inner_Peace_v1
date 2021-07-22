@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Column(
               children: <Widget>[
-                customButton(
+                CustomButton(
                   text: "Mahlzeit erfassen",
                   onClick: () {
                     Navigator.of(context).push(
@@ -62,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     );
                   },
                 ),
-                customButton(
+                CustomButton(
                   text: "Erfasste Mahlzeiten",
                   onClick: () {
                     Navigator.of(context).push(
@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     );
                   },
                 ),
-                customButton(
+                CustomButton(
                   text: "Symptome erfassen",
                   onClick: () {
                     Navigator.of(context).push(
@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     );
                   },
                 ),
-                customButton(
+                CustomButton(
                   text: "Unverträglichkeiten",
                   onClick: () {
                     Navigator.of(context).push(
@@ -95,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     );
                   },
                 ),
-                customButton(
+                CustomButton(
                   text: "Infos",
                   onClick: () {
                     Navigator.of(context).push(

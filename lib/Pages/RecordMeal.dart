@@ -123,35 +123,38 @@ class _RecordMeal extends State<RecordMeal> {
                   children: <Widget>[
                     Flexible(
                       flex: 20,
-                      child: customButton(
+                      child: CustomButton(
                         text: 'Symptome hinzufügen',
                         onClick: () {
                           //Damit keine leeren Einträge gemacht werden können
                           if (mealName.text.length > 0 && ingredientList.length > 0) {
                             addEntry();
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => RecordSymptoms(),
+                              ),
+                            );
                           }
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => RecordSymptoms(),
-                            ),
-                          );
+                          //todo: Meldung machen, dass keine Zutat gespeichert ist
                         },
                       ),
                     ),
                     Flexible(
                       flex: 20,
-                      child: customButton(
+                      child: CustomButton(
                         text: 'Mahlzeit speichern',
                         onClick: () async {
                           //Damit keine leeren Einträge gemacht werden können
                           if (mealName.text.length > 0 && ingredientList.length > 0) {
                             addEntry();
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => MyApp(),
+                              ),
+                            );
+                            //todo: "Mahlzeit gespeichert" meldung erstellen
                           }
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => MyApp(),
-                            ),
-                          );
+                          //todo: Meldung machen, dass keine Zutat gespeichert ist
                         },
                       ),
                     ),
@@ -183,7 +186,7 @@ class _RecordMeal extends State<RecordMeal> {
       await DatabaseHelper.instance.insertIngredient(ingredients);
     }
 
-    //Alle Zutaten mit zugehörigen IDs holen
+    //Alle Zutaten mit zugehörigen IDs holen und mealIngredients erstellen
     List<IngredientData> ingredientListID = await DatabaseHelper.instance.getIngredientID();
     for (var i in ingredientListID) {
       //int ingredientID = i.in
@@ -224,4 +227,63 @@ class _RecordMeal extends State<RecordMeal> {
   //   await DatabaseHelper.instance.insertIngredient(ingredients);
   // }
 
+}
+class customRow extends StatelessWidget {
+  final textController;
+  final String description;
+  final String title;
+  final double left = 10.0;
+  final double top = 10.0;
+  final double right = 10.0;
+  final double bottom = 0.0;
+
+  customRow({
+    required this.title,
+    required this.description,
+    required this.textController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double width = 10.0;
+    return Container(
+      padding: EdgeInsets.fromLTRB(this.left, this.top, this.right, this.bottom),
+      child: Row(
+        children: <Widget>[
+          //SizedBox(width: width),
+          Flexible(
+            flex: 1,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.cyanAccent,
+                border: Border.all(width: 1.0),
+                borderRadius: BorderRadius.all(Radius.circular(5.0) //
+                ),
+              ),
+              //height: 49,
+              child: ListTile(
+                title: Text(title),
+              ),
+            ),
+          ),
+          SizedBox(width: width),
+          Flexible(
+            flex: 3,
+            child: Container(
+              height: 58,
+              child: TextField(
+                decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: OutlineInputBorder(),
+                    hintText: description),
+                controller: textController,
+              ),
+            ),
+          ),
+          //SizedBox(width: width),
+        ],
+      ),
+    );
+  }
 }

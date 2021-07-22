@@ -1,5 +1,5 @@
 class SymptomData {
-  int symptomID;
+  int? symptomsID;
   double? symptomTotal;
   double? generalWellbeing;
   double? cramps;
@@ -7,7 +7,7 @@ class SymptomData {
   double? bowel;
 
   SymptomData({
-    required this.symptomID,
+    this.symptomsID,
     this.symptomTotal,
     this.generalWellbeing,
     this.cramps,
@@ -17,7 +17,7 @@ class SymptomData {
 
   Map<String, dynamic> toMap() {
     return {
-      'ingredientID': symptomID,
+      'symptomsID': symptomsID,
       'symptomTotal': symptomTotal,
       'generalWellbeing': generalWellbeing,
       'cramps': cramps,
