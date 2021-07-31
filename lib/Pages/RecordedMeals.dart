@@ -359,10 +359,10 @@ class _RecordedMeals extends State<RecordedMeals> {
           print(i);
         var meal = await DatabaseHelper.instance.getAllRecordedMeals(i);
           //var meals = await DatabaseHelper.instance.getAllRecordedMeals2(i);
-          var meals2 = await DatabaseHelper.instance.getAllRecordedMeals3(i);
+          // var meals2 = await DatabaseHelper.instance.getAllRecordedMeals3(i);
           // var meals = await DatabaseHelper.instance.getMeal();
           //print(meals);
-          print(meals2);
+          // print(meals2);
         mealList.add(meal[0]);
         //print(meal[0]);
         } catch (e) {

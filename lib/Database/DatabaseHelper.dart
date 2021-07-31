@@ -1,6 +1,5 @@
 import 'package:inner_peace_v1/Database/MealIngredientData.dart';
 import 'package:inner_peace_v1/Database/SymptomData.dart';
-import 'package:inner_peace_v1/Database/SymptomsIngredientData.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:inner_peace_v1/Database/MealData.dart';
@@ -14,7 +13,7 @@ class DatabaseHelper {
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('mealData50.db');
+    _database = await _initDB('mealData52.db');
     return _database!;
   }
 
@@ -28,7 +27,9 @@ class DatabaseHelper {
     await db.execute("""
     CREATE TABLE meal(
     mealID INTEGER PRIMARY KEY,
-    meal TEXT
+    symptomsID INTEGER,
+    meal TEXT,
+    FOREIGN KEY(symptomsID) REFERENCES symptoms(symptomsID)
     );""");
     await db.execute("""
     CREATE TABLE ingredient(
@@ -53,14 +54,6 @@ class DatabaseHelper {
     FOREIGN KEY(mealID) REFERENCES meal(mealID),
     FOREIGN KEY(ingredientID) REFERENCES ingredient(ingredientID)
     );""");
-    await db.execute("""
-    CREATE TABLE symptomsingredient(
-    symptomsingredientID INTEGER PRIMARY KEY,
-    symptomsID INTEGER,
-    ingredientID INTEGER,
-    FOREIGN KEY(symptomsID) REFERENCES symptoms(symptomsID),
-    FOREIGN KEY(ingredientID) REFERENCES ingredient(ingredientID)
-    );""");
   }
 
   getHighestMealID() async {
@@ -73,38 +66,6 @@ class DatabaseHelper {
     return mealID;
   }
 
-  getAllRecordedMeals2(int mealID) async {
-    final db = await database;
-    List<Map<String, dynamic>> allMeals = await db.rawQuery(
-        """SELECT meal.mealID, meal.meal, symptomsingredient.symptomsID
-        FROM meal
-        JOIN mealingredient ON meal.mealID = mealingredient.mealID
-        JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID
-        JOIN symptomsingredient ON ingredient.ingredientID = symptomsingredient.ingredientID
-        WHERE meal.mealID = ?""",
-        [mealID]);
-    var allMealsWithSymptoms = allMeals.toList();
-    return allMealsWithSymptoms;
-  }
-  getAllRecordedMeals3(int mealID) async {
-    final db = await database;
-    List<Map<String, dynamic>> allMeals = await db.rawQuery(
-        """SELECT meal.mealID, meal.meal, ingredient.ingredient
-        FROM meal
-        JOIN mealingredient ON meal.mealID = mealingredient.mealID
-        JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID
-        WHERE meal.mealID = ?""",
-        [mealID]);
-    var allMealsWithSymptoms = allMeals.toList();
-    return allMealsWithSymptoms;
-  }
-  //
-  // symptoms.generalWellbeing, symptoms.cramps, symptoms.flatulence, symptoms.bowel, symptoms.symptomTotal
-  // JOIN mealingredient ON meal.mealID = mealingredient.mealID
-  // JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID
-  // JOIN symptomsingredient ON ingredient.ingredientID = symptomsingredient.ingredientID
-  // JOIN symptoms ON symptomsingredient.symptomsID = symptoms.symptomsID
-  //
   getAllRecordedMeals(int mealID) async {
     final db = await database;
     List<Map<String, dynamic>> allMeals = await db.rawQuery(
@@ -112,8 +73,7 @@ class DatabaseHelper {
         FROM meal 
         JOIN mealingredient ON meal.mealID = mealingredient.mealID 
         JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID 
-        JOIN symptomsingredient ON ingredient.ingredientID = symptomsingredient.ingredientID 
-        JOIN symptoms ON symptomsingredient.symptomsID = symptoms.symptomsID 
+        JOIN symptoms ON meal.symptomsID = symptoms.symptomsID 
         WHERE meal.mealID = ?""", [mealID]);
     var allMealsWithSymptoms = allMeals.toList();
 
@@ -136,8 +96,7 @@ class DatabaseHelper {
         FROM meal 
         JOIN mealingredient ON meal.mealID = mealingredient.mealID 
         JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID 
-        JOIN symptomsingredient ON ingredient.ingredientID = symptomsingredient.ingredientID 
-        JOIN symptoms ON symptomsingredient.symptomsID = symptoms.symptomsID 
+        JOIN symptoms ON meal.symptomsID = symptoms.symptomsID 
         WHERE meal.mealID = ?
         AND symptoms.generalWellbeing BETWEEN ? and ?
         AND symptoms.cramps BETWEEN ? and ?
@@ -165,8 +124,7 @@ class DatabaseHelper {
         FROM meal 
         JOIN mealingredient ON meal.mealID = mealingredient.mealID 
         JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID 
-        JOIN symptomsingredient ON ingredient.ingredientID = symptomsingredient.ingredientID 
-        JOIN symptoms ON symptomsingredient.symptomsID = symptoms.symptomsID 
+        JOIN symptoms ON meal.symptomsID = symptoms.symptomsID 
         WHERE meal.mealID = ? AND (
         symptoms.generalWellbeing >= ? OR 
         symptoms.cramps >= ? OR 
@@ -224,19 +182,6 @@ class DatabaseHelper {
     });
   }
 
-  getSymptomsIngredient() async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps =
-        await db.query('symptomsingredient');
-
-    return List.generate(maps.length, (i) {
-      return SymptomsIngredientData(
-        symptomsID: maps[i]['symptomsID'],
-        ingredientID: maps[i]['ingredientID'],
-      );
-    });
-  }
-
   getSymptomsID() async {
     final db = await database;
     List<Map<String, dynamic>> lastInsertedSymptoms = await db
@@ -245,15 +190,23 @@ class DatabaseHelper {
     return symptomsID;
   }
 
+  addSymptomsToMeal(int symptomsID, int mealID) async {
+    final db = await database;
+    await db.rawUpdate(
+        """UPDATE meal
+        SET symptomsID = ?
+        WHERE mealID = ?""",
+        [symptomsID, mealID]);
+  }
+
   getDeleteMealInformation(int mealID) async {
     final db = await database;
     List<Map<String, dynamic>> deleteMealInformation = await db.rawQuery(
         """SELECT mealingredient.mealID, symptomsingredient.ingredientID, symptoms.symptomsID
         FROM meal
+        JOIN symptoms ON meal.symptomID = sympotoms.symptomID
         JOIN mealingredient ON meal.mealID = mealingredient.mealID 
         JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID 
-        JOIN symptomsingredient ON ingredient.ingredientID = symptomsingredient.ingredientID 
-        JOIN symptoms ON symptomsingredient.symptomsID = symptoms.symptomsID 
         WHERE meal.mealID = ?""", [mealID]);
     var symptomsID = deleteMealInformation.toList();
     return symptomsID;
@@ -306,16 +259,6 @@ class DatabaseHelper {
     );
   }
 
-  Future<void> createSymptomsIngredient(
-      SymptomsIngredientData symptomsIngredient) async {
-    final db = await database;
-    await db.insert(
-      'symptomsingredient',
-      symptomsIngredient.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.ignore,
-    );
-  }
-
   Future<void> insertSymptoms(SymptomData symptoms) async {
     final db = await database;
     print(symptoms);
@@ -325,43 +268,6 @@ class DatabaseHelper {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
-
-  // Future<List<SymptomData>> getSymptomsID() async {
-  //   final db = await database;
-  //   final List<Map<String, dynamic>> maps = await db.query('symptoms');
-  //
-  //   return List.generate(maps.length, (i) {
-  //     return SymptomData(
-  //       symptomID: maps[i]['symptomsID'],
-  //       symptomTotal: maps[i]['symtpomTotal']
-  //     );
-  //   });
-  // }
-
-  // Future<void> updateMeal(MealData meal) async {
-  //   final db = await database;
-  //   await db.update(
-  //     'meal',
-  //     meal.toMap(),
-  //     where: 'id = ?',
-  //     whereArgs: [meal.id],
-  //   );
-  // }
-
-  // Future<List<MealData>> allMeals() async {
-  //   final db = await database;
-  //   final List<Map<String, dynamic>> maps = await db.query('meal');
-  //
-  //   return List.generate(maps.length, (i) {
-  //     return MealData(
-  //       meal: maps[i]['meal'],
-  //       mealIngredientID: maps[i][
-  //           'ingredientID'], //ToDo hier muss nicht die ID sondern alle Zutaten mit der ingredientID ausgegeben werden
-  //       symptomID: maps[i][
-  //           'symptomID'], //ToDo hier muss nicht die ID sondern alle Zutaten mit der symptomID ausgegeben werden
-  //     );
-  //   });
-  // }
 
   getAllIngredients() async {
     final db = await database;
@@ -383,12 +289,4 @@ class DatabaseHelper {
     );
   }
 
-  // Future<MealData> getProductById(int id) async {
-  //   final db = await database;
-  //   var result = await db.query("Product", where: "id = ", whereArgs: [id]);
-  //   return result.isNotEmpty ? MealData.toMap(result.first) : Null;
-  // }
-
-  //var maxIdResult = await db.rawQuery("SELECT MAX(id)+1 as last_inserted_id FROM Product");
-  //var id = maxIdResult.first["last_inserted_id"];
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inner_peace_v1/Database/DatabaseHelper.dart';
 import 'package:inner_peace_v1/Database/SymptomData.dart';
-import 'package:inner_peace_v1/Database/SymptomsIngredientData.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 import 'package:inner_peace_v1/Pages/RecordedMeals.dart';
 import 'package:inner_peace_v1/GuiElements.dart';
@@ -407,6 +406,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
     await DatabaseHelper.instance.insertSymptoms(symptoms);
 
     //letzte mealID herausholen
+    //todo: nicht höchste mealID suchen sondern mitgabe damit bei späterem hinzufügen keine Probleme entstehen
     var lastInsertedMeal = await DatabaseHelper.instance.getHighestMealID();
     int mealID = lastInsertedMeal[0]['mealID'];
     print(mealID);
@@ -415,13 +415,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
     var lastInsertedSymptoms = await DatabaseHelper.instance.getSymptomsID();
     int symptomsID = lastInsertedSymptoms[0]['symptomsID'];
 
-
-    //symptomsIngredient erstellen
-    var symptomsIngredient = SymptomsIngredientData(
-        symptomsID: symptomsID,
-        ingredientID: mealID
-    );
-    await DatabaseHelper.instance.createSymptomsIngredient(symptomsIngredient);
+    await DatabaseHelper.instance.addSymptomsToMeal(symptomsID, mealID);
   }
 }
 
