@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inner_peace_v1/GuiElements.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 // ignore: camel_case_types
 class Infos extends StatelessWidget{
@@ -8,9 +9,7 @@ class Infos extends StatelessWidget{
     endDrawer: menu(),
     appBar: AppBar(
       title: Text('Infos',
-        style: TextStyle(
-          color: Colors.black,
-        ),
+        style: myAppBarTextStyle(),
       ),
       backgroundColor: Colors.cyanAccent,
     ),

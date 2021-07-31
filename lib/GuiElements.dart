@@ -45,3 +45,42 @@ BoxDecoration myBoxDecoration() {
     borderRadius: BorderRadius.all(Radius.circular(7.0)),
   );
 }
+
+BoxDecoration myInnerBoxDecoration() {
+  return BoxDecoration(
+    color: Colors.cyanAccent,
+    border: Border.all(width: 1.0),
+    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+  );
+}
+
+TextStyle myAppBarTextStyle(){
+  return TextStyle(
+    color: Colors.black,
+  );
+}
+
+TextStyle myTitleCyanAccentTextStyle(){
+  return TextStyle(
+    backgroundColor: Colors.cyanAccent,
+    height: 1.5,
+    fontSize: 25,
+    color: Colors.black,
+  );
+}
+
+TextStyle myTextStyle(){
+  return TextStyle(
+    fontSize: 14,
+    color: Colors.black,
+  );
+}
+
+TextStyle mySliderTextStyle(){
+  return TextStyle(
+    height: 0.5,
+    fontSize: 18,
+  );
+}
+
+

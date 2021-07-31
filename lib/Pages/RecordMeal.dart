@@ -39,9 +39,7 @@ class _RecordMeal extends State<RecordMeal> {
       appBar: AppBar(
         title: Text(
           'Mahlzeit erfassen',
-          style: TextStyle(
-            color: Colors.black,
-          ),
+          style: myAppBarTextStyle(),
         ),
         backgroundColor: Colors.cyanAccent,
       ),
@@ -175,7 +173,8 @@ class _RecordMeal extends State<RecordMeal> {
       meal: mealName.text,
     );
     await DatabaseHelper.instance.insertMeal(meal);
-    var lastInsertedMeal = await DatabaseHelper.instance.getMealID();
+
+    var lastInsertedMeal = await DatabaseHelper.instance.getHighestMealID();
     int mealID = lastInsertedMeal[0]['mealID'];
 
     //Zutaten in Tabelle einfügen
@@ -187,10 +186,13 @@ class _RecordMeal extends State<RecordMeal> {
     }
 
     //Alle Zutaten mit zugehörigen IDs holen und mealIngredients erstellen
-    List<IngredientData> ingredientListID = await DatabaseHelper.instance.getIngredientID();
+    var ingredientListID = await DatabaseHelper.instance.getIngredients();
+    print(ingredientListID.toString());
     for (var i in ingredientListID) {
-      //int ingredientID = i.in
       if(ingredientList.contains(i.ingredient)){
+        // print(i.ingredientID);
+        // await DatabaseHelper.instance.createMealIngredients(mealID, i.ingredientID);
+
         var mealIngredient = MealIngredientData(
           mealID: mealID,
           ingredientID: i.ingredientID!,
@@ -198,36 +200,9 @@ class _RecordMeal extends State<RecordMeal> {
         await DatabaseHelper.instance.createMealIngredient(mealIngredient);
       }
     }
-    // var seewhatwillcome = await DatabaseHelper.instance.getMealIngredient();
-    // for (var i in seewhatwillcome) {
-    //   print(i.mealID);
-    //   print(i.ingredientID);
-    // }
-    // for (int i = 0; i < ingredientList.length; i++) {
-    //   var ingredients = IngredientData(
-    //     ingredient: ingredientList[i],
-    //   );
-    //   print("hallo"+ i.toString());
-    //   await DatabaseHelper.instance.insertIngredient(ingredients);
-    // }
-
   }
-
-  // if (ingredients.text.length > 1) {
-  //   var ingredient = IngredientData(
-  //     ingredient: ingredients.text,
-  //   );
-  //   await DatabaseHelper.instance.insertIngredient(ingredient);
-  // }
-
-  // for (int i = 0; i == ingredientsArray.length; i++) {
-  //   var ingredients = IngredientData(
-  //     ingredient: ingredientsArray[i],
-  //   );
-  //   await DatabaseHelper.instance.insertIngredient(ingredients);
-  // }
-
 }
+
 class customRow extends StatelessWidget {
   final textController;
   final String description;
@@ -236,7 +211,7 @@ class customRow extends StatelessWidget {
   final double top = 10.0;
   final double right = 10.0;
   final double bottom = 0.0;
-
+  final double width = 10.0;
   customRow({
     required this.title,
     required this.description,
@@ -245,7 +220,7 @@ class customRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = 10.0;
+
     return Container(
       padding: EdgeInsets.fromLTRB(this.left, this.top, this.right, this.bottom),
       child: Row(

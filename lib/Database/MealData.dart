@@ -31,18 +31,9 @@ class MealData {
     };
   }
 
-// mealData.mapToObject(Map<String, dynamic> map){
-//   this.meal = map['meal'];
-//   this.ingredients = map['ingredients'];
-//   this.symptomTotal = map['symptomTotal'];
-//   this.generalWellbeing = map['generalWellbeing'];
-//   this.cramps = map['cramps'];
-//   this.flatulence = map['flatulence'];
-//   this.bowel = map['bowel'];
-// }
 
-// @override
-// String toString() {
-//   return 'Mahlzeit{id: $id, meal: $meal, ingredients: $ingredients. symptomTotal: $symptomTotal, generalWellbeing: $generalWellbeing, cramps: $cramps, flatulence: $flatulence, bowel: $bowel}';
-// }
+@override
+String toString() {
+  return 'Mahlzeit{id: $mealID, meal: $meal}';
+}
 }

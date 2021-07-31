@@ -35,9 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text(
             'Hauptmenü',
-            style: TextStyle(
-              color: Colors.black,
-            ),
+            style: myAppBarTextStyle(),
           ),
           backgroundColor: Colors.cyanAccent,
         ),

@@ -13,4 +13,9 @@ class IngredientData {
       'ingredient': ingredient,
     };
   }
+
+  @override
+  String toString() {
+    return 'ingredient{ingredientID: $ingredientID, ingredient: $ingredient}';
+  }
 }

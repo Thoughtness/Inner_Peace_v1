@@ -16,4 +16,9 @@ class MealIngredientData {
       'ingredientID': ingredientID,
     };
   }
+
+  @override
+  String toString() {
+    return 'meal{mealIngredientID: $mealIngredientID, mealID: $mealID, ingredientID: $ingredientID}';
+  }
 }

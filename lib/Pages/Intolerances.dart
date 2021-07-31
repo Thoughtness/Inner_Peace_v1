@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inner_peace_v1/GuiElements.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 
 class Intolerances extends StatelessWidget{
@@ -8,9 +9,7 @@ class Intolerances extends StatelessWidget{
     endDrawer: menu(),
     appBar: AppBar(
       title: Text('Unverträglichkeiten',
-        style: TextStyle(
-          color: Colors.black,
-        ),
+        style: myAppBarTextStyle(),
       ),
       backgroundColor: Colors.cyanAccent,
     ),

@@ -8,13 +8,19 @@ import 'package:inner_peace_v1/GuiElements.dart';
 import 'package:inner_peace_v1/Main.dart';
 
 class RecordSymptoms extends StatefulWidget {
+  // final String mealID;
+  //
+  // RecordSymptoms({Key key, this.mealID,}) : super (key: key);
+
   @override
   State createState() => new _RecordSymptoms();
 }
 
 class _RecordSymptoms extends State<RecordSymptoms> {
+
+  // var mealID = widget.value;
+
   final double height = 20;
-  double symptomTotal = 0;
   var generalWellbeing1;
   double generalWellbeing = 0;
   double cramps = 0;
@@ -22,6 +28,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
   double bowel = 0;
   double sliderHeight = 15.0;
   double sliderWidth = 10.0;
+  double negativeCounter = -10;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -30,9 +37,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
         appBar: AppBar(
           title: Text(
             'Symptome erfassen',
-            style: TextStyle(
-              color: Colors.black,
-            ),
+            style: myAppBarTextStyle(),
           ),
           backgroundColor: Colors.cyanAccent,
         ),
@@ -69,12 +74,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                                   SizedBox(width: sliderWidth),
                                   new Text(
                                     "Allgemeines Wohlbefinden",
-                                    style: TextStyle(
-                                      backgroundColor: Colors.cyanAccent,
-                                      height: 1.5,
-                                      fontSize: 25,
-                                      color: Colors.black,
-                                    ),
+                                    style: myTitleCyanAccentTextStyle(),
                                   ),
                                 ],
                               ),
@@ -105,19 +105,13 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                                 new Text(
                                   "Gut",
                                   textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    height: 0.5,
-                                    fontSize: 18,
-                                  ),
+                                  style: mySliderTextStyle(),
                                 ),
                                 Spacer(),
                                 new Text(
                                   "Schlecht",
                                   textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    height: 0.5,
-                                    fontSize: 18,
-                                  ),
+                                  style: mySliderTextStyle(),
                                 ),
                                 SizedBox(width: sliderWidth),
                               ],
@@ -151,12 +145,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                                   SizedBox(width: sliderWidth),
                                   new Text(
                                     "Krämpfe",
-                                    style: TextStyle(
-                                      backgroundColor: Colors.cyanAccent,
-                                      height: 1.5,
-                                      fontSize: 25,
-                                      color: Colors.black,
-                                    ),
+                                    style: myTitleCyanAccentTextStyle(),
                                   ),
                                 ],
                               ),
@@ -187,19 +176,13 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                                 new Text(
                                   "Keine",
                                   textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    height: 0.5,
-                                    fontSize: 18,
-                                  ),
+                                  style: mySliderTextStyle(),
                                 ),
                                 Spacer(),
                                 new Text(
                                   "Extrem",
                                   textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    height: 0.5,
-                                    fontSize: 18,
-                                  ),
+                                  style: mySliderTextStyle(),
                                 ),
                                 SizedBox(width: sliderWidth),
                               ],
@@ -233,12 +216,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                                   SizedBox(width: sliderWidth),
                                   new Text(
                                     "Blähungen",
-                                    style: TextStyle(
-                                      backgroundColor: Colors.cyanAccent,
-                                      height: 1.5,
-                                      fontSize: 25,
-                                      color: Colors.black,
-                                    ),
+                                    style: myTitleCyanAccentTextStyle(),
                                   ),
                                 ],
                               ),
@@ -269,19 +247,13 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                                 new Text(
                                   "Keine",
                                   textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    height: 0.5,
-                                    fontSize: 18,
-                                  ),
+                                  style: mySliderTextStyle(),
                                 ),
                                 Spacer(),
                                 new Text(
                                   "Extrem",
                                   textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    height: 0.5,
-                                    fontSize: 18,
-                                  ),
+                                  style: mySliderTextStyle(),
                                 ),
                                 SizedBox(width: sliderWidth),
                               ],
@@ -315,12 +287,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                                   SizedBox(width: sliderWidth),
                                   new Text(
                                     "Stuhlgang",
-                                    style: TextStyle(
-                                      backgroundColor: Colors.cyanAccent,
-                                      height: 1.5,
-                                      fontSize: 25,
-                                      color: Colors.black,
-                                    ),
+                                    style: myTitleCyanAccentTextStyle(),
                                   ),
                                 ],
                               ),
@@ -351,19 +318,13 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                                 new Text(
                                   "Fest",
                                   textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    height: 0.5,
-                                    fontSize: 18,
-                                  ),
+                                  style: mySliderTextStyle(),
                                 ),
                                 Spacer(),
                                 new Text(
                                   "Flüssig",
                                   textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    height: 0.5,
-                                    fontSize: 18,
-                                  ),
+                                  style: mySliderTextStyle(),
                                 ),
                                 SizedBox(width: sliderWidth),
                               ],
@@ -384,11 +345,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                         child: CustomButton(
                           text: 'Keine Symptome',
                           onClick: () {
-                            generalWellbeing = -10;
-                            cramps = -10;
-                            flatulence = -10;
-                            bowel = -10;
-                            addSymptoms();
+                            addSymptoms(negativeCounter, negativeCounter, negativeCounter, negativeCounter);
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => RecordedMeals(),
@@ -402,7 +359,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                         child: CustomButton(
                           text: 'Symptome speichern',
                           onClick: () async {
-                            addSymptoms();
+                            addSymptoms(generalWellbeing, cramps, flatulence, bowel);
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => RecordedMeals(),
@@ -421,24 +378,43 @@ class _RecordSymptoms extends State<RecordSymptoms> {
         ),
       );
 
-  Future addSymptoms() async {
+  Future addSymptoms(double generalWellbeing, double cramps, double flatulence, double bowel) async {
+    //Multiplikator für Symptome = je schlimmer die Symptome desto höher der Multiplikator ( eine 10 ist wesentlich schlimmer wie 4* eine 3)
+    List<double> symptomList = [generalWellbeing, cramps, flatulence, bowel];
+
+    for(int i = 0; i <= 3; i++){
+      if(symptomList[i] == 6){
+        symptomList[i] = symptomList[i] * 1.25;
+      }else if(symptomList[i] == 7){
+        symptomList[i] = symptomList[i] * 1.5;
+      }else if(symptomList[i] == 8){
+        symptomList[i] = symptomList[i] * 2;
+      }else if(symptomList[i] == 9){
+        symptomList[i] = symptomList[i] * 2.75;
+      }else if(symptomList[i] == 10){
+        symptomList[i] = symptomList[i] * 4;
+      }
+    }
+
     //Symptome in Tabelle einfügen
     var symptoms = SymptomData(
       generalWellbeing: generalWellbeing,
       cramps: cramps,
       flatulence: flatulence,
       bowel: bowel,
-      symptomTotal: generalWellbeing + cramps + flatulence + bowel,
+      symptomTotal: symptomList[0] + symptomList[1] + symptomList[2] + symptomList[3],
     );
     await DatabaseHelper.instance.insertSymptoms(symptoms);
 
     //letzte mealID herausholen
-    var lastInsertedMeal = await DatabaseHelper.instance.getMealID();
+    var lastInsertedMeal = await DatabaseHelper.instance.getHighestMealID();
     int mealID = lastInsertedMeal[0]['mealID'];
+    print(mealID);
 
     //letze symptomsID herausholen
     var lastInsertedSymptoms = await DatabaseHelper.instance.getSymptomsID();
     int symptomsID = lastInsertedSymptoms[0]['symptomsID'];
+
 
     //symptomsIngredient erstellen
     var symptomsIngredient = SymptomsIngredientData(
