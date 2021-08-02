@@ -79,6 +79,7 @@ class _RecordedMeals extends State<RecordedMeals> {
                               color: Colors.black,
                             ),
                             onChanged: (String? newValue) {
+                              filter = newValue;
                               getMealList(newValue, sort);
                             },
                             items: <String>[
@@ -177,9 +178,10 @@ class _RecordedMeals extends State<RecordedMeals> {
                                   IconButton(
                                     icon: Icon(Icons.delete),
                                     iconSize: 24.0,
-                                    color: Colors.red,
+                                    color: Colors.grey,
                                     onPressed: () async {
-                                      deleteMeal(index);
+                                      //todo: make popup "are you sure" to delete meal (make separate mehtod with the popup, when select yes then call deleteMeal
+                                      deleteMeal(mealList[index]['mealID']);
                                     }
                                   ),
                                 ],
@@ -356,15 +358,8 @@ class _RecordedMeals extends State<RecordedMeals> {
     if (value == 'Alle') {
       for (int i = 1; i <= numbOfMeals; i++) {
         try {
-          print(i);
         var meal = await DatabaseHelper.instance.getAllRecordedMeals(i);
-          //var meals = await DatabaseHelper.instance.getAllRecordedMeals2(i);
-          // var meals2 = await DatabaseHelper.instance.getAllRecordedMeals3(i);
-          // var meals = await DatabaseHelper.instance.getMeal();
-          //print(meals);
-          // print(meals2);
         mealList.add(meal[0]);
-        //print(meal[0]);
         } catch (e) {
           //Handle exception of type SomeException
         }
@@ -406,7 +401,7 @@ class _RecordedMeals extends State<RecordedMeals> {
         }
       }
     }
-
+    print(mealList);
     if (sort == "Erfassungsdatum") {
       mealList.sort((a, b) => a["mealID"].compareTo(b["mealID"]));
     } else if (sort == "Name A-Z") {
@@ -425,28 +420,13 @@ class _RecordedMeals extends State<RecordedMeals> {
   }
 
   Future deleteMeal(int index) async{
-    print(index);
-    index = index + 1;
     var deleteMealInformation = await DatabaseHelper.instance.getDeleteMealInformation(index);
     print(deleteMealInformation);
 
-    // await DatabaseHelper.instance.deleteMeal("meal", "mealID", deleteMealInformation[0]['mealID']);
-    //   await DatabaseHelper.instance.deleteMeal("mealingredient", "mealID", deleteMealInformation[0]['mealID']);
-    //   await DatabaseHelper.instance.deleteMeal("symptomsingredient", "ingredientID", deleteMealInformation[0]['ingredientID']);
-    //   await DatabaseHelper.instance.deleteMeal("mealID", "mealID", deleteMealInformation[0]['mealID']);
+    await DatabaseHelper.instance.deleteMeal(index, deleteMealInformation[0]['symptomsID']);
 
-    var mealingredientID = await DatabaseHelper.instance.getMealIngredient(index);
-    print(mealingredientID.toString());
-    // //for (int i = 0; mealingredientID[i]['mealIngredientID'] != null; i++){
-    // for (int i = 0; i < mealingredientID.length; i++){
-    //   var ingredientID = await DatabaseHelper.instance.getIngredientID(mealingredientID[i]['ingredientID']);
-    // }
-    // for (int i = 0; i>= mealingredientID.length(); i++) {
-    //
-    // }
-
-    //await DatabaseHelper.instance.deleteMeal(index);
     setState(() {
+      getMealList(filter, sort);
     });
   }
 

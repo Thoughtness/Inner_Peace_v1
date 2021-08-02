@@ -123,13 +123,14 @@ class _RecordMeal extends State<RecordMeal> {
                       flex: 20,
                       child: CustomButton(
                         text: 'Symptome hinzufügen',
-                        onClick: () {
+                        onClick: () async {
                           //Damit keine leeren Einträge gemacht werden können
                           if (mealName.text.length > 0 && ingredientList.length > 0) {
-                            addEntry();
+                            int mealID = await addEntry();
+                            print(mealID);
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => RecordSymptoms(),
+                                builder: (context) => RecordSymptoms(mealID: mealID),
                               ),
                             );
                           }
@@ -167,7 +168,7 @@ class _RecordMeal extends State<RecordMeal> {
     );
   }
 
-  Future addEntry() async {
+  Future<int> addEntry() async {
     //Mahlzeit in Tabelle einfügen
     var meal = MealData(
       meal: mealName.text,
@@ -187,7 +188,6 @@ class _RecordMeal extends State<RecordMeal> {
 
     //Alle Zutaten mit zugehörigen IDs holen und mealIngredients erstellen
     var ingredientListID = await DatabaseHelper.instance.getIngredients();
-    print(ingredientListID.toString());
     for (var i in ingredientListID) {
       if(ingredientList.contains(i.ingredient)){
         // print(i.ingredientID);
@@ -200,6 +200,7 @@ class _RecordMeal extends State<RecordMeal> {
         await DatabaseHelper.instance.createMealIngredient(mealIngredient);
       }
     }
+    return mealID;
   }
 }
 

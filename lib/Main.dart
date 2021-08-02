@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inner_peace_v1/Database/DatabaseHelper.dart';
 import 'package:inner_peace_v1/GuiElements.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 import 'package:flutter/widgets.dart';
@@ -73,11 +74,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 CustomButton(
                   text: "Symptome erfassen",
-                  onClick: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        //toDo save inputs
-                        builder: (context) => PickMealForSymptoms(),
+                  onClick: () async {
+                    var symptomlessMeals = await DatabaseHelper.instance.getSymptomlessMeals();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => PickMealForSymptoms(symptomlessMeals: symptomlessMeals),
                       ),
                     );
                   },

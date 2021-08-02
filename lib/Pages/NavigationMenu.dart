@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inner_peace_v1/Database/DatabaseHelper.dart';
 import 'package:inner_peace_v1/Pages/RecordedMeals.dart';
 import 'package:inner_peace_v1/Pages/Infos.dart';
 import 'package:inner_peace_v1/Pages/RecordMeal.dart';
@@ -40,9 +41,10 @@ class menu extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.air),
                   title: Text('Symptome erfassen'),
-                    onTap: (){
+                    onTap: () async{
+                      var symptomlessMeals = await DatabaseHelper.instance.getSymptomlessMeals();
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => PickMealForSymptoms(),
+                        builder: (context) => PickMealForSymptoms(symptomlessMeals: symptomlessMeals),
                       ));
                     }
                 ),
@@ -73,5 +75,15 @@ class menu extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  symptomlessMeals() async {
+
+    var symptomlessMealCount = await DatabaseHelper.instance.getSymptomlessMeals();
+
+    return symptomlessMealCount;
+    // setState(() {
+    //   filter = value!;
+    // });
   }
 }

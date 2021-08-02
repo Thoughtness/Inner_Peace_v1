@@ -59,9 +59,31 @@ class DatabaseHelper {
   getHighestMealID() async {
     final db = await database;
     List<Map<String, dynamic>> lastInsertedMeal =
-        await db.rawQuery("""SELECT * FROM meal 
+        await db.rawQuery(
+            """SELECT * FROM meal 
         ORDER BY mealID DESC 
         LIMIT 1""");
+    var mealID = lastInsertedMeal.toList();
+    return mealID;
+  }
+
+  getSymptomlessMeals() async {
+    final db = await database;
+    List<Map<String, dynamic>> _symptomlessMeals =
+    await db.rawQuery(
+        """SELECT * FROM meal
+        WHERE symptomsID IS NULL""");
+    var symptomlessMeals = _symptomlessMeals.toList();
+    print(symptomlessMeals);
+    return symptomlessMeals;
+  }
+
+  getSymptomsID() async {
+    final db = await database;
+    List<Map<String, dynamic>> lastInsertedMeal =
+    await db.rawQuery("""SELECT symptoms.symptomsID
+    FROM symptoms
+    """);
     var mealID = lastInsertedMeal.toList();
     return mealID;
   }
@@ -141,6 +163,7 @@ class DatabaseHelper {
     return allMealsWithSymptoms;
   }
 
+
   getMealIngredient(int index) async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -182,7 +205,7 @@ class DatabaseHelper {
     });
   }
 
-  getSymptomsID() async {
+  getHighestSymptomsID() async {
     final db = await database;
     List<Map<String, dynamic>> lastInsertedSymptoms = await db
         .rawQuery('SELECT * FROM symptoms ORDER BY symptomsID DESC LIMIT 1');
@@ -202,11 +225,9 @@ class DatabaseHelper {
   getDeleteMealInformation(int mealID) async {
     final db = await database;
     List<Map<String, dynamic>> deleteMealInformation = await db.rawQuery(
-        """SELECT mealingredient.mealID, symptomsingredient.ingredientID, symptoms.symptomsID
+        """SELECT meal.mealID, symptoms.symptomsID
         FROM meal
-        JOIN symptoms ON meal.symptomID = sympotoms.symptomID
-        JOIN mealingredient ON meal.mealID = mealingredient.mealID 
-        JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID 
+        JOIN symptoms ON meal.symptomsID = symptoms.symptomsID
         WHERE meal.mealID = ?""", [mealID]);
     var symptomsID = deleteMealInformation.toList();
     return symptomsID;
@@ -226,10 +247,14 @@ class DatabaseHelper {
     await db.rawInsert("""INSERT INTO meal(""");
   }
 
-  deleteMeal(String deleteFrom, String where, int id) async {
+  deleteMeal(int mealID, int symptomsID) async {
     final db = await database;
-    await db.rawDelete("""DELETE FROM ?
-        WHERE ? = ?""", [deleteFrom, where, id]);
+    await db.rawDelete("""DELETE FROM meal
+        WHERE mealID = ?""", [mealID]);
+    await db.rawDelete("""DELETE FROM mealingredient
+        WHERE mealID = ?""", [mealID]);
+    await db.rawDelete("""DELETE FROM symptoms
+        WHERE symptomsID = ?""", [symptomsID]);
   }
 
   Future<void> createMealIngredient(MealIngredientData mealIngredient) async {
@@ -240,7 +265,6 @@ class DatabaseHelper {
       mealIngredient.toMap(),
       conflictAlgorithm: ConflictAlgorithm.ignore,
     );
-    print(mealIngredient.toString());
   }
 
   Future<void> createMealIngredients(int mealID, int ingredientID) async {
@@ -261,7 +285,6 @@ class DatabaseHelper {
 
   Future<void> insertSymptoms(SymptomData symptoms) async {
     final db = await database;
-    print(symptoms);
     await db.insert(
       'symptoms',
       symptoms.toMap(),

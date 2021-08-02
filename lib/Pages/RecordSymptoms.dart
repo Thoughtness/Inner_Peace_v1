@@ -7,17 +7,21 @@ import 'package:inner_peace_v1/GuiElements.dart';
 import 'package:inner_peace_v1/Main.dart';
 
 class RecordSymptoms extends StatefulWidget {
-  // final String mealID;
-  //
-  // RecordSymptoms({Key key, this.mealID,}) : super (key: key);
+  RecordSymptoms({
+    required this.mealID,
+  });
+  final int mealID;
 
   @override
-  State createState() => new _RecordSymptoms();
+  State createState() => new _RecordSymptoms(mealID: mealID);
 }
 
 class _RecordSymptoms extends State<RecordSymptoms> {
+  _RecordSymptoms({
+    required this.mealID
+  });
 
-  // var mealID = widget.value;
+  final int mealID;
 
   final double height = 20;
   var generalWellbeing1;
@@ -344,7 +348,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                         child: CustomButton(
                           text: 'Keine Symptome',
                           onClick: () {
-                            addSymptoms(negativeCounter, negativeCounter, negativeCounter, negativeCounter);
+                            addSymptoms(negativeCounter, negativeCounter, negativeCounter, negativeCounter, mealID);
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => RecordedMeals(),
@@ -358,7 +362,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                         child: CustomButton(
                           text: 'Symptome speichern',
                           onClick: () async {
-                            addSymptoms(generalWellbeing, cramps, flatulence, bowel);
+                            addSymptoms(generalWellbeing, cramps, flatulence, bowel, mealID);
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => RecordedMeals(),
@@ -377,8 +381,8 @@ class _RecordSymptoms extends State<RecordSymptoms> {
         ),
       );
 
-  Future addSymptoms(double generalWellbeing, double cramps, double flatulence, double bowel) async {
-    //Multiplikator für Symptome = je schlimmer die Symptome desto höher der Multiplikator ( eine 10 ist wesentlich schlimmer wie 4* eine 3)
+  Future addSymptoms(double generalWellbeing, double cramps, double flatulence, double bowel, int mealID) async {
+    //Multiplikator für Symptome = je schlimmer die Symptome desto höher der Multiplikator (eine 10 ist wesentlich schlimmer wie 4* eine 3)
     List<double> symptomList = [generalWellbeing, cramps, flatulence, bowel];
 
     for(int i = 0; i <= 3; i++){
@@ -407,12 +411,13 @@ class _RecordSymptoms extends State<RecordSymptoms> {
 
     //letzte mealID herausholen
     //todo: nicht höchste mealID suchen sondern mitgabe damit bei späterem hinzufügen keine Probleme entstehen
-    var lastInsertedMeal = await DatabaseHelper.instance.getHighestMealID();
-    int mealID = lastInsertedMeal[0]['mealID'];
-    print(mealID);
+    // var lastInsertedMeal = await DatabaseHelper.instance.getHighestMealID();
+    // int mealID = lastInsertedMeal[0]['mealID'];
+    // print(mealID);
+
 
     //letze symptomsID herausholen
-    var lastInsertedSymptoms = await DatabaseHelper.instance.getSymptomsID();
+    var lastInsertedSymptoms = await DatabaseHelper.instance.getHighestSymptomsID();
     int symptomsID = lastInsertedSymptoms[0]['symptomsID'];
 
     await DatabaseHelper.instance.addSymptomsToMeal(symptomsID, mealID);
