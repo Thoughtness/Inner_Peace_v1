@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:inner_peace_v1/Database/DatabaseHelper.dart';
-import 'package:inner_peace_v1/Database/IngredientData.dart';
-import 'package:inner_peace_v1/Database/MealIngredientData.dart';
+import 'package:inner_peace_v1/Database/DatabaseFunctions.dart';
 import 'package:inner_peace_v1/Main.dart';
-import 'package:inner_peace_v1/Database/MealData.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
-import 'package:inner_peace_v1/GuiElements.dart';
+import 'package:inner_peace_v1/Formation%20and%20Elements/GuiElements.dart';
 import 'package:inner_peace_v1/Pages/RecordSymptoms.dart';
+import 'package:intl/intl.dart';
+import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
 
 class RecordMeal extends StatefulWidget {
   @override
@@ -14,28 +13,35 @@ class RecordMeal extends StatefulWidget {
 }
 
 class _RecordMeal extends State<RecordMeal> {
+  var controller = TextEditingController();
   var mealName = TextEditingController();
   var ingredients = TextEditingController();
 
-  final double width = 10.0;
-  final double height = 20;
-  List<IngredientData> ingredient = [];
   List<String> ingredientList = [];
-  //set id(int id) {}
-  //set meal(String meal) {}
+  List<double> amountList = [];
+
+  TimeOfDay? time;
+  String dateAndTime = "";
+  String formatedDate = "";
+  String? sqlFormatedDate;
+  String? sqlFormatedTime;
+
+  final double width = 10.0;
+  final double containerWidth = 100.0;
+  final double height = 10;
+  final double boxDistance = 10;
   final double left = 10.0;
   final double top = 10.0;
   final double right = 10.0;
   final double bottom = 0.0;
-
-  //final formKey = new GlobalKey<FormState>();
+  double amount = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //=> Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.teal[100],
-      endDrawer: menu(),
+      endDrawer: Menu(),
       appBar: AppBar(
         title: Text(
           'Mahlzeit erfassen',
@@ -44,34 +50,178 @@ class _RecordMeal extends State<RecordMeal> {
         backgroundColor: Colors.cyanAccent,
       ),
       body: Stack(
-        children: <Widget>[
+        children: [
           Positioned.fill(
             child: Image(
               image: AssetImage('assets/Inner_Peace.png'),
               fit: BoxFit.fill,
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              customRow(
-                title: 'Gericht',
-                description: 'Gericht hier benennen',
-                textController: mealName,
-              ),
-              customRow(
-                title: 'Zutaten',
-                description: 'Zutaten einzeln hinzufügen',
-                textController: ingredients,
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(
-                    this.left, this.top, this.right, this.bottom),
-                child: ElevatedButton(
+          Padding(
+            padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  decoration: thickTeal(),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: containerWidth,
+                        decoration: thinCyan(),
+                        child: ListTile(
+                          title: Text("Datum"),
+                        ),
+                      ),
+                      SizedBox(width: width),
+                      Expanded(
+                        child: Container(
+                          decoration: thinCyan(),
+                          height: 58,
+                          child: TextField(
+                            enabled: false,
+                            decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                filled: true,
+                                border: OutlineInputBorder(),
+                                hintText: "Datum und Uhrzeit wählen"),
+                            controller: controller,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                          icon: Icon(Icons.calendar_today),
+                          iconSize: 24.0,
+                          color: Colors.grey,
+                          onPressed: () async {
+                            showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2019, 1),
+                                lastDate: DateTime(2021, 12),
+                                builder: (context, picker) {
+                                  return datePicker(picker!);
+                                }).then((selectedDate) {
+                              if (selectedDate != null) {
+                                formatedDate = DateFormat('dd.MM.yyyy')
+                                    .format(selectedDate);
+                                sqlFormatedDate = DateFormat('yyyy-MM-dd')
+                                    .format(selectedDate);
+                                controller.text =
+                                    formatedDate + " " + getText();
+                              }
+                            });
+                          }),
+                      IconButton(
+                          icon: Icon(Icons.access_time_outlined),
+                          iconSize: 24.0,
+                          color: Colors.grey,
+                          onPressed: () async {
+                            final initialTime = TimeOfDay(hour: 9, minute: 0);
+                            final newTime = await showTimePicker(
+                              context: context,
+                              initialTime: time ?? initialTime,
+                            );
+                            if (newTime == null) return;
+                            setState(() => time = newTime);
+                            sqlFormatedTime = getText();
+                            controller.text = formatedDate + " " + getText();
+                          }),
+                    ],
+                  ),
+                ),
+                SizedBox(height: boxDistance),
+                Container(
+                  decoration: thickTeal(),
+                  //padding: EdgeInsets.fromLTRB(this.left, this.top, this.right, this.bottom),
+                  child: CustomRow(
+                    title: 'Gericht',
+                    description: 'Gericht hier benennen',
+                    textController: mealName,
+                  ),
+                ),
+                SizedBox(height: boxDistance),
+                Container(
+                  decoration: thickTeal(),
+                  child: Column(
+                    children: [
+                      Container(
+                        //padding: EdgeInsets.fromLTRB(this.left, this.top, this.right, this.bottom),
+                        child: CustomRow(
+                          title: 'Zutaten',
+                          description: 'Zutaten einzeln hinzufügen',
+                          textController: ingredients,
+                        ),
+                      ),
+                      SizedBox(height: height),
+                      Row(
+                        children: [
+                          Container(
+                            width: containerWidth,
+                            decoration: thinCyan(),
+                            child: ListTile(
+                              title: Text("Menge"),
+                            ),
+                          ),
+                          SizedBox(width: width),
+                          Flexible(
+                            flex: 29,
+                            child: Row(
+                              children: [
+                                Flexible(
+                                  flex: 3,
+                                  child: new Text(
+                                    "-",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      height: 1,
+                                      fontSize: 40,
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 100,
+                                  child: Slider.adaptive(
+                                    value: amount,
+                                    min: 0,
+                                    max: 10,
+                                    divisions: 10,
+                                    activeColor: Colors.blue,
+                                    onChanged: (double changedValue) {
+                                      setState(() {
+                                        amount = changedValue;
+                                      });
+                                    },
+                                    label: amount.toString(),
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 3,
+                                  child: new Text(
+                                    "+",
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      height: 1,
+                                      fontSize: 25,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Flexible(flex: 1, child: SizedBox(width: width)),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: boxDistance),
+                ElevatedButton(
                   onPressed: () async {
                     if (ingredients.text.length > 1) {
                       if (!ingredientList.contains(ingredients.text)) {
                         ingredientList.insert(0, ingredients.text);
+                        amountList.insert(0, amount);
                       }
                     }
                     ingredients.clear();
@@ -85,181 +235,121 @@ class _RecordMeal extends State<RecordMeal> {
                     primary: Colors.black,
                   ),
                 ),
-              ),
-              Flexible(
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(1),
-                  itemCount: ingredientList.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      child: Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(width: 1.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5.0)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: Text(
-                                '${ingredientList[index].toString()}',
-                                style: TextStyle(height: 1.5, fontSize: 20),
+                Flexible(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(1),
+                    itemCount: ingredientList.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        child: Row(
+                          children: [
+                            Flexible(
+                              flex: 18,
+                              child: Container(
+                                height: 40,
+                                decoration: thinTeal(),
+                                child: ListTile(
+                                  title: Text(
+                                    '${ingredientList[index].toString()}',
+                                    style: TextStyle(height: 0, fontSize: 20),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    Flexible(
-                      flex: 20,
-                      child: CustomButton(
-                        text: 'Symptome hinzufügen',
-                        onClick: () async {
-                          //Damit keine leeren Einträge gemacht werden können
-                          if (mealName.text.length > 0 && ingredientList.length > 0) {
-                            int mealID = await addEntry();
-                            print(mealID);
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => RecordSymptoms(mealID: mealID),
+                            Flexible(
+                              flex: 30,
+                              child: Row(
+                                children: [
+                                  Flexible(
+                                    flex: amountList[index].toInt(),
+                                    child: new Container(
+                                      decoration: symptomsBar(index, amountList),
+                                      height: 20.0,
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 10 - amountList[index].toInt(),
+                                    child: SizedBox(),
+                                  ),
+                                ],
                               ),
-                            );
-                          }
-                          //todo: Meldung machen, dass keine Zutat gespeichert ist
-                        },
-                      ),
-                    ),
-                    Flexible(
-                      flex: 20,
-                      child: CustomButton(
-                        text: 'Mahlzeit speichern',
-                        onClick: () async {
-                          //Damit keine leeren Einträge gemacht werden können
-                          if (mealName.text.length > 0 && ingredientList.length > 0) {
-                            addEntry();
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => MyApp(),
-                              ),
-                            );
-                            //todo: "Mahlzeit gespeichert" meldung erstellen
-                          }
-                          //todo: Meldung machen, dass keine Zutat gespeichert ist
-                        },
-                      ),
-                    ),
-                  ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-              SizedBox(height: height),
-            ],
+                Container(
+                  child: Row(
+                    children: [
+                      Flexible(
+                        flex: 20,
+                        child: CustomButton(
+                          text: 'Symptome hinzufügen',
+                          onClick: () async {
+                            //Damit keine leeren Einträge gemacht werden können
+                            if (mealName.text.length > 0 &&
+                                ingredientList.length > 0 &&
+                                sqlFormatedTime != "" &&
+                                sqlFormatedDate != null) {
+                              int mealID = await addEntry(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amount);
+                              print(mealID);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      RecordSymptoms(mealID: mealID),
+                                ),
+                              );
+                            }
+                            //todo: Meldung machen, dass keine Zutat gespeichert ist
+                          },
+                        ),
+                      ),
+                      SizedBox(width: width),
+                      Flexible(
+                        flex: 20,
+                        child: CustomButton(
+                          text: 'Mahlzeit speichern',
+                          onClick: () async {
+                            //Damit keine leeren Einträge gemacht werden können
+                            if (mealName.text.length > 0 &&
+                                ingredientList.length > 0 &&
+                                sqlFormatedTime != "" &&
+                                sqlFormatedDate != null) {
+                              addEntry(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amount);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => MyApp(),
+                                ),
+                              );
+                              //todo: "Mahlzeit gespeichert" meldung erstellen
+                            }
+                            //todo: Meldung machen, dass keine Zutat gespeichert ist
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: height),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  Future<int> addEntry() async {
-    //Mahlzeit in Tabelle einfügen
-    var meal = MealData(
-      meal: mealName.text,
-    );
-    await DatabaseHelper.instance.insertMeal(meal);
-
-    var lastInsertedMeal = await DatabaseHelper.instance.getHighestMealID();
-    int mealID = lastInsertedMeal[0]['mealID'];
-
-    //Zutaten in Tabelle einfügen
-    for (int i = 0; i < ingredientList.length; i++) {
-      var ingredients = IngredientData(
-        ingredient: ingredientList[i],
-      );
-      await DatabaseHelper.instance.insertIngredient(ingredients);
+  String getText() {
+    try {
+      final hours = time!.hour.toString().padLeft(2, '0');
+      final minutes = time!.minute.toString().padLeft(2, '0');
+      return '$hours:$minutes';
+    } catch (e) {
+      return "";
     }
-
-    //Alle Zutaten mit zugehörigen IDs holen und mealIngredients erstellen
-    var ingredientListID = await DatabaseHelper.instance.getIngredients();
-    for (var i in ingredientListID) {
-      if(ingredientList.contains(i.ingredient)){
-        // print(i.ingredientID);
-        // await DatabaseHelper.instance.createMealIngredients(mealID, i.ingredientID);
-
-        var mealIngredient = MealIngredientData(
-          mealID: mealID,
-          ingredientID: i.ingredientID!,
-        );
-        await DatabaseHelper.instance.createMealIngredient(mealIngredient);
-      }
-    }
-    return mealID;
   }
 }
 
-class customRow extends StatelessWidget {
-  final textController;
-  final String description;
-  final String title;
-  final double left = 10.0;
-  final double top = 10.0;
-  final double right = 10.0;
-  final double bottom = 0.0;
-  final double width = 10.0;
-  customRow({
-    required this.title,
-    required this.description,
-    required this.textController,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Container(
-      padding: EdgeInsets.fromLTRB(this.left, this.top, this.right, this.bottom),
-      child: Row(
-        children: <Widget>[
-          //SizedBox(width: width),
-          Flexible(
-            flex: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.cyanAccent,
-                border: Border.all(width: 1.0),
-                borderRadius: BorderRadius.all(Radius.circular(5.0) //
-                ),
-              ),
-              //height: 49,
-              child: ListTile(
-                title: Text(title),
-              ),
-            ),
-          ),
-          SizedBox(width: width),
-          Flexible(
-            flex: 3,
-            child: Container(
-              height: 58,
-              child: TextField(
-                decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: OutlineInputBorder(),
-                    hintText: description),
-                controller: textController,
-              ),
-            ),
-          ),
-          //SizedBox(width: width),
-        ],
-      ),
-    );
-  }
-}

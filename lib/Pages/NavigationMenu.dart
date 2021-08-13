@@ -5,15 +5,16 @@ import 'package:inner_peace_v1/Pages/Infos.dart';
 import 'package:inner_peace_v1/Pages/RecordMeal.dart';
 import 'package:inner_peace_v1/Pages/PickMealForSymptoms.dart';
 import 'package:inner_peace_v1/Pages/Intolerances.dart';
-// ignore: camel_case_types
-class menu extends StatelessWidget {
+import 'package:inner_peace_v1/Database/DatabaseFunctions.dart';
+
+class Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return Drawer(
       child: Material(
         color: Colors.cyanAccent,
         child: ListView(
-          children: <Widget>[
+          children: [
           Container(
             child: Column(
               children: [
@@ -52,9 +53,11 @@ class menu extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.show_chart),
                   title: Text('Unverträglichkeiten'),
-                    onTap: (){
+                    onTap: () async{
+                      var allIngredientsWithSymptoms = await getAverageForSymptoms();
+                      var mealsFromIngredients = await DatabaseHelper.instance.getMealsFromIngredients();
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Intolerances(),
+                        builder: (context) => Intolerances(allIngredientsWithSymptoms: allIngredientsWithSymptoms, mealsFromIngredients: mealsFromIngredients),
                       ));
                     }
                 ),
@@ -76,14 +79,5 @@ class menu extends StatelessWidget {
       ),
     );
   }
-
-  symptomlessMeals() async {
-
-    var symptomlessMealCount = await DatabaseHelper.instance.getSymptomlessMeals();
-
-    return symptomlessMealCount;
-    // setState(() {
-    //   filter = value!;
-    // });
-  }
 }
+

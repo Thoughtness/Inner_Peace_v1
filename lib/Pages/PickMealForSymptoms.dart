@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inner_peace_v1/GuiElements.dart';
+import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 import 'package:inner_peace_v1/Pages/RecordSymptoms.dart';
 
@@ -33,7 +33,7 @@ class _PickMealForSymptoms extends State<PickMealForSymptoms> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.teal[100],
-      endDrawer: menu(),
+      endDrawer: Menu(),
       appBar: AppBar(
         title: Text(
           'Mahlzeit wählen',
@@ -42,7 +42,7 @@ class _PickMealForSymptoms extends State<PickMealForSymptoms> {
         backgroundColor: Colors.cyanAccent,
       ),
       body: Stack(
-        children: <Widget>[
+        children: [
           Positioned.fill(
             child: Image(
               image: AssetImage('assets/Inner_Peace.png'),
@@ -55,6 +55,7 @@ class _PickMealForSymptoms extends State<PickMealForSymptoms> {
               itemCount: symptomlessMeals.length,
               itemBuilder: (context, index) {
                 return ListTile(
+                  //todo: make a ExpansionTile that shows ingredients to the meal
                   onTap: () async {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -66,7 +67,7 @@ class _PickMealForSymptoms extends State<PickMealForSymptoms> {
                   },
                   title: Container(
                     padding: EdgeInsets.fromLTRB(this.left, 0, 0, this.bottom),
-                    decoration: myInnerBoxDecoration(),
+                    decoration: thinCyan(),
                     child: Text(
                       symptomlessMeals[index]['meal'],
                       style: myTitleCyanAccentTextStyle(),

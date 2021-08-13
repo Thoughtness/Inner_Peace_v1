@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:inner_peace_v1/GuiElements.dart';
+import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 // ignore: camel_case_types
 class Infos extends StatelessWidget{
   @override
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: Colors.teal[100],
-    endDrawer: menu(),
+    endDrawer: Menu(),
     appBar: AppBar(
       title: Text('Infos',
         style: myAppBarTextStyle(),
@@ -14,7 +14,7 @@ class Infos extends StatelessWidget{
       backgroundColor: Colors.cyanAccent,
     ),
     body: Stack(
-      children: <Widget>[
+      children: [
         Positioned.fill(
           child: Image(
             image: AssetImage('assets/Inner_Peace.png'),
