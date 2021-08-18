@@ -85,6 +85,12 @@ TextStyle mySliderTextStyle(){
       color: Colors.black
   );
 }
+TextStyle myTextStyleMedium(){
+  return TextStyle(
+    fontSize: 16,
+    color: Colors.black,
+  );
+}
 
 TextStyle myTextStyleSmall(){
   return TextStyle(

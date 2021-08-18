@@ -7,20 +7,20 @@ class DatabaseHelper {
 
   DatabaseHelper._();
 
-  Future<Database> get database async {
+  get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('mealData58.db');
+    _database = await _initDB('mealData59.db');
     return _database!;
   }
 
-  Future<Database> _initDB(String filePath) async {
+  _initDB(String filePath) async {
     final path = join(await getDatabasesPath(), filePath);
 
     return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
-  Future _createDB(Database db, int version) async {
+  _createDB(Database db, int version) async {
     await db.execute("""
     CREATE TABLE user(
     userID INTEGER PRIMARY KEY
@@ -62,7 +62,7 @@ class DatabaseHelper {
     );""");
   }
 
-  Future<void> insertMeal(String meal, int time) async {
+  insertMeal(String meal, int time) async {
     final db = await database;
     await db.rawInsert(
         """INSERT OR IGNORE INTO meal(meal, time)
@@ -70,14 +70,14 @@ class DatabaseHelper {
         [meal, time]);
   }
 
-  Future<void> insertIngredient(String ingredient) async {
+  insertIngredient(String ingredient) async {
     final db = await database;
     await db.rawInsert(
         """INSERT OR IGNORE INTO ingredient(ingredient) VALUES(?)""",
         [ingredient]);
   }
 
-  Future<void> insertSymptoms(double wellbeing, double cramps,
+  insertSymptoms(double wellbeing, double cramps,
       double flatulence, double bowel, double symptomTotal,
       String symptomTime) async {
     final db = await database;
@@ -86,7 +86,7 @@ class DatabaseHelper {
         [wellbeing, cramps, flatulence, bowel, symptomTotal, symptomTime]);
   }
 
-  Future<void> addSymptomsToMeal(int symptomsID, int mealID) async {
+  addSymptomsToMeal(int symptomsID, int mealID) async {
     final db = await database;
     await db.rawUpdate(
         """UPDATE meal
@@ -95,14 +95,14 @@ class DatabaseHelper {
         [symptomsID, mealID]);
   }
 
-  Future<void> createMealIngredient(int mealID, int ingredientID,
+  createMealIngredient(int mealID, int ingredientID,
       double amount) async {
     final db = await database;
     await db.rawInsert(
         """INSERT OR IGNORE INTO mealingredient(mealID, ingredientID, amount) VALUES(?,?,?)""",
         [mealID, ingredientID, amount]);
   }
-
+//here
   getHighestMealID() async {
     final db = await database;
     List<Map<String, dynamic>> lastInsertedMeal = await db.rawQuery(
@@ -198,8 +198,9 @@ class DatabaseHelper {
   getMealsFromIngredients() async {
     final db = await database;
     List<Map<String, dynamic>> mealsFromIngredients = await db.rawQuery(
-        """SELECT meal.meal, ingredient.ingredientID, ingredient.ingredient
+        """SELECT meal.meal, ingredient.ingredientID, ingredient.ingredient, symptoms.symptomTime
         FROM meal
+        JOIN symptoms ON meal.symptomsID = symptoms.symptomsID
         JOIN mealingredient ON meal.mealID = mealingredient.mealID 
         JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID""");
     return mealsFromIngredients;

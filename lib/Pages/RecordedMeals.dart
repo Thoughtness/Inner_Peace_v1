@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inner_peace_v1/Formation%20and%20Elements/GuiElements.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
+import 'package:inner_peace_v1/Formation and Elements/Functions.dart';
 import 'package:inner_peace_v1/Database/DatabaseFunctions.dart';
 
 class RecordedMeals extends StatefulWidget {
@@ -14,7 +15,7 @@ class _RecordedMeals extends State<RecordedMeals> {
 
   String sort = 'Mahlzeitdatum';
   String sortByFilter = "";
-  String? filter = 'Keine';
+  String filter = 'Keine';
   double filterNumberLow = 0;
   double filterNumberHigh = 0;
   final double left = 10.0;
@@ -51,100 +52,99 @@ class _RecordedMeals extends State<RecordedMeals> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 170,
-                      decoration: thickTeal(),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.fromLTRB(
-                                this.left, this.top, this.right, this.bottom),
-                            decoration: thinCyan(),
-                            child: Row(
-                              children: [
-                                Text("Mahlzeittyp wählen"),
-                              ],
+                    Flexible(
+                      child: Container(
+                        decoration: thickTeal(),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.fromLTRB(
+                                  this.left, this.top, this.right, this.bottom),
+                              decoration: thinCyan(),
+                              child: Row(
+                                children: [
+                                  Text("Mahlzeittyp wählen", style: myTextStyleMedium()),
+                                ],
+                              ),
                             ),
-                          ),
-                          DropdownButton<String>(
-                            value: filter,
-                            icon: Icon(Icons.arrow_downward),
-                            iconSize: 24,
-                            elevation: 16,
-                            style: myTextStyleSmall(),
-                            underline: Container(
-                              height: 2,
-                              color: Colors.black,
+                            DropdownButton<String>(
+                              value: filter,
+                              icon: Icon(Icons.arrow_downward),
+                              iconSize: 24,
+                              elevation: 16,
+                              style: myTextStyleSmall(),
+                              underline: Container(
+                                height: 2,
+                                color: Colors.black,
+                              ),
+                              onChanged: (String? newValue) async {
+                                filter = newValue!;
+                                mealList = await getMealList(newValue, sort);
+                                setState(() {});
+                              },
+                              items: <String>[
+                                'Keine',
+                                'Alle',
+                                'Symptomfrei',
+                                'Verträglich',
+                                'Unverträglich'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value, style: myTextStyleMedium()),
+                                );
+                              }).toList(),
                             ),
-                            onChanged: (String? newValue) async {
-                              filter = newValue;
-                              mealList = await getMealList(newValue, sort);
-                              setState(() {});
-                            },
-                            items: <String>[
-                              'Keine',
-                              'Alle',
-                              'Symptomfrei',
-                              'Verträglich',
-                              'Unverträglich'
-                            ].map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
+                    SizedBox(width: 10),
                     Flexible(
-                      flex: 1,
-                      child: SizedBox(width: 100),
-                    ),
-                    Container(
-                      width: 170,
-                      decoration: thickTeal(),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.fromLTRB(
-                                this.left, this.top, this.right, this.bottom),
-                            decoration: thinCyan(),
-                            child: Row(
-                              children: [
-                                Text("Sortierung wählen"),
-                              ],
+                      child: Container(
+                        decoration: thickTeal(),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.fromLTRB(
+                                  this.left, this.top, this.right, this.bottom),
+                              decoration: thinCyan(),
+                              child: Row(
+                                children: [
+                                  Text("Sortierung wählen", style: myTextStyleMedium()),
+                                ],
+                              ),
                             ),
-                          ),
-                          DropdownButton<String>(
-                            value: sort,
-                            icon: Icon(Icons.arrow_downward),
-                            iconSize: 24,
-                            elevation: 16,
-                            style: myTextStyleSmall(),
-                            underline: Container(
-                              height: 2,
-                              color: Colors.black,
+                            DropdownButton<String>(
+                              value: sort,
+                              icon: Icon(Icons.arrow_downward),
+                              iconSize: 24,
+                              elevation: 16,
+                              style: myTextStyleSmall(),
+                              underline: Container(
+                                height: 2,
+                                color: Colors.black,
+                              ),
+                              onChanged: (String? newValue) async {
+                                sort = newValue!;
+                                mealList = await getMealList(filter, newValue);
+                                setState(() {});
+                              },
+                              items: <String>[
+                                'Mahlzeitdatum',
+                                'Name A-Z',
+                                'Name Z-A',
+                                'Verträglichkeit',
+                                'Unverträglichkeit'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value, style: myTextStyleMedium()),
+                                );
+                              }).toList(),
                             ),
-                            onChanged: (String? newValue) async{
-                              sort = newValue!;
-                              mealList = await getMealList(filter, newValue);
-                                setState((){});
-                            },
-                            items: <String>[
-                              'Mahlzeitdatum',
-                              'Name A-Z',
-                              'Name Z-A',
-                              'Verträglichkeit',
-                              'Unverträglichkeit'
-                            ].map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -179,9 +179,11 @@ class _RecordedMeals extends State<RecordedMeals> {
                                       color: Colors.grey,
                                       onPressed: () async {
                                         //todo: make popup "are you sure" to delete meal (make separate mehtod with the popup, when select yes then call deleteMeal
-                                        await deleteMeal(mealList[index]['mealID']);
+                                        await deleteMeal(
+                                            mealList[index]['mealID']);
                                         setState(() async {
-                                          mealList = await getMealList(filter, sort);
+                                          mealList =
+                                              await getMealList(filter, sort);
                                           setState(() {});
                                         });
                                       }),
@@ -194,29 +196,43 @@ class _RecordedMeals extends State<RecordedMeals> {
                               child: Column(
                                 children: [
                                   SymptomsRow(
-                                      symptom: 'Wohlbefinden',
-                                      index: index,
-                                      averageSymptom: 'wellbeing',
-                                      symptomsValue: mealList[index]['wellbeing'],
-                                      allIngredientsWithSymptoms: mealList),
+                                      barName: 'Wohlbefinden',
+                                    //index: index,
+                                      //barName: 'wellbeing',
+                                      value: mealList[index]
+                                          ['wellbeing'],
+                                      allIngredientsWithSymptoms: mealList,
+                                    barLength: barLengthSymptoms(mealList[index]['avg(symptoms.wellbeing)']),
+                                    opposingBarLength: opposingBarLengthSymptoms(mealList[index]['avg(symptoms.wellbeing)']),
+                                  ),
                                   SymptomsRow(
-                                      symptom: 'Krämpfe',
-                                      index: index,
-                                      averageSymptom: 'cramps',
-                                      symptomsValue: mealList[index]['cramps'],
-                                      allIngredientsWithSymptoms: mealList),
+                                      barName: 'Krämpfe',
+                                    //index: index,
+                                      //barName: 'cramps',
+                                      value: mealList[index]['cramps'],
+                                      allIngredientsWithSymptoms: mealList,
+                                    barLength: barLengthSymptoms(mealList[index]['avg(symptoms.cramps)']),
+                                    opposingBarLength: opposingBarLengthSymptoms(mealList[index]['avg(symptoms.cramps)']),
+                                  ),
                                   SymptomsRow(
-                                      symptom: 'Blähungen',
-                                      index: index,
-                                      averageSymptom: 'flatulence',
-                                      symptomsValue: mealList[index]['flatulence'],
-                                      allIngredientsWithSymptoms: mealList),
+                                      barName: 'Blähungen',
+                                    //index: index,
+                                      //barName: 'flatulence',
+                                      value: mealList[index]
+                                          ['flatulence'],
+                                      allIngredientsWithSymptoms: mealList,
+                                    barLength: barLengthSymptoms(mealList[index]['avg(symptoms.flatulence)']),
+                                    opposingBarLength: opposingBarLengthSymptoms(mealList[index]['avg(symptoms.flatulence)']),
+                                  ),
                                   SymptomsRow(
-                                      symptom: 'Stuhlgang',
-                                      index: index,
-                                      averageSymptom: 'bowel',
-                                      symptomsValue: mealList[index]['bowel'],
-                                      allIngredientsWithSymptoms: mealList),
+                                      barName: 'Stuhlgang',
+                                      //index: index,
+                                      //barName: 'bowel',
+                                      value: mealList[index]['bowel'],
+                                      allIngredientsWithSymptoms: mealList,
+                                    barLength: barLengthSymptoms(mealList[index]['avg(symptoms.bowel)']),
+                                    opposingBarLength: opposingBarLengthSymptoms(mealList[index]['avg(symptoms.bowel)']),
+                                  ),
                                 ],
                               ),
                             ),

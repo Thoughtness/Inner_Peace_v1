@@ -3,50 +3,64 @@ import 'package:flutter/material.dart';
 import 'package:inner_peace_v1/Formation%20and%20Elements/GuiElements.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
+import 'package:inner_peace_v1/Formation and Elements/Functions.dart';
 import 'package:inner_peace_v1/Database/DatabaseFunctions.dart';
 
 class Intolerances extends StatefulWidget {
   Intolerances({
-    required this.allIngredientsWithSymptoms,
+    required this.warnings,
+    required this.digestible,
+    required this.symptomFree,
     required this.mealsFromIngredients,
   });
 
-  final List<Map<String, dynamic>> allIngredientsWithSymptoms;
+  final List<Map<String, dynamic>> warnings;
+  final List<Map<String, dynamic>> digestible;
+  final List<Map<String, dynamic>> symptomFree;
   final List<Map<String, dynamic>> mealsFromIngredients;
 
   @override
   _Intolerances createState() => _Intolerances(
-      allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+      warnings: warnings,
+      digestible: digestible,
+      symptomFree: symptomFree,
       mealsFromIngredients: mealsFromIngredients);
 }
 
 class _Intolerances extends State<Intolerances> {
   _Intolerances({
-    required this.allIngredientsWithSymptoms,
+    required this.warnings,
+    required this.digestible,
+    required this.symptomFree,
     required this.mealsFromIngredients,
   });
 
-  List<Map<String, dynamic>> allIngredientsWithSymptoms;
-  List<Map<String, dynamic>> mealsFromIngredients;
+  final List<Map<String, dynamic>> warnings;
+  final List<Map<String, dynamic>> digestible;
+  final List<Map<String, dynamic>> symptomFree;
+  final List<Map<String, dynamic>> mealsFromIngredients;
+  List<Map<String, dynamic>> allIngredientsWithSymptoms = [];
 
   final double left = 10.0;
   final double top = 10.0;
   final double right = 10.0;
   final double bottom = 10.0;
 
-  int mealCounter = 0;
-  bool allIsChecked = false;
-  bool warningsIsChecked = false;
-  bool digestibleIsChecked = false;
-  bool symptomFreeIsChecked = false;
-  bool allTimeIsChecked = false;
-  bool whileEating = false;
-  bool firstHour = false;
-  bool twoAndFive = false;
-  bool afterFive = false;
+  String sortByFilter = "";
+  String sort = 'Unverträglich';
+
+  int symptomTimeLength = 0;
+  bool allIsChecked = true;
+  bool warningsIsChecked = true;
+  bool digestibleIsChecked = true;
+  bool symptomFreeIsChecked = true;
 
   @override
   Widget build(BuildContext context) {
+    allIngredientsWithSymptoms = warnings + digestible + symptomFree;
+
+
+    print(allIngredientsWithSymptoms);
     return Scaffold(
       backgroundColor: Colors.teal[100],
       endDrawer: Menu(),
@@ -65,160 +79,264 @@ class _Intolerances extends State<Intolerances> {
               fit: BoxFit.fill,
             ),
           ),
-          Container(
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(left, top, right, 0),
-                  child: Container(
-                    decoration: thickCyan(),
-                    //ClipRRect damit wenn ExpansionTile aufgeklappt ist, dass die Ecken noch abgerundet sind. Nur mit Container sind diese aussen rund, jedoch innen eckig
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5.0),
-                      child: ExpansionTile(
-                        title: Text(
-                          "Suchfilter",
-                          style: mySliderTextStyle(),
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(
+                          this.left, this.top, this.right, 0),
+                      child: Container(
+                        decoration: thickTeal(),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.fromLTRB(
+                                  this.left, this.top, this.right, this.bottom),
+                              decoration: thinCyan(),
+                              child: Row(
+                                children: [
+                                  Text("Sortieren nach",
+                                      style: myTextStyleMedium()),
+                                ],
+                              ),
+                            ),
+                            DropdownButton<String>(
+                              value: sort,
+                              icon: Icon(Icons.arrow_downward),
+                              iconSize: 24,
+                              elevation: 16,
+                              style: myTextStyleSmall(),
+                              underline: Container(
+                                height: 2,
+                                color: Colors.black,
+                              ),
+                              onChanged: (String? newValue) async {
+                                sort = newValue!;
+                                sortList();
+                                setState(() {});
+                              },
+                              items: <String>[
+                                'Unverträglich',
+                                'Verträglich',
+                                // 'Auftreten der Symptome ↑',
+                                // 'Auftreten der Symptome ↓',
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child:
+                                      Text(value, style: myTextStyleMedium()),
+                                );
+                              }).toList(),
+                            ),
+                          ],
                         ),
-                        children: [
-                          ExpansionTile(
-                            title: Text(
-                              "Verträglichkeit",
-                              style: mySliderTextStyle(),
-                            ),
-                            children: [
-                              customCheckbox("Alle anzeigen", allIsChecked),
-                              customCheckbox("Warnungen anzeigen", warningsIsChecked),
-                              customCheckbox(
-                                  "Verträgliche anzeigen", digestibleIsChecked),
-                              customCheckbox("Symptomfreie anzeigen",
-                                  symptomFreeIsChecked),
-                            ],
-                          ),
-                          ExpansionTile(
-                            title: Text(
-                              "Auftreten der Symptome",
-                              style: mySliderTextStyle(),
-                            ),
-                            children: [
-                              customCheckbox("Alle Zeiten", allTimeIsChecked),
-                              customCheckbox("Während der Mahlzeit", whileEating),
-                              customCheckbox("In der ersten Stunde", firstHour),
-                              customCheckbox("Nach 2-5 Stunden", twoAndFive),
-                              customCheckbox("Nach 5 Stunden", afterFive),
-                            ],
-                          ),
-                        ],
                       ),
                     ),
                   ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(left, top, right, 0),
+                child: Container(
+                  decoration: thickCyan(),
+                  //ClipRRect damit wenn ExpansionTile aufgeklappt ist, dass die Ecken noch abgerundet sind. Nur mit Container sind diese aussen rund, jedoch innen eckig
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5.0),
+                    child: ExpansionTile(
+                      title: Text(
+                        "Suchfilter",
+                        style: myTextStyleMedium(),
+                      ),
+                      children: [
+                        customCheckbox("Alle anzeigen", allIsChecked),
+                        customCheckbox("Warnungen anzeigen", warningsIsChecked),
+                        customCheckbox(
+                            "Verträgliche anzeigen", digestibleIsChecked),
+                        customCheckbox(
+                            "Symptomfreie anzeigen", symptomFreeIsChecked),
+                      ],
+                    ),
+                  ),
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                    itemCount: allIngredientsWithSymptoms.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Container(
-                          decoration: thickTeal(),
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: thinCyan(),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.fromLTRB(
-                                          this.left, 0, 0, this.bottom),
-                                      child: Text(
-                                        allIngredientsWithSymptoms[index]
-                                            ['ingredient'],
-                                        style: myTitleCyanAccentTextStyle(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(this.left,
-                                    this.top, this.right, this.bottom),
-                                child: Column(
-                                  children: [
-                                    SymptomsRow(
-                                        symptom: 'Wohlbefinden',
-                                        index: index,
-                                        averageSymptom:
-                                            'avg(symptoms.wellbeing)',
-                                        symptomsValue:
-                                            allIngredientsWithSymptoms[index]
-                                                ['avg(symptoms.wellbeing)'],
-                                        allIngredientsWithSymptoms:
-                                            allIngredientsWithSymptoms),
-                                    SymptomsRow(
-                                        symptom: 'Krämpfe',
-                                        index: index,
-                                        averageSymptom: 'avg(symptoms.cramps)',
-                                        symptomsValue:
-                                            allIngredientsWithSymptoms[index]
-                                                ['avg(symptoms.cramps)'],
-                                        allIngredientsWithSymptoms:
-                                            allIngredientsWithSymptoms),
-                                    SymptomsRow(
-                                        symptom: 'Blähungen',
-                                        index: index,
-                                        averageSymptom:
-                                            'avg(symptoms.flatulence)',
-                                        symptomsValue:
-                                            allIngredientsWithSymptoms[index]
-                                                ['avg(symptoms.flatulence)'],
-                                        allIngredientsWithSymptoms:
-                                            allIngredientsWithSymptoms),
-                                    SymptomsRow(
-                                        symptom: 'Stuhlgang',
-                                        index: index,
-                                        averageSymptom: 'avg(symptoms.bowel)',
-                                        symptomsValue:
-                                            allIngredientsWithSymptoms[index]
-                                                ['avg(symptoms.bowel)'],
-                                        allIngredientsWithSymptoms:
-                                            allIngredientsWithSymptoms),
-                                  ],
-                                ),
-                              ),
-                              ExpansionTile(
-                                title: Text(
-                                  "Mahlzeiten mit dieser Zutat",
-                                  style: mySliderTextStyle(),
-                                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                  itemCount: allIngredientsWithSymptoms.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Container(
+                        decoration: thickTeal(),
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: thinCyan(),
+                              child: Row(
                                 children: [
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: mealCounter = getMealListLength(
-                                        allIngredientsWithSymptoms[index]
-                                            ['ingredient'], mealsFromIngredients),
-                                    itemBuilder: (context, index2) {
-                                      return Container(
-                                        padding: EdgeInsets.fromLTRB(
-                                            left, 0, right, bottom),
-                                        child: Text(getMealsForIngredient(
-                                            index2,
-                                            allIngredientsWithSymptoms[index]
-                                                ['ingredient'], mealsFromIngredients)),
-                                      );
-                                    },
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(
+                                        this.left, 0, 0, this.bottom),
+                                    child: Text(
+                                      allIngredientsWithSymptoms[index]
+                                          ['ingredient'],
+                                      style: myTitleCyanAccentTextStyle(),
+                                    ),
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.fromLTRB(
+                                  this.left, this.top, this.right, this.bottom),
+                              child: Column(
+                                children: [
+                                  SymptomsRow(
+                                    barName: 'Wohlbefinden',
+                                    //index: index,
+                                    //barName: 'avg(symptoms.wellbeing)',
+                                    value:
+                                        allIngredientsWithSymptoms[index]
+                                            ['avg(symptoms.wellbeing)'],
+                                    allIngredientsWithSymptoms:
+                                        allIngredientsWithSymptoms,
+                                    barLength: barLengthSymptoms(
+                                        allIngredientsWithSymptoms[index]
+                                            ['avg(symptoms.wellbeing)']),
+                                    opposingBarLength:
+                                        opposingBarLengthSymptoms(
+                                            allIngredientsWithSymptoms[index]
+                                                ['avg(symptoms.wellbeing)']),
+                                  ),
+                                  SymptomsRow(
+                                    barName: 'Krämpfe',
+                                    //index: index,
+                                    //barName: 'avg(symptoms.cramps)',
+                                    value:
+                                        allIngredientsWithSymptoms[index]
+                                            ['avg(symptoms.cramps)'],
+                                    allIngredientsWithSymptoms:
+                                        allIngredientsWithSymptoms,
+                                    barLength: barLengthSymptoms(
+                                        allIngredientsWithSymptoms[index]
+                                            ['avg(symptoms.cramps)']),
+                                    opposingBarLength:
+                                        opposingBarLengthSymptoms(
+                                            allIngredientsWithSymptoms[index]
+                                                ['avg(symptoms.cramps)']),
+                                  ),
+                                  SymptomsRow(
+                                    barName: 'Blähungen',
+                                    //index: index,
+                                    //barName: 'avg(symptoms.flatulence)',
+                                    value:
+                                        allIngredientsWithSymptoms[index]['avg(symptoms.flatulence)'],
+                                    allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                    barLength: barLengthSymptoms(allIngredientsWithSymptoms[index]['avg(symptoms.flatulence)']),
+                                    //barLength: barLengthSymptoms(index, 'avg(symptoms.flatulence)', allIngredientsWithSymptoms),
+                                    opposingBarLength:
+                                        opposingBarLengthSymptoms(
+                                            allIngredientsWithSymptoms[index]
+                                                ['avg(symptoms.flatulence)']),
+                                  ),
+                                  SymptomsRow(
+                                    barName: 'Stuhlgang',
+                                    //index: index,
+                                    //barName: 'avg(symptoms.bowel)',
+                                    value:
+                                        allIngredientsWithSymptoms[index]
+                                            ['avg(symptoms.bowel)'],
+                                    allIngredientsWithSymptoms:
+                                        allIngredientsWithSymptoms,
+                                    barLength: barLengthSymptoms(
+                                        allIngredientsWithSymptoms[index]
+                                            ['avg(symptoms.bowel)']),
+                                    opposingBarLength:
+                                        opposingBarLengthSymptoms(
+                                            allIngredientsWithSymptoms[index]
+                                                ['avg(symptoms.bowel)']),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            ExpansionTile(
+                              title: Text(
+                                "Auftreten der Symptome",
+                                style: mySliderTextStyle(),
+                              ),
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.fromLTRB(
+                                      this.left, 0, this.right, this.bottom),
+                                  child: Column(
+                                    children: [
+                                      SymptomsRow(
+                                        barName: 'Während der Mahlzeit',
+                                        value: 11,
+                                        allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                        barLength: symptomTimeLength = getSymptomTimeLength('Während der Mahlzeit', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
+                                        opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
+                                      ),
+                                      SymptomsRow(
+                                        barName: 'In der ersten Stunde',
+                                        value: 11,
+                                        allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                        barLength: symptomTimeLength = getSymptomTimeLength('In der ersten Stunde', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
+                                        opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
+                                      ),
+                                      SymptomsRow(
+                                        barName: 'Nach 2-5 Stunden',
+                                        value: 11,
+                                        allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                        barLength: symptomTimeLength = getSymptomTimeLength('Nach 2-5 Stunden', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
+                                        opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
+                                      ),
+                                      SymptomsRow(
+                                        barName: 'Nach 5 Stunden',
+                                        value: 11,
+                                        allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                        barLength: symptomTimeLength = getSymptomTimeLength('Nach 5 Stunden', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
+                                        opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            ExpansionTile(
+                              title: Text(
+                                "Mahlzeiten mit dieser Zutat",
+                                style: mySliderTextStyle(),
+                              ),
+                              children: [
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: getMealListLength(allIngredientsWithSymptoms[index]['ingredient'], mealsFromIngredients),
+                                  itemBuilder: (context, index2) {
+                                    return Container(
+                                      padding: EdgeInsets.fromLTRB(
+                                          left, 0, right, bottom),
+                                      child: Text(getMealsForIngredient(
+                                          index2,
+                                          allIngredientsWithSymptoms[index]
+                                              ['ingredient'],
+                                          mealsFromIngredients)),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
@@ -233,89 +351,93 @@ class _Intolerances extends State<Intolerances> {
         controlAffinity: ListTileControlAffinity.trailing,
         value: boolValue,
         onChanged: (bool? value) {
-          /// manage the state of each value
-          setState(() async {
-            switch (title) {
-              case "Alle anzeigen":
-                allIsChecked = value!;
-                setCheckboxStateDigestible("Alle anzeigen", value);
-                allIngredientsWithSymptoms = await getAverageForSymptoms();
+          switch (title) {
+            case "Alle anzeigen":
+              allIsChecked = value!;
+              warningsIsChecked = value;
+              digestibleIsChecked = value;
+              symptomFreeIsChecked = value;
+              if (allIsChecked == true) {
+                allIngredientsWithSymptoms =
+                    warnings + digestible + symptomFree;
                 break;
-              case "Warnungen anzeigen":
-                warningsIsChecked = value!;
-                setCheckboxStateDigestible("Warnungen anzeigen", value);
-                break;
-              case "Verträgliche anzeigen":
-                digestibleIsChecked = value!;
-                setCheckboxStateDigestible("Verträgliche anzeigen", value);
-                break;
-              case "Symptomfreie anzeigen":
-                symptomFreeIsChecked = value!;
-                setCheckboxStateDigestible("Symptomfreie anzeigen", value);
-                break;
-              case "Alle Zeiten":
-                allTimeIsChecked = value!;
-                setCheckboxStateTime("Alle Zeiten", value);
-                break;
-              case "Während der Mahlzeit":
-                whileEating = value!;
-                setCheckboxStateTime("Während der Mahlzeit", value);
-                break;
-              case "In der ersten Stunde":
-                firstHour = value!;
-                setCheckboxStateTime("In der ersten Stunde", value);
-                break;
-              case "Nach 2-5 Stunden":
-                twoAndFive = value!;
-                setCheckboxStateTime("Nach 2-5 Stunden", value);
-                break;
-              case "Nach 5 Stunden":
-                afterFive = value!;
-                setCheckboxStateTime("Nach 5 Stunden", value);
-                break;
-            }
-          });
+              }
+              allIngredientsWithSymptoms = [];
+              break;
+            case "Warnungen anzeigen":
+              warningsIsChecked = value!;
+              setCheckboxState("Warnungen anzeigen", value);
+              getIngredients(warningsIsChecked, digestibleIsChecked,
+                  symptomFreeIsChecked, warnings, digestible, symptomFree);
+              break;
+            case "Verträgliche anzeigen":
+              digestibleIsChecked = value!;
+              setCheckboxState("Verträgliche anzeigen", value);
+              getIngredients(digestibleIsChecked, warningsIsChecked,
+                  symptomFreeIsChecked, digestible, warnings, symptomFree);
+              break;
+            case "Symptomfreie anzeigen":
+              symptomFreeIsChecked = value!;
+              setCheckboxState("Symptomfreie anzeigen", value);
+              getIngredients(symptomFreeIsChecked, warningsIsChecked,
+                  digestibleIsChecked, symptomFree, warnings, digestible);
+              break;
+          }
+          setState(() {});
         },
       ),
     );
   }
 
-  setCheckboxStateDigestible(String title, bool value) {
-    if (title == "Alle anzeigen") {
-      warningsIsChecked = value;
-      digestibleIsChecked = value;
-      symptomFreeIsChecked = value;
-    } else if (title != "Alle anzeigen") {
-      if (warningsIsChecked == false ||
-          digestibleIsChecked == false ||
-          symptomFreeIsChecked == false) {
-        allIsChecked = false;
-      } else if (warningsIsChecked == true &&
-          digestibleIsChecked == true &&
-          symptomFreeIsChecked == true) {
-        allIsChecked = true;
+  getIngredients(
+      bool primary,
+      bool secondary1,
+      secondary2,
+      List<Map<String, dynamic>> primaryList,
+      List<Map<String, dynamic>> secondaryList1,
+      List<Map<String, dynamic>> secondaryList2) {
+    if (primary) {
+      allIngredientsWithSymptoms = primaryList;
+      if (allIsChecked) {
+        allIngredientsWithSymptoms =
+            primaryList + secondaryList1 + secondaryList2;
+      } else if (secondary1) {
+        allIngredientsWithSymptoms = primaryList + secondaryList1;
+      } else if (secondary2) {
+        allIngredientsWithSymptoms = primaryList + secondaryList2;
       }
+    } else if (!primary && secondary1 && secondary2) {
+      allIngredientsWithSymptoms = secondaryList1 + secondaryList2;
+    } else if (!primary && secondary1) {
+      allIngredientsWithSymptoms = secondaryList1;
+    } else if (!primary && secondary2) {
+      allIngredientsWithSymptoms = secondaryList2;
+    } else if (!primary && !secondary1 && !secondary2) {
+      allIngredientsWithSymptoms = [];
     }
+    sortList();
   }
 
-  setCheckboxStateTime(String title, bool value) {
-    if (title == "Alle Zeiten") {
-      whileEating = value;
-      firstHour = value;
-      twoAndFive = value;
-      afterFive = value;
-    } else if (title != "Alle anzeigen") {
-      if (whileEating == false ||
-          firstHour == false ||
-          twoAndFive == false ||
-          afterFive == false) {
-        allTimeIsChecked = false;
-      } else if (whileEating == true &&
-          firstHour == true &&
-          twoAndFive == true &&
-          afterFive == true) {
-        allTimeIsChecked = true;
-      }
+  sortList() {
+    if (sort == "Unverträglich") {
+      allIngredientsWithSymptoms.sort((a, b) => b["sum(symptoms.symptomTotal)"]
+          .compareTo(a["sum(symptoms.symptomTotal)"]));
+    } else if (sort == "Verträglich") {
+      allIngredientsWithSymptoms.sort((a, b) => a["sum(symptoms.symptomTotal)"]
+          .compareTo(b["sum(symptoms.symptomTotal)"]));
+    }
+    return allIngredientsWithSymptoms;
+  }
+
+  setCheckboxState(String title, bool value) {
+    if (warningsIsChecked == false ||
+        digestibleIsChecked == false ||
+        symptomFreeIsChecked == false) {
+      allIsChecked = false;
+    } else if (warningsIsChecked == true &&
+        digestibleIsChecked == true &&
+        symptomFreeIsChecked == true) {
+      allIsChecked = true;
     }
   }
 }

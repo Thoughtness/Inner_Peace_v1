@@ -54,10 +54,12 @@ class Menu extends StatelessWidget {
                   leading: Icon(Icons.show_chart),
                   title: Text('Unverträglichkeiten'),
                     onTap: () async{
-                      var allIngredientsWithSymptoms = await getAverageForSymptoms();
+                      var warnings = await getAverageForSymptoms("Warnungen anzeigen", "red");
+                      var digestible = await getAverageForSymptoms("Verträgliche anzeigen", "yellow");
+                      var symptomFree = await getAverageForSymptoms("Symptomfreie anzeigenn", "green");
                       var mealsFromIngredients = await DatabaseHelper.instance.getMealsFromIngredients();
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Intolerances(allIngredientsWithSymptoms: allIngredientsWithSymptoms, mealsFromIngredients: mealsFromIngredients),
+                        builder: (context) => Intolerances(warnings: warnings, digestible: digestible, symptomFree: symptomFree, mealsFromIngredients: mealsFromIngredients),
                       ));
                     }
                 ),

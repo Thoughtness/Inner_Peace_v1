@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
+import 'package:inner_peace_v1/Formation and Elements/Functions.dart';
 
 // ignore: camel_case_types
 class CustomButton extends StatelessWidget {
@@ -88,18 +89,18 @@ class CustomRow extends StatelessWidget {
 }
 
 class SymptomsRow extends StatelessWidget {
-  final String symptom;
-  final int index;
-  final String averageSymptom;
-  final double symptomsValue;
+  final String barName;
+  final double value;
   final List<Map<String, dynamic>> allIngredientsWithSymptoms;
+  final barLength;
+  final opposingBarLength;
 
   SymptomsRow({
-    required this.symptom,
-    required this.index,
-    required this.averageSymptom,
-    required this.symptomsValue,
+    required this.barName,
+    required this.value,
     required this.allIngredientsWithSymptoms,
+    required this.barLength,
+    required this.opposingBarLength,
 });
 
   @override
@@ -110,16 +111,16 @@ class SymptomsRow extends StatelessWidget {
         children: [
           Container(
             width: 150,
-            child: Text(symptom),
+            child: Text(barName),
           ),
           Expanded(
             child: Row(
               children: [
                 Flexible(
-                  flex: barLength(index, averageSymptom),
+                  flex: barLength,
                   child: new Container(
                     decoration: BoxDecoration(
-                      color: barColor(symptomsValue.toInt()),
+                      color: barColor(value.toInt()),
                       borderRadius:
                       BorderRadius.all(
                           Radius.circular(
@@ -129,7 +130,7 @@ class SymptomsRow extends StatelessWidget {
                   ),
                 ),
                 Flexible(
-                  flex: opposingBarLength(index, averageSymptom),
+                  flex: opposingBarLength,
                   child: SizedBox(),
                 ),
               ],
@@ -139,30 +140,5 @@ class SymptomsRow extends StatelessWidget {
       ),
     );
   }
-
-  barLength(int index, String symptom) {
-    double barLength = allIngredientsWithSymptoms[index]['$symptom'] * 100;
-    return barLength.toInt();
-  }
-
-  opposingBarLength(int index, String symptom) {
-    double barLength = allIngredientsWithSymptoms[index]['$symptom'] * 100;
-    double opposingBarLength = 1000 - barLength;
-    return opposingBarLength.toInt();
-  }
-
-  barColor(int index) {
-    Color color = Colors.black;
-
-    if (index <= 3) {
-      color = Colors.green;
-    } else if (index <= 5) {
-      color = Colors.yellow;
-    } else if (index <= 8) {
-      color = Colors.orange;
-    } else if (index <= 10) {
-      color = Colors.red;
-    }
-    return color;
-  }
 }
+

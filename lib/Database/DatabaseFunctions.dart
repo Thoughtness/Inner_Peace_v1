@@ -1,16 +1,6 @@
 import 'package:inner_peace_v1/Database/DatabaseHelper.dart';
 import 'package:flutter/material.dart';
 
-getMealListLength(String ingredient, List<Map<String, dynamic>> mealsFromIngredients) {
-  int counter = 0;
-  for (int i = 0; i < mealsFromIngredients.length; i++) {
-    if (ingredient == mealsFromIngredients[i]['ingredient']) {
-      counter++;
-    }
-  }
-  return counter;
-}
-
 getMealsForIngredient(int mealCounter, String ingredient, List<Map<String, dynamic>> mealsFromIngredients) {
   var mealsForIngredient = [];
   for (int i = 0; i < mealsFromIngredients.length; i++) {
@@ -21,13 +11,32 @@ getMealsForIngredient(int mealCounter, String ingredient, List<Map<String, dynam
   return mealsForIngredient[mealCounter].toString();
 }
 
-getAverageForSymptoms() async{
+getAverageForSymptoms(String filter,String filterColor) async{
   var allIngredients = await DatabaseHelper.instance.getIngredients();
   List<Map<String, dynamic>> allIngredientsWithSymptoms = [];
   for(int i = 0; i < allIngredients.length; i++){
     var singleIngredient = await DatabaseHelper.instance.getAllIngredientsWithSymptoms(allIngredients[i]['ingredientID']);
-    if(singleIngredient[0]['ingredientID'] != null){
-      allIngredientsWithSymptoms.add(singleIngredient[0]);
+    try {
+      switch (filterColor) {
+        case "green":
+          if (singleIngredient[0]['sum(symptoms.symptomTotal)'] <= 0) {
+            allIngredientsWithSymptoms.add(singleIngredient[0]);
+          }
+          break;
+        case "yellow":
+          if (singleIngredient[0]['sum(symptoms.symptomTotal)'] <= 160 &&
+              singleIngredient[0]['sum(symptoms.symptomTotal)'] > 0) {
+            allIngredientsWithSymptoms.add(singleIngredient[0]);
+          }
+          break;
+        case "red":
+          if (singleIngredient[0]['sum(symptoms.symptomTotal)'] > 160) {
+            allIngredientsWithSymptoms.add(singleIngredient[0]);
+          }
+          break;
+      }
+    } catch (e) {
+
     }
   }
   return allIngredientsWithSymptoms;
@@ -55,7 +64,7 @@ getMealList(String? value, String? sort) async {
         var meal = await DatabaseHelper.instance.getAllRecordedMeals(i);
         mealList.add(meal[0]);
       } catch (e) {
-        //Handle exception of type SomeException
+
       }
     }
   } else if (value == "Symptomfrei") {
@@ -67,7 +76,7 @@ getMealList(String? value, String? sort) async {
             .getCertainRecordedMeals(i, filterNumberLow, filterNumberHigh);
         mealList.add(meal[0]);
       } catch (e) {
-        //Handle exception of type SomeException
+
       }
     }
   } else if (value == "Verträglich") {
@@ -79,7 +88,7 @@ getMealList(String? value, String? sort) async {
             .getCertainRecordedMeals(i, filterNumberLow, filterNumberHigh);
         mealList.add(meal[0]);
       } catch (e) {
-        //Handle exception of type SomeException
+
       }
     }
   } else if (value == "Unverträglich") {
@@ -90,7 +99,7 @@ getMealList(String? value, String? sort) async {
             .getIntolerantRecordedMeals(i, filterNumberLow);
         mealList.add(meal[0]);
       } catch (e) {
-        //Handle exception of type SomeException
+
       }
     }
   }
@@ -109,7 +118,7 @@ getMealList(String? value, String? sort) async {
   return mealList;
 }
 
-Future addSymptoms(double wellbeing, double cramps, double flatulence, double bowel, int mealID, String symptomTime) async {
+addSymptoms(double wellbeing, double cramps, double flatulence, double bowel, int mealID, String symptomTime) async {
   //Multiplikator für Symptome = je schlimmer die Symptome desto höher der Multiplikator (eine 10 ist wesentlich schlimmer wie 4* eine 3)
   List<double> symptomList = [wellbeing, cramps, flatulence, bowel];
 
@@ -138,7 +147,7 @@ Future addSymptoms(double wellbeing, double cramps, double flatulence, double bo
   await DatabaseHelper.instance.addSymptomsToMeal(symptomsID, mealID);
 }
 
-Future<int> addEntry(String? sqlFormatedDate, String? sqlFormatedTime, List<String> ingredientList, TextEditingController mealName, double amount) async {
+addEntry(String? sqlFormatedDate, String? sqlFormatedTime, List<String> ingredientList, TextEditingController mealName, double amount) async {
   DateTime sqlDate =
   DateTime.parse(sqlFormatedDate! + "T" + sqlFormatedTime!);
   await DatabaseHelper.instance
