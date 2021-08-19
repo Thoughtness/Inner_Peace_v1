@@ -218,7 +218,7 @@ class DatabaseHelper {
     final db = await database;
     final List<Map<String, dynamic>> allIngredientsWithMeals = await db
         .rawQuery(
-        """SELECT ingredient.ingredientID, ingredient.ingredient, meal.meal, sum(symptoms.symptomTotal), avg(symptoms.wellbeing), avg(symptoms.flatulence), avg(symptoms.cramps), avg(symptoms.bowel)
+        """SELECT ingredient.ingredientID, ingredient.ingredient, avg(mealingredient.amount), meal.meal, sum(symptoms.symptomTotal), avg(symptoms.wellbeing), avg(symptoms.flatulence), avg(symptoms.cramps), avg(symptoms.bowel)
         FROM ingredient
         JOIN mealingredient ON ingredient.ingredientID = mealingredient.ingredientID
         JOIN meal ON mealingredient.mealID = meal.mealID

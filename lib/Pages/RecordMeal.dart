@@ -34,7 +34,7 @@ class _RecordMeal extends State<RecordMeal> {
   final double top = 10.0;
   final double right = 10.0;
   final double bottom = 0.0;
-  double amount = 0;
+  double amount = 5;
 
   @override
   Widget build(BuildContext context) {
