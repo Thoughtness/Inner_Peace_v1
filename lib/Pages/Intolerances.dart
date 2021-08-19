@@ -159,87 +159,6 @@ class _Intolerances extends State<Intolerances> {
                   ),
                 ),
               ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     Flexible(
-              //       child: Padding(
-              //         padding: EdgeInsets.fromLTRB(
-              //             this.left, this.top, this.right, 0),
-              //         child: Container(
-              //           decoration: thickTeal(),
-              //           child: Column(
-              //             children: [
-              //               Container(
-              //                 padding: EdgeInsets.fromLTRB(
-              //                     this.left, this.top, this.right, this.bottom),
-              //                 decoration: thinCyan(),
-              //                 child: Row(
-              //                   children: [
-              //                     Text("Sortieren nach",
-              //                         style: myTextStyleMedium()),
-              //                   ],
-              //                 ),
-              //               ),
-              //               DropdownButton<String>(
-              //                 value: sort,
-              //                 icon: Icon(Icons.arrow_downward),
-              //                 iconSize: 24,
-              //                 elevation: 16,
-              //                 style: myTextStyleSmall(),
-              //                 underline: Container(
-              //                   height: 2,
-              //                   color: Colors.black,
-              //                 ),
-              //                 onChanged: (String? newValue) async {
-              //                   sort = newValue!;
-              //                   sortList();
-              //                   setState(() {});
-              //                 },
-              //                 items: <String>[
-              //                   'Unverträglich',
-              //                   'Verträglich',
-              //                   // 'Auftreten der Symptome ↑',
-              //                   // 'Auftreten der Symptome ↓',
-              //                 ].map<DropdownMenuItem<String>>((String value) {
-              //                   return DropdownMenuItem<String>(
-              //                     value: value,
-              //                     child:
-              //                         Text(value, style: myTextStyleMedium()),
-              //                   );
-              //                 }).toList(),
-              //               ),
-              //             ],
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // Padding(
-              //   padding: EdgeInsets.fromLTRB(left, top, right, 0),
-              //   child: Container(
-              //     decoration: thickCyan(),
-              //     //ClipRRect damit wenn ExpansionTile aufgeklappt ist, dass die Ecken noch abgerundet sind. Nur mit Container sind diese aussen rund, jedoch innen eckig
-              //     child: ClipRRect(
-              //       borderRadius: BorderRadius.circular(5.0),
-              //       child: ExpansionTile(
-              //         title: Text(
-              //           "Suchfilter",
-              //           style: myTextStyleMedium(),
-              //         ),
-              //         children: [
-              //           customCheckbox("Alle anzeigen", allIsChecked),
-              //           customCheckbox("Warnungen anzeigen", warningsIsChecked),
-              //           customCheckbox(
-              //               "Verträgliche anzeigen", digestibleIsChecked),
-              //           customCheckbox(
-              //               "Symptomfreie anzeigen", symptomFreeIsChecked),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ),
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
@@ -254,21 +173,25 @@ class _Intolerances extends State<Intolerances> {
                               decoration: thinCyan(),
                               child: Row(
                                 children: [
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(
-                                        this.left, 0, 0, this.bottom),
-                                    child: Text(
-                                      allIngredientsWithSymptoms[index]
-                                          ['ingredient'],
-                                      style: myTitleCyanAccentTextStyle(),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.fromLTRB(left, 0, right, bottom),
+                                      child: FittedBox(
+                                        alignment: Alignment.topLeft,
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          allIngredientsWithSymptoms[index]
+                                              ['ingredient'],
+                                          style: myTitleCyanAccentTextStyle(),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.fromLTRB(
-                                  this.left, this.top, this.right, this.bottom),
+                              padding: EdgeInsets.fromLTRB(left, top, right, bottom),
                               child: Column(
                                 children: [
                                   SymptomsRow(
@@ -355,9 +278,9 @@ class _Intolerances extends State<Intolerances> {
                                       SymptomsRow(
                                         barName: 'Sofort',
                                         value: 11,
-                                        allIngredientsWithSymptoms: allIngredientsWithSymptoms,
-                                        barLength: symptomTimeLength = getSymptomTimeLength('Während der Mahlzeit', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
-                                        opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
+                                      allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                      barLength: symptomTimeLength = getSymptomTimeLength('Während der Mahlzeit', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
+                                      opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
                                       ),
                                       SymptomsRow(
                                         barName: '<1 Stunde',

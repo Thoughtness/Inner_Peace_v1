@@ -246,13 +246,16 @@ class _RecordMeal extends State<RecordMeal> {
                           children: [
                             Flexible(
                               flex: 18,
+                              fit: FlexFit.tight,
                               child: Container(
-                                height: 40,
+                                //height: 40,
                                 decoration: thinTeal(),
-                                child: ListTile(
-                                  title: Text(
-                                    '${ingredientList[index].toString()}',
-                                    style: TextStyle(height: 0, fontSize: 20),
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+                                  child: Text(
+                                    ingredientList[index].toString(),
+                                    style: TextStyle(fontSize: 20),
+                                    maxLines: 2,
                                   ),
                                 ),
                               ),

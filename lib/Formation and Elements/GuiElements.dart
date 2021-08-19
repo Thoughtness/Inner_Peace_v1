@@ -101,7 +101,7 @@ class SymptomsRow extends StatelessWidget {
     required this.allIngredientsWithSymptoms,
     required this.barLength,
     required this.opposingBarLength,
-});
+  });
 
   @override
   Widget build(BuildContext context) {

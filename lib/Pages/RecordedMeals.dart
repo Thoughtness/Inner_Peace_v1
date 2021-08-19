@@ -164,14 +164,17 @@ class _RecordedMeals extends State<RecordedMeals> {
                               decoration: thinCyan(),
                               child: Row(
                                 children: [
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(
-                                        this.left, 0, 0, this.bottom),
-                                    child: Text(
-                                        mealList[index]['meal'].toString(),
-                                        style: myTitleCyanAccentTextStyle()),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.fromLTRB(left, 0, 0, bottom),
+                                      child: FittedBox(
+                                        alignment: Alignment.topLeft,
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(mealList[index]['meal'].toString(),
+                                            style: myTitleCyanAccentTextStyle()),
+                                      ),
+                                    ),
                                   ),
-                                  Spacer(),
                                   //todo add info button (popup with all info)
                                   IconButton(
                                       icon: Icon(Icons.delete),
@@ -196,42 +199,34 @@ class _RecordedMeals extends State<RecordedMeals> {
                               child: Column(
                                 children: [
                                   SymptomsRow(
-                                      barName: 'Wohlbefinden',
-                                    //index: index,
-                                      //barName: 'wellbeing',
-                                      value: mealList[index]
-                                          ['wellbeing'],
-                                      allIngredientsWithSymptoms: mealList,
-                                    barLength: barLengthSymptoms(mealList[index]['avg(symptoms.wellbeing)']),
-                                    opposingBarLength: opposingBarLengthSymptoms(mealList[index]['avg(symptoms.wellbeing)']),
+                                    barName: 'Wohlbefinden',
+                                    value: mealList[index]
+                                    ['wellbeing'],
+                                    allIngredientsWithSymptoms: mealList,
+                                    barLength: barLengthSymptoms(mealList[index]['wellbeing']),
+                                    opposingBarLength: opposingBarLengthSymptoms(mealList[index]['wellbeing']),
                                   ),
                                   SymptomsRow(
-                                      barName: 'Krämpfe',
-                                    //index: index,
-                                      //barName: 'cramps',
-                                      value: mealList[index]['cramps'],
-                                      allIngredientsWithSymptoms: mealList,
-                                    barLength: barLengthSymptoms(mealList[index]['avg(symptoms.cramps)']),
-                                    opposingBarLength: opposingBarLengthSymptoms(mealList[index]['avg(symptoms.cramps)']),
+                                    barName: 'Krämpfe',
+                                    value: mealList[index]['cramps'],
+                                    allIngredientsWithSymptoms: mealList,
+                                    barLength: barLengthSymptoms(mealList[index]['cramps']),
+                                    opposingBarLength: opposingBarLengthSymptoms(mealList[index]['cramps']),
                                   ),
                                   SymptomsRow(
-                                      barName: 'Blähungen',
-                                    //index: index,
-                                      //barName: 'flatulence',
-                                      value: mealList[index]
-                                          ['flatulence'],
-                                      allIngredientsWithSymptoms: mealList,
-                                    barLength: barLengthSymptoms(mealList[index]['avg(symptoms.flatulence)']),
-                                    opposingBarLength: opposingBarLengthSymptoms(mealList[index]['avg(symptoms.flatulence)']),
+                                    barName: 'Blähungen',
+                                    value: mealList[index]
+                                    ['flatulence'],
+                                    allIngredientsWithSymptoms: mealList,
+                                    barLength: barLengthSymptoms(mealList[index]['flatulence']),
+                                    opposingBarLength: opposingBarLengthSymptoms(mealList[index]['flatulence']),
                                   ),
                                   SymptomsRow(
-                                      barName: 'Stuhlgang',
-                                      //index: index,
-                                      //barName: 'bowel',
-                                      value: mealList[index]['bowel'],
-                                      allIngredientsWithSymptoms: mealList,
-                                    barLength: barLengthSymptoms(mealList[index]['avg(symptoms.bowel)']),
-                                    opposingBarLength: opposingBarLengthSymptoms(mealList[index]['avg(symptoms.bowel)']),
+                                    barName: 'Stuhlgang',
+                                    value: mealList[index]['bowel'],
+                                    allIngredientsWithSymptoms: mealList,
+                                    barLength: barLengthSymptoms(mealList[index]['bowel']),
+                                    opposingBarLength: opposingBarLengthSymptoms(mealList[index]['bowel']),
                                   ),
                                 ],
                               ),

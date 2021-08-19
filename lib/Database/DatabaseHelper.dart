@@ -10,7 +10,7 @@ class DatabaseHelper {
   get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('mealData59.db');
+    _database = await _initDB('mealData60.db');
     return _database!;
   }
 
