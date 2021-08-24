@@ -92,9 +92,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   CustomButton(
                       text: "Unverträglichkeiten",
                       onClick: () async {
-                        var warnings = await getAverageForSymptoms("Warnungen anzeigen", "red");
-                        var digestible = await getAverageForSymptoms("Verträgliche anzeigen", "yellow");
-                        var symptomFree = await getAverageForSymptoms("Symptomfreie anzeigenn", "green");
+                        var warnings = await getAverageForSymptoms("red");
+                        var digestible = await getAverageForSymptoms("yellow");
+                        var symptomFree = await getAverageForSymptoms("green");
                         var mealsFromIngredients = await DatabaseHelper.instance.getMealsFromIngredients();
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => Intolerances(

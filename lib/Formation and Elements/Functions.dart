@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 barColor(int index) {
   Color color = Colors.black;
 
-  if (index <= 3) {
+  if (index <= 4) {
     color = Colors.green;
-  } else if (index <= 5) {
+  } else if (index <= 7) {
     color = Colors.yellow;
-  } else if (index <= 8) {
-    color = Colors.orange;
   } else if (index <= 10) {
+    color = Colors.orange;
+  } else if (index <= 15) {
     color = Colors.red;
-  } else if (index > 10) {
+  } else if (index > 15) {
     color = Colors.grey;
   }
   return color;
@@ -23,8 +23,7 @@ barLengthSymptoms(double ingredient) {
 }
 
 opposingBarLengthSymptoms(double ingredient) {
-  double barLength = 1000 - ingredient * 100;
-  //double opposingBarLength = 1000 - barLength;
+  double barLength = 1500 - ingredient * 100;
   return barLength.toInt();
 }
 
@@ -56,4 +55,30 @@ getSymptomTimeLength(String symptomTime, List<Map<String, dynamic>> mealsFromIng
     }
   }
   return counter;
+}
+
+amountMultiplicator(double amount){
+  if(amount == 0){
+    return 0.5;
+  }else if(amount == 1){
+    return 0.6;
+  }else if(amount == 2){
+    return 0.7;
+  }else if(amount == 3){
+    return 0.8;
+  }else if(amount == 4){
+    return 0.9;
+  }else if(amount == 5){
+    return 1;
+  }else if(amount == 6){
+    return 1.1;
+  }else if(amount == 7){
+    return 1.2;
+  }else if(amount == 8){
+    return 1.3;
+  }else if(amount == 9){
+    return 1.4;
+  }else if(amount == 10){
+    return 1.5;
+  }
 }

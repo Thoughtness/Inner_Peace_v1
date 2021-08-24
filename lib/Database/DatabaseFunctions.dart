@@ -1,5 +1,6 @@
 import 'package:inner_peace_v1/Database/DatabaseHelper.dart';
 import 'package:flutter/material.dart';
+import 'package:inner_peace_v1/Formation%20and%20Elements/Functions.dart';
 
 getMealsForIngredient(int mealCounter, String ingredient, List<Map<String, dynamic>> mealsFromIngredients) {
   var mealsForIngredient = [];
@@ -11,7 +12,7 @@ getMealsForIngredient(int mealCounter, String ingredient, List<Map<String, dynam
   return mealsForIngredient[mealCounter].toString();
 }
 
-getAverageForSymptoms(String filter,String filterColor) async{
+getAverageForSymptoms(String filterColor) async{
   var allIngredients = await DatabaseHelper.instance.getIngredients();
   List<Map<String, dynamic>> allIngredientsWithSymptoms = [];
   for(int i = 0; i < allIngredients.length; i++){
@@ -31,6 +32,37 @@ getAverageForSymptoms(String filter,String filterColor) async{
           break;
         case "red":
           if (singleIngredient[0]['sum(symptoms.symptomTotal)'] > 160) {
+            allIngredientsWithSymptoms.add(singleIngredient[0]);
+          }
+          break;
+      }
+    } catch (e) {
+
+    }
+  }
+  return allIngredientsWithSymptoms;
+}
+
+getAverageForSymptoms2(String filter,String filterColor) async{
+  var allIngredients = await DatabaseHelper.instance.getIngredients();
+  List<Map<String, dynamic>> allIngredientsWithSymptoms = [];
+  for(int i = 0; i < allIngredients.length; i++){
+    var singleIngredient = await DatabaseHelper.instance.getAllIngredientsWithSymptoms2(allIngredients[i]['ingredientID']);
+    try {
+      switch (filterColor) {
+        case "green":
+          if (singleIngredient[0]['symptomTotal'] <= 0) {
+            allIngredientsWithSymptoms.add(singleIngredient[0]);
+          }
+          break;
+        case "yellow":
+          if (singleIngredient[0]['symptomTotal'] <= 160 &&
+              singleIngredient[0]['symptomTotal'] > 0) {
+            allIngredientsWithSymptoms.add(singleIngredient[0]);
+          }
+          break;
+        case "red":
+          if (singleIngredient[0]['symptomTotal'] > 160) {
             allIngredientsWithSymptoms.add(singleIngredient[0]);
           }
           break;
@@ -170,4 +202,66 @@ addEntry(String? sqlFormatedDate, String? sqlFormatedTime, List<String> ingredie
     }
   }
   return mealID;
+}
+
+averageSymptomWithAmount(String filterColor) async{
+  var allIngredients = await DatabaseHelper.instance.getIngredients();
+  List<Map<String, dynamic>> ingredientSymptomAmount = [];
+
+  double symptomtotalAmount = 0;
+  double wellbeingAmount = 0;
+  double flatulenceAmount = 0;
+  double crampsAmount = 0;
+  double bowelAmount = 0;
+
+  for(int i = 0; i < allIngredients.length; i++){
+    if(!ingredientSymptomAmount.contains(allIngredients[i]['ingredientID'])){
+      var singleIngredient = await DatabaseHelper.instance.getAllIngredientsWithSymptoms2(allIngredients[i]['ingredientID']);
+      for(int e = 0; e < singleIngredient.length; e++){
+        symptomtotalAmount = symptomtotalAmount + singleIngredient[e]['symptomTotal']*amountMultiplicator(singleIngredient[e]['amount'].toDouble());
+        wellbeingAmount = wellbeingAmount + singleIngredient[e]['wellbeing']*amountMultiplicator(singleIngredient[e]['amount'].toDouble());
+        flatulenceAmount = flatulenceAmount + singleIngredient[e]['flatulence']*amountMultiplicator(singleIngredient[e]['amount'].toDouble());
+        crampsAmount = crampsAmount + singleIngredient[e]['cramps']*amountMultiplicator(singleIngredient[e]['amount'].toDouble());
+        bowelAmount = bowelAmount + singleIngredient[e]['bowel']*amountMultiplicator(singleIngredient[e]['amount'].toDouble());
+      }
+
+      wellbeingAmount = wellbeingAmount/singleIngredient.length;
+      flatulenceAmount = flatulenceAmount/singleIngredient.length;
+      crampsAmount = crampsAmount/singleIngredient.length;
+      bowelAmount = bowelAmount/singleIngredient.length;
+
+      //print(singleIngredient);
+      List<Map<String, dynamic>> updatedIngredient = [{'ingredientID': singleIngredient[0]['ingredientID'], 'ingredient': singleIngredient[0]['ingredient'], 'amount': singleIngredient[0]['amount'], 'meal': singleIngredient[0]['meal'], 'symptomTotal': symptomtotalAmount, 'wellbeing': wellbeingAmount, 'flatulence': flatulenceAmount, 'cramps': crampsAmount, 'bowel': bowelAmount}];
+      print(updatedIngredient);
+      try {
+        switch (filterColor) {
+          case "green":
+            if (singleIngredient[0]['symptomTotal'] <= 0) {
+              ingredientSymptomAmount.add(updatedIngredient[0]);
+            }
+            break;
+          case "yellow":
+            if (singleIngredient[0]['symptomTotal'] <= 160 &&
+                singleIngredient[0]['symptomTotal'] > 0) {
+              ingredientSymptomAmount.add(updatedIngredient[0]);
+            }
+            break;
+          case "red":
+            if (singleIngredient[0]['symptomTotal'] > 160) {
+              ingredientSymptomAmount.add(updatedIngredient[0]);
+            }
+            break;
+        }
+      } catch (e) {
+
+      }
+
+      symptomtotalAmount = 0;
+      wellbeingAmount = 0;
+      flatulenceAmount = 0;
+      crampsAmount = 0;
+      bowelAmount = 0;
+    }
+  }
+  return ingredientSymptomAmount;
 }

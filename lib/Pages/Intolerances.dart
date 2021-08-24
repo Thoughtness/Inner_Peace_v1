@@ -198,68 +198,68 @@ class _Intolerances extends State<Intolerances> {
                                     barName: 'Wohlbefinden',
                                     value:
                                         allIngredientsWithSymptoms[index]
-                                            ['avg(symptoms.wellbeing)'],
+                                            ['wellbeing'],
                                     allIngredientsWithSymptoms:
                                         allIngredientsWithSymptoms,
                                     barLength: barLengthSymptoms(
                                         allIngredientsWithSymptoms[index]
-                                            ['avg(symptoms.wellbeing)']),
+                                            ['wellbeing']),
                                     opposingBarLength:
                                         opposingBarLengthSymptoms(
                                             allIngredientsWithSymptoms[index]
-                                                ['avg(symptoms.wellbeing)']),
+                                                ['wellbeing']),
                                   ),
                                   SymptomsRow(
                                     barName: 'Krämpfe',
-                                    value: allIngredientsWithSymptoms[index]['avg(symptoms.cramps)'],
+                                    value: allIngredientsWithSymptoms[index]['cramps'],
                                     allIngredientsWithSymptoms:
                                         allIngredientsWithSymptoms,
                                     barLength: barLengthSymptoms(
                                         allIngredientsWithSymptoms[index]
-                                            ['avg(symptoms.cramps)']),
+                                            ['cramps']),
                                     opposingBarLength:
                                         opposingBarLengthSymptoms(
                                             allIngredientsWithSymptoms[index]
-                                                ['avg(symptoms.cramps)']),
+                                                ['cramps']),
                                   ),
                                   SymptomsRow(
                                     barName: 'Blähungen',
                                     value:
-                                        allIngredientsWithSymptoms[index]['avg(symptoms.flatulence)'],
+                                        allIngredientsWithSymptoms[index]['flatulence'],
                                     allIngredientsWithSymptoms: allIngredientsWithSymptoms,
-                                    barLength: barLengthSymptoms(allIngredientsWithSymptoms[index]['avg(symptoms.flatulence)']),
+                                    barLength: barLengthSymptoms(allIngredientsWithSymptoms[index]['flatulence']),
                                     opposingBarLength:
                                         opposingBarLengthSymptoms(
                                             allIngredientsWithSymptoms[index]
-                                                ['avg(symptoms.flatulence)']),
+                                                ['flatulence']),
                                   ),
                                   SymptomsRow(
                                     barName: 'Stuhlgang',
                                     value:
                                         allIngredientsWithSymptoms[index]
-                                            ['avg(symptoms.bowel)'],
+                                            ['bowel'],
                                     allIngredientsWithSymptoms:
                                         allIngredientsWithSymptoms,
                                     barLength: barLengthSymptoms(
                                         allIngredientsWithSymptoms[index]
-                                            ['avg(symptoms.bowel)']),
+                                            ['bowel']),
                                     opposingBarLength:
                                         opposingBarLengthSymptoms(
                                             allIngredientsWithSymptoms[index]
-                                                ['avg(symptoms.bowel)']),
+                                                ['bowel']),
                                   ),
                                   SymptomsRow(
                                     barName: 'Menge',
-                                    value: 11,
+                                    value: 16,
                                     allIngredientsWithSymptoms:
                                     allIngredientsWithSymptoms,
                                     barLength: barLengthSymptoms(
                                         allIngredientsWithSymptoms[index]
-                                        ['avg(mealingredient.amount)']),
+                                        ['amount'].toDouble()),
                                     opposingBarLength:
                                     opposingBarLengthSymptoms(
                                         allIngredientsWithSymptoms[index]
-                                        ['avg(mealingredient.amount)']),
+                                        ['amount'].toDouble()),
                                   ),
                                 ],
                               ),
@@ -423,11 +423,11 @@ class _Intolerances extends State<Intolerances> {
 
   sortList() {
     if (sort == "Unverträglich") {
-      allIngredientsWithSymptoms.sort((a, b) => b["sum(symptoms.symptomTotal)"]
-          .compareTo(a["sum(symptoms.symptomTotal)"]));
+      allIngredientsWithSymptoms.sort((a, b) => b["symptomTotal"]
+          .compareTo(a["symptomTotal"]));
     } else if (sort == "Verträglich") {
-      allIngredientsWithSymptoms.sort((a, b) => a["sum(symptoms.symptomTotal)"]
-          .compareTo(b["sum(symptoms.symptomTotal)"]));
+      allIngredientsWithSymptoms.sort((a, b) => a["symptomTotal"]
+          .compareTo(b["symptomTotal"]));
     }
     return allIngredientsWithSymptoms;
   }

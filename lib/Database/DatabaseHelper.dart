@@ -228,6 +228,20 @@ class DatabaseHelper {
     return allIngredientsWithMeals;
   }
 
+  getAllIngredientsWithSymptoms2(int ingredientID) async {
+    final db = await database;
+    final List<Map<String, dynamic>> allIngredientsWithMeals = await db
+        .rawQuery(
+        """SELECT ingredient.ingredientID, ingredient.ingredient, mealingredient.amount, meal.meal, symptoms.symptomTotal, symptoms.wellbeing, symptoms.flatulence, symptoms.cramps, symptoms.bowel
+        FROM ingredient
+        JOIN mealingredient ON ingredient.ingredientID = mealingredient.ingredientID
+        JOIN meal ON mealingredient.mealID = meal.mealID
+        JOIN symptoms ON meal.symptomsID = symptoms.symptomsID
+        WHERE ingredient.ingredientID = ?""",
+        [ingredientID]);
+    return allIngredientsWithMeals;
+  }
+
   getHighestSymptomsID() async {
     final db = await database;
     List<Map<String, dynamic>> lastInsertedSymptoms = await db.rawQuery(
