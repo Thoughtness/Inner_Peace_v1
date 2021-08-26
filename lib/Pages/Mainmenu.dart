@@ -12,22 +12,12 @@ import 'package:inner_peace_v1/Database/DatabaseFunctions.dart';
 import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
 
 class MainMenu extends StatefulWidget {
-  MainMenu({
-    required this.userId
-  });
-
-  final int userId;
 
   @override
-  _Mainmenu createState() => _Mainmenu(userId: userId);
+  _Mainmenu createState() => _Mainmenu();
 }
 
 class _Mainmenu extends State<MainMenu> {
-  _Mainmenu({
-    required this.userId
-  });
-
-  final int userId;
 
   final double left = 10.0;
   final double right = 10.0;

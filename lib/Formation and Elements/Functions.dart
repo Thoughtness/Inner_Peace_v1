@@ -66,29 +66,29 @@ getSymptomTimeLength(String symptomTime, List<Map<String, dynamic>> mealsFromIng
 }
 
 amountMultiplicator(double amount){
+  return 0.5+amount/10;
 
-
-  if(amount == 0){
-    return 0.5;
-  }else if(amount == 1){
-    return 0.6;
-  }else if(amount == 2){
-    return 0.7;
-  }else if(amount == 3){
-    return 0.8;
-  }else if(amount == 4){
-    return 0.9;
-  }else if(amount == 5){
-    return 1;
-  }else if(amount == 6){
-    return 1.1;
-  }else if(amount == 7){
-    return 1.2;
-  }else if(amount == 8){
-    return 1.3;
-  }else if(amount == 9){
-    return 1.4;
-  }else if(amount == 10){
-    return 1.5;
-  }
+  // if(amount == 0){
+  //   return 0.5;
+  // }else if(amount == 1){
+  //   return 0.6;
+  // }else if(amount == 2){
+  //   return 0.7;
+  // }else if(amount == 3){
+  //   return 0.8;
+  // }else if(amount == 4){
+  //   return 0.9;
+  // }else if(amount == 5){
+  //   return 1;
+  // }else if(amount == 6){
+  //   return 1.1;
+  // }else if(amount == 7){
+  //   return 1.2;
+  // }else if(amount == 8){
+  //   return 1.3;
+  // }else if(amount == 9){
+  //   return 1.4;
+  // }else if(amount == 10){
+  //   return 1.5;
+  // }
 }

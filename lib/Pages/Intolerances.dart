@@ -251,15 +251,9 @@ class _Intolerances extends State<Intolerances> {
                                   SymptomsRow(
                                     barName: 'Menge',
                                     value: 16,
-                                    allIngredientsWithSymptoms:
-                                    allIngredientsWithSymptoms,
-                                    barLength: barLengthSymptoms(
-                                        allIngredientsWithSymptoms[index]
-                                        ['amount'].toDouble()),
-                                    opposingBarLength:
-                                    opposingBarLengthSymptoms(
-                                        allIngredientsWithSymptoms[index]
-                                        ['amount'].toDouble()),
+                                    allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                    barLength: barLengthSymptoms(allIngredientsWithSymptoms[index]['amount'].toDouble()),
+                                    opposingBarLength: opposingBarLengthSymptoms(allIngredientsWithSymptoms[index]['amount'].toDouble()),
                                   ),
                                 ],
                               ),

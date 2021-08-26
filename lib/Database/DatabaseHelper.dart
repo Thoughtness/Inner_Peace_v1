@@ -1,7 +1,11 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:inner_peace_v1/Formation%20and%20Elements/MyUser.dart';
 
 class DatabaseHelper {
+  MyUser _myUser = MyUser();
+  get userId => _myUser.myUserId;
+
   static final DatabaseHelper instance = DatabaseHelper._();
   static Database? _database;
 
@@ -10,7 +14,7 @@ class DatabaseHelper {
   get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('mealData63.db');
+    _database = await _initDB('mealData65.db');
     return _database!;
   }
 
@@ -72,9 +76,9 @@ class DatabaseHelper {
   insertMeal(String meal, int time) async {
     final db = await database;
     await db.rawInsert(
-        """INSERT OR IGNORE INTO meal(meal, time)
-        VALUES(?, ?)""",
-        [meal, time]);
+        """INSERT OR IGNORE INTO meal(userID, meal, time)
+        VALUES(?, ?, ?)""",
+        [userId, meal, time]);
   }
 
   insertIngredient(String ingredient) async {
@@ -109,7 +113,7 @@ class DatabaseHelper {
         """INSERT OR IGNORE INTO mealingredient(mealID, ingredientID, amount) VALUES(?,?,?)""",
         [mealID, ingredientID, amount]);
   }
-//here
+
   getLoginDetails(String username) async {
     final db = await database;
     try {
@@ -140,8 +144,8 @@ class DatabaseHelper {
         JOIN mealingredient ON meal.mealID = mealingredient.mealID 
         JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID 
         JOIN symptoms ON meal.symptomsID = symptoms.symptomsID 
-        WHERE meal.mealID = ?""",
-        [mealID]);
+        WHERE meal.mealID = ? AND meal.userID = ?""",
+        [mealID, userId]);
     return allMeals;
   }
 
@@ -155,12 +159,14 @@ class DatabaseHelper {
         JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID 
         JOIN symptoms ON meal.symptomsID = symptoms.symptomsID 
         WHERE meal.mealID = ?
+        AND meal.userID = ?
         AND symptoms.wellbeing BETWEEN ? and ?
         AND symptoms.cramps BETWEEN ? and ?
         AND symptoms.flatulence BETWEEN ? and ?
         AND symptoms.bowel BETWEEN ? and ?""",
         [
           mealID,
+          userId,
           filterNumberLow,
           filterNumberHigh,
           filterNumberLow,
@@ -181,13 +187,15 @@ class DatabaseHelper {
         JOIN mealingredient ON meal.mealID = mealingredient.mealID 
         JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID 
         JOIN symptoms ON meal.symptomsID = symptoms.symptomsID 
-        WHERE meal.mealID = ? AND (
+        WHERE meal.mealID = ? 
+        AND meal.userID = ? AND (
         symptoms.wellbeing >= ? OR 
         symptoms.cramps >= ? OR 
         symptoms.flatulence >= ? OR 
         symptoms.bowel >= ?)""",
         [
           mealID,
+          userId,
           filterNumberLow,
           filterNumberLow,
           filterNumberLow,
@@ -211,7 +219,9 @@ class DatabaseHelper {
     final db = await database;
     List<Map<String, dynamic>> symptomlessMeals = await db.rawQuery(
         """SELECT * FROM meal
-        WHERE symptomsID IS NULL""");
+        WHERE symptomsID IS NULL
+        AND meal.userID = ?""",
+        [userId]);
     return symptomlessMeals;
   }
 
@@ -222,7 +232,9 @@ class DatabaseHelper {
         FROM meal
         JOIN symptoms ON meal.symptomsID = symptoms.symptomsID
         JOIN mealingredient ON meal.mealID = mealingredient.mealID 
-        JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID""");
+        JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID
+        WHERE meal.userID = ?""",
+        [userId]);
     return mealsFromIngredients;
   }
 
@@ -234,20 +246,6 @@ class DatabaseHelper {
     return getIngredientsWithSymptoms;
   }
 
-  getAllIngredientsWithSymptoms(int ingredientID) async {
-    final db = await database;
-    final List<Map<String, dynamic>> allIngredientsWithMeals = await db
-        .rawQuery(
-        """SELECT ingredient.ingredientID, ingredient.ingredient, avg(mealingredient.amount), meal.meal, sum(symptoms.symptomTotal), avg(symptoms.wellbeing), avg(symptoms.flatulence), avg(symptoms.cramps), avg(symptoms.bowel)
-        FROM ingredient
-        JOIN mealingredient ON ingredient.ingredientID = mealingredient.ingredientID
-        JOIN meal ON mealingredient.mealID = meal.mealID
-        JOIN symptoms ON meal.symptomsID = symptoms.symptomsID
-        WHERE ingredient.ingredientID = ?""",
-        [ingredientID]);
-    return allIngredientsWithMeals;
-  }
-
   getAllIngredientsWithSymptoms2(int ingredientID) async {
     final db = await database;
     final List<Map<String, dynamic>> allIngredientsWithMeals = await db
@@ -257,8 +255,9 @@ class DatabaseHelper {
         JOIN mealingredient ON ingredient.ingredientID = mealingredient.ingredientID
         JOIN meal ON mealingredient.mealID = meal.mealID
         JOIN symptoms ON meal.symptomsID = symptoms.symptomsID
-        WHERE ingredient.ingredientID = ?""",
-        [ingredientID]);
+        WHERE ingredient.ingredientID = ?
+        AND meal.userID = ?""",
+        [ingredientID, userId]);
     return allIngredientsWithMeals;
   }
 
@@ -288,126 +287,3 @@ class DatabaseHelper {
         [symptomsID]);
   }
 }
-
-
-// getSymptomsID() async {
-//   final db = await database;
-//   List<Map<String, dynamic>> lastInsertedMeal = await db.rawQuery(
-//       """SELECT symptoms.symptomsID
-//       FROM symptoms""");
-//   //var mealID = lastInsertedMeal.toList();
-//   return lastInsertedMeal;
-// }
-  //
-  // getIngredientsWithSymptoms() async {
-  //   final db = await database;
-  //   final List<Map<String, dynamic>> getIngredientsWithSymptoms = await db.rawQuery(
-  //       """SELECT ingredient.ingredientID, ingredient.ingredient
-  //       FROM ingredient
-  //       JOIN mealingredient ON ingredient.ingredientID = mealingredient.ingredientID
-  //       JOIN meal ON mealingredient.mealID = meal.mealID
-  //       JOIN symptoms ON meal.symptomsID = symptoms.symptomsID
-  //       WHERE symptoms.symptomTotal NOT NULL""");
-  //   //var getIngredientsWithSymptoms = getIngredientsWithSymptoms.toList();
-  //   print(getIngredientsWithSymptoms);
-  //   return getIngredientsWithSymptoms;
-  // }
-
-
-  //
-  // getMealIngredient(int index) async {
-  //   final db = await database;
-  //   final List<Map<String, dynamic>> maps = await db.query(
-  //     'mealingredient',
-  //     where: 'mealID = ?',
-  //     whereArgs: [index],
-  //   );
-  //
-  //   return List.generate(maps.length, (i) {
-  //     return MealIngredientData(
-  //       mealIngredientID: maps[i]['mealIngredientID'],
-  //       mealID: maps[i]['mealID'],
-  //       ingredientID: maps[i]['ingredientID'],
-  //     );
-  //   });
-  // }
-
-  // getIngredients2() async {
-  //   final db = await database;
-  //   final List<Map<String, dynamic>> maps = await db.query('ingredient');
-  //
-  //   print(maps);
-  //   return List.generate(maps.length, (i) {
-  //     return IngredientData(
-  //       ingredientID: maps[i]['ingredientID'],
-  //       ingredient: maps[i]['ingredient'],
-  //     );
-  //   });
-  // }
-
-  // getHighestIngredientID() async {
-  //   // final db = await database;
-  //   // final List<Map<String, dynamic>> maps = await db.query('ingredient');
-  //   //
-  //   // return List.generate(maps.length, (i) {
-  //   //   return IngredientData(
-  //   //     ingredientID: maps[i]['ingredientID'],
-  //   //     ingredient: maps[i]['ingredient'],
-  //   //   );
-  //   // });
-  //
-  //   final db = await database;
-  //   List<Map<String, dynamic>> lastInsertedIngredient =
-  //   await db.rawQuery(
-  //       """SELECT * FROM ingredient
-  //       ORDER BY ingredientID DESC
-  //       LIMIT 1""");
-  //   var ingredientID = lastInsertedIngredient.toList();
-  //   return ingredientID;
-  // }
-
-
-
-  // Future<void> insertMeals(MealData meal) async {
-  //   final db = await database;
-  //   await db.insert(
-  //     'meal',
-  //     meal.toMap(),
-  //     conflictAlgorithm: ConflictAlgorithm.replace,
-  //   );
-  // }
-
-  //
-  // Future<void> createMealIngredients(MealIngredientData mealIngredient) async {
-  //   final db = await database;
-  //
-  //   await db.insert(
-  //     'mealingredient',
-  //     mealIngredient.toMap(),
-  //     conflictAlgorithm: ConflictAlgorithm.ignore,
-  //   );
-  // }
-
-
-
-  // Future<void> insertIngredient(IngredientData ingredient) async {
-  //   final db = await database;
-  //   await db.insert(
-  //     'ingredient',
-  //     ingredient.toMap(),
-  //     conflictAlgorithm: ConflictAlgorithm.ignore,
-  //   );
-  // }
-
-
-  //
-  // Future<void> insertSymptoms(SymptomData symptoms) async {
-  //   final db = await database;
-  //   // await db.rawInsert(
-  //   //   """INSERT OR REPLACE INTO symptoms(wellbeing, cramps, flatulence, bowel, ) VALUES(?,?)""",)
-  //   await db.insert(
-  //     'symptoms',
-  //     symptoms.toMap(),
-  //     conflictAlgorithm: ConflictAlgorithm.replace,
-  //   );
-  // }

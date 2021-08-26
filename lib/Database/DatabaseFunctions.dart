@@ -35,37 +35,6 @@ getMealsForIngredient(int mealCounter, String ingredient, List<Map<String, dynam
   return mealsForIngredient[mealCounter].toString();
 }
 
-getAverageForSymptoms(String filterColor) async{
-  var allIngredients = await DatabaseHelper.instance.getIngredients();
-  List<Map<String, dynamic>> allIngredientsWithSymptoms = [];
-  for(int i = 0; i < allIngredients.length; i++){
-    var singleIngredient = await DatabaseHelper.instance.getAllIngredientsWithSymptoms(allIngredients[i]['ingredientID']);
-    try {
-      switch (filterColor) {
-        case "green":
-          if (singleIngredient[0]['sum(symptoms.symptomTotal)'] <= 0) {
-            allIngredientsWithSymptoms.add(singleIngredient[0]);
-          }
-          break;
-        case "yellow":
-          if (singleIngredient[0]['sum(symptoms.symptomTotal)'] <= 160 &&
-              singleIngredient[0]['sum(symptoms.symptomTotal)'] > 0) {
-            allIngredientsWithSymptoms.add(singleIngredient[0]);
-          }
-          break;
-        case "red":
-          if (singleIngredient[0]['sum(symptoms.symptomTotal)'] > 160) {
-            allIngredientsWithSymptoms.add(singleIngredient[0]);
-          }
-          break;
-      }
-    } catch (e) {
-
-    }
-  }
-  return allIngredientsWithSymptoms;
-}
-
 getAverageForSymptoms2(String filter,String filterColor) async{
   var allIngredients = await DatabaseHelper.instance.getIngredients();
   List<Map<String, dynamic>> allIngredientsWithSymptoms = [];
@@ -98,8 +67,7 @@ getAverageForSymptoms2(String filter,String filterColor) async{
 }
 
 Future deleteMeal(int index) async {
-  var deleteMealInformation =
-  await DatabaseHelper.instance.getDeleteMealInformation(index);
+  var deleteMealInformation = await DatabaseHelper.instance.getDeleteMealInformation(index);
   print(deleteMealInformation);
 
   await DatabaseHelper.instance.deleteMeal(index, deleteMealInformation[0]['symptomsID']);
@@ -202,7 +170,7 @@ addSymptoms(double wellbeing, double cramps, double flatulence, double bowel, in
   await DatabaseHelper.instance.addSymptomsToMeal(symptomsID, mealID);
 }
 
-addEntry(String? sqlFormatedDate, String? sqlFormatedTime, List<String> ingredientList, TextEditingController mealName, double amount) async {
+addEntry(String? sqlFormatedDate, String? sqlFormatedTime, List<String> ingredientList, TextEditingController mealName, List<double> amount) async {
   DateTime sqlDate =
   DateTime.parse(sqlFormatedDate! + "T" + sqlFormatedTime!);
   await DatabaseHelper.instance
@@ -218,10 +186,11 @@ addEntry(String? sqlFormatedDate, String? sqlFormatedTime, List<String> ingredie
 
   //Alle Zutaten mit zugehörigen IDs holen und mealIngredients erstellen
   var ingredientListID = await DatabaseHelper.instance.getIngredients();
+  var amountCounter = 0;
   for (int i = 0; i < ingredientListID.length; i++) {
     if (ingredientList.contains(ingredientListID[i]['ingredient'])) {
-      await DatabaseHelper.instance.createMealIngredient(
-          mealID, ingredientListID[i]['ingredientID'], amount);
+      await DatabaseHelper.instance.createMealIngredient(mealID, ingredientListID[i]['ingredientID'], amount[amountCounter]);
+      amountCounter ++;
     }
   }
   return mealID;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inner_peace_v1/Database/DatabaseHelper.dart';
+import 'package:inner_peace_v1/Pages/LoginPage.dart';
 import 'package:inner_peace_v1/Pages/RecordedMeals.dart';
 import 'package:inner_peace_v1/Pages/Infos.dart';
 import 'package:inner_peace_v1/Pages/RecordMeal.dart';
@@ -70,6 +71,16 @@ class Menu extends StatelessWidget {
                     onTap: (){
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => Infos(),
+                      ));
+                    }
+                ),
+                const SizedBox(height: 15),
+                ListTile(
+                    leading: Icon(Icons.logout),
+                    title: Text('Ausloggen'),
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => LoginPage(),
                       ));
                     }
                 ),

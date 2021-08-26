@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inner_peace_v1/Formation%20and%20Elements/GuiElements.dart';
 import 'package:inner_peace_v1/Database/DatabaseFunctions.dart';
+import 'package:inner_peace_v1/Formation%20and%20Elements/MyUser.dart';
 import 'package:inner_peace_v1/Pages/Mainmenu.dart';
 import 'package:flutter/widgets.dart';
 import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
@@ -13,6 +14,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPage extends State<LoginPage> {
+  MyUser _myUser = MyUser();
+
+  void _saveUserId(int userId){
+    _myUser.myUserId = userId;
+  }
+
   TextEditingController username = TextEditingController();
   bool falseUser = false;
 
@@ -52,8 +59,10 @@ class _LoginPage extends State<LoginPage> {
                     onClick: () async {
                       var validUser = await checkLogin(username.text);
                         if(validUser != null){
+                          print(validUser[0]['userID']);
+                          _saveUserId(validUser[0]['userID']);
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => MainMenu(userId: validUser[0]['userID']),
+                            builder: (context) => MainMenu(),
                           ));
                         }else {
                           setState(() {

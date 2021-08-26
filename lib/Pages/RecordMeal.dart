@@ -297,7 +297,7 @@ class _RecordMeal extends State<RecordMeal> {
                                 ingredientList.length > 0 &&
                                 sqlFormatedTime != "" &&
                                 sqlFormatedDate != null) {
-                              int mealID = await addEntry(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amount);
+                              int mealID = await addEntry(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amountList);
                               print(mealID);
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -321,7 +321,7 @@ class _RecordMeal extends State<RecordMeal> {
                                 ingredientList.length > 0 &&
                                 sqlFormatedTime != "" &&
                                 sqlFormatedDate != null) {
-                              addEntry(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amount);
+                              addEntry(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amountList);
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => MyApp(),
