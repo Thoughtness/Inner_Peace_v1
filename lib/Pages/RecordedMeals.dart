@@ -200,33 +200,31 @@ class _RecordedMeals extends State<RecordedMeals> {
                                 children: [
                                   SymptomsRow(
                                     barName: 'Wohlbefinden',
-                                    value: mealList[index]
-                                    ['wellbeing'],
+                                    color: barColorMeal(mealList[index]['wellbeing']),
                                     allIngredientsWithSymptoms: mealList,
                                     barLength: barLengthSymptoms(mealList[index]['wellbeing']),
-                                    opposingBarLength: opposingBarLengthSymptoms(mealList[index]['wellbeing']),
+                                    opposingBarLength: opposingBarLengthSymptomsMeal(mealList[index]['wellbeing']),
                                   ),
                                   SymptomsRow(
                                     barName: 'Krämpfe',
-                                    value: mealList[index]['cramps'],
+                                    color: barColorMeal(mealList[index]['cramps']),
                                     allIngredientsWithSymptoms: mealList,
                                     barLength: barLengthSymptoms(mealList[index]['cramps']),
-                                    opposingBarLength: opposingBarLengthSymptoms(mealList[index]['cramps']),
+                                    opposingBarLength: opposingBarLengthSymptomsMeal(mealList[index]['cramps']),
                                   ),
                                   SymptomsRow(
                                     barName: 'Blähungen',
-                                    value: mealList[index]
-                                    ['flatulence'],
+                                    color: barColorMeal(mealList[index]['flatulence']),
                                     allIngredientsWithSymptoms: mealList,
                                     barLength: barLengthSymptoms(mealList[index]['flatulence']),
-                                    opposingBarLength: opposingBarLengthSymptoms(mealList[index]['flatulence']),
+                                    opposingBarLength: opposingBarLengthSymptomsMeal(mealList[index]['flatulence']),
                                   ),
                                   SymptomsRow(
                                     barName: 'Stuhlgang',
-                                    value: mealList[index]['bowel'],
+                                    color: barColorMeal(mealList[index]['bowel']),
                                     allIngredientsWithSymptoms: mealList,
                                     barLength: barLengthSymptoms(mealList[index]['bowel']),
-                                    opposingBarLength: opposingBarLengthSymptoms(mealList[index]['bowel']),
+                                    opposingBarLength: opposingBarLengthSymptomsMeal(mealList[index]['bowel']),
                                   ),
                                 ],
                               ),

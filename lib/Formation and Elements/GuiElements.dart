@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
-import 'package:inner_peace_v1/Formation and Elements/Functions.dart';
 
 // ignore: camel_case_types
 class CustomButton extends StatelessWidget {
@@ -86,14 +85,14 @@ class CustomRow extends StatelessWidget {
 
 class SymptomsRow extends StatelessWidget {
   final String barName;
-  final double value;
+  final Color color;
   final List<Map<String, dynamic>> allIngredientsWithSymptoms;
   final barLength;
   final opposingBarLength;
 
   SymptomsRow({
     required this.barName,
-    required this.value,
+    required this.color,
     required this.allIngredientsWithSymptoms,
     required this.barLength,
     required this.opposingBarLength,
@@ -116,7 +115,7 @@ class SymptomsRow extends StatelessWidget {
                   flex: barLength,
                   child: new Container(
                     decoration: BoxDecoration(
-                      color: barColor(value.toInt()),
+                      color: color,
                       borderRadius:
                       BorderRadius.all(
                           Radius.circular(

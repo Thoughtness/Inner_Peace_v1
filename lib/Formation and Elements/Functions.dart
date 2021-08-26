@@ -7,8 +7,22 @@ freeOrUsed(bool isAvailable){
     return "Benutzername ist vergeben";
   }
 }
+barColorMeal(double index) {
+  Color color = Colors.black;
 
-barColor(int index) {
+  if (index <= 2) {
+    color = Colors.green;
+  } else if (index <= 4) {
+    color = Colors.yellow;
+  } else if (index <= 7) {
+    color = Colors.orange;
+  } else{
+    color = Colors.red;
+  }
+  return color;
+}
+
+barColor(double index) {
   Color color = Colors.black;
 
   if (index <= 4) {
@@ -17,16 +31,19 @@ barColor(int index) {
     color = Colors.yellow;
   } else if (index <= 10) {
     color = Colors.orange;
-  } else if (index <= 15) {
+  } else {
     color = Colors.red;
-  } else if (index > 15) {
-    color = Colors.grey;
   }
   return color;
 }
 
 barLengthSymptoms(double ingredient) {
   double barLength = ingredient * 100;
+  return barLength.toInt();
+}
+
+opposingBarLengthSymptomsMeal(double ingredient) {
+  double barLength = 1000 - ingredient * 100;
   return barLength.toInt();
 }
 
@@ -67,28 +84,4 @@ getSymptomTimeLength(String symptomTime, List<Map<String, dynamic>> mealsFromIng
 
 amountMultiplicator(double amount){
   return 0.5+amount/10;
-
-  // if(amount == 0){
-  //   return 0.5;
-  // }else if(amount == 1){
-  //   return 0.6;
-  // }else if(amount == 2){
-  //   return 0.7;
-  // }else if(amount == 3){
-  //   return 0.8;
-  // }else if(amount == 4){
-  //   return 0.9;
-  // }else if(amount == 5){
-  //   return 1;
-  // }else if(amount == 6){
-  //   return 1.1;
-  // }else if(amount == 7){
-  //   return 1.2;
-  // }else if(amount == 8){
-  //   return 1.3;
-  // }else if(amount == 9){
-  //   return 1.4;
-  // }else if(amount == 10){
-  //   return 1.5;
-  // }
 }

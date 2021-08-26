@@ -196,9 +196,7 @@ class _Intolerances extends State<Intolerances> {
                                 children: [
                                   SymptomsRow(
                                     barName: 'Wohlbefinden',
-                                    value:
-                                        allIngredientsWithSymptoms[index]
-                                            ['wellbeing'],
+                                    color: barColor(allIngredientsWithSymptoms[index]['wellbeing']),
                                     allIngredientsWithSymptoms:
                                         allIngredientsWithSymptoms,
                                     barLength: barLengthSymptoms(
@@ -211,7 +209,7 @@ class _Intolerances extends State<Intolerances> {
                                   ),
                                   SymptomsRow(
                                     barName: 'Krämpfe',
-                                    value: allIngredientsWithSymptoms[index]['cramps'],
+                                    color: barColor(allIngredientsWithSymptoms[index]['cramps']),
                                     allIngredientsWithSymptoms:
                                         allIngredientsWithSymptoms,
                                     barLength: barLengthSymptoms(
@@ -224,8 +222,8 @@ class _Intolerances extends State<Intolerances> {
                                   ),
                                   SymptomsRow(
                                     barName: 'Blähungen',
-                                    value:
-                                        allIngredientsWithSymptoms[index]['flatulence'],
+                                    color:
+                                    barColor(allIngredientsWithSymptoms[index]['flatulence']),
                                     allIngredientsWithSymptoms: allIngredientsWithSymptoms,
                                     barLength: barLengthSymptoms(allIngredientsWithSymptoms[index]['flatulence']),
                                     opposingBarLength:
@@ -235,9 +233,8 @@ class _Intolerances extends State<Intolerances> {
                                   ),
                                   SymptomsRow(
                                     barName: 'Stuhlgang',
-                                    value:
-                                        allIngredientsWithSymptoms[index]
-                                            ['bowel'],
+                                    color:
+                                    barColor(allIngredientsWithSymptoms[index]['bowel']),
                                     allIngredientsWithSymptoms:
                                         allIngredientsWithSymptoms,
                                     barLength: barLengthSymptoms(
@@ -250,7 +247,7 @@ class _Intolerances extends State<Intolerances> {
                                   ),
                                   SymptomsRow(
                                     barName: 'Menge',
-                                    value: 16,
+                                    color: Colors.grey,
                                     allIngredientsWithSymptoms: allIngredientsWithSymptoms,
                                     barLength: barLengthSymptoms(allIngredientsWithSymptoms[index]['amount'].toDouble()),
                                     opposingBarLength: opposingBarLengthSymptoms(allIngredientsWithSymptoms[index]['amount'].toDouble()),
@@ -271,28 +268,28 @@ class _Intolerances extends State<Intolerances> {
                                     children: [
                                       SymptomsRow(
                                         barName: 'Sofort',
-                                        value: 11,
+                                        color: Colors.grey,
                                       allIngredientsWithSymptoms: allIngredientsWithSymptoms,
                                       barLength: symptomTimeLength = getSymptomTimeLength('Während der Mahlzeit', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
                                       opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
                                       ),
                                       SymptomsRow(
                                         barName: '<1 Stunde',
-                                        value: 11,
+                                        color: Colors.grey,
                                         allIngredientsWithSymptoms: allIngredientsWithSymptoms,
                                         barLength: symptomTimeLength = getSymptomTimeLength('In der ersten Stunde', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
                                         opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
                                       ),
                                       SymptomsRow(
                                         barName: '2-5 Stunden',
-                                        value: 11,
+                                        color: Colors.grey,
                                         allIngredientsWithSymptoms: allIngredientsWithSymptoms,
                                         barLength: symptomTimeLength = getSymptomTimeLength('Nach 2-5 Stunden', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
                                         opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
                                       ),
                                       SymptomsRow(
                                         barName: '>5 Stunden',
-                                        value: 11,
+                                        color: Colors.grey,
                                         allIngredientsWithSymptoms: allIngredientsWithSymptoms,
                                         barLength: symptomTimeLength = getSymptomTimeLength('Nach 5 Stunden', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
                                         opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
