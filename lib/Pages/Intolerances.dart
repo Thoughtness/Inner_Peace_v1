@@ -348,7 +348,7 @@ class _Intolerances extends State<Intolerances> {
 
   customCheckbox(String title, bool boolValue) {
     return Container(
-      decoration: noTeal(),
+      decoration: noSquareTeal(),
       child: CheckboxListTile(
         title: Text(title),
         controlAffinity: ListTileControlAffinity.trailing,

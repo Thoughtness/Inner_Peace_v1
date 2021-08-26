@@ -2,6 +2,29 @@ import 'package:inner_peace_v1/Database/DatabaseHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:inner_peace_v1/Formation%20and%20Elements/Functions.dart';
 
+checkLogin(String username) async {
+  var getLogin = await DatabaseHelper.instance.getLoginDetails(username);
+  try {
+    if (getLogin[0]['username'] == username){
+      return getLogin;
+    }
+  } catch (e){
+    return null;
+  }
+}
+
+ifAvailableSave(String username) async {
+  var checkAvailability = await DatabaseHelper.instance.getLoginDetails(username);
+  try {
+    if (checkAvailability[0]['username'] == username){
+      return false;
+    }
+  } catch (e){
+    await DatabaseHelper.instance.insertUser(username);
+    return true;
+  }
+}
+
 getMealsForIngredient(int mealCounter, String ingredient, List<Map<String, dynamic>> mealsFromIngredients) {
   var mealsForIngredient = [];
   for (int i = 0; i < mealsFromIngredients.length; i++) {

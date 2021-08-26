@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 
+freeOrUsed(bool isAvailable){
+  if(isAvailable){
+    return "Benutzerkonto wurde erstellt";
+  }else {
+    return "Benutzername ist vergeben";
+  }
+}
+
 barColor(int index) {
   Color color = Colors.black;
 
@@ -58,6 +66,8 @@ getSymptomTimeLength(String symptomTime, List<Map<String, dynamic>> mealsFromIng
 }
 
 amountMultiplicator(double amount){
+
+
   if(amount == 0){
     return 0.5;
   }else if(amount == 1){

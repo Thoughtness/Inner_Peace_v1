@@ -27,13 +27,8 @@ class CustomButton extends StatelessWidget {
           ElevatedButton(
             onPressed: onClick,
             child: Text(text),
-            style: TextButton.styleFrom(
-              side: BorderSide(width: 2.0, color: Colors.black),
-              backgroundColor: Colors.cyanAccent,
-              minimumSize: Size(0, 45),
-              primary: Colors.black,
-            ),
-          )
+            style: buttonStyle(),
+          ),
         ],
       ),
     );
@@ -78,7 +73,8 @@ class CustomRow extends StatelessWidget {
                   fillColor: Colors.white,
                   filled: true,
                   border: OutlineInputBorder(),
-                  hintText: description),
+                  hintText: description,
+              ),
               controller: textController,
             ),
           ),

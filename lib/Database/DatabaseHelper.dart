@@ -10,7 +10,7 @@ class DatabaseHelper {
   get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('mealData60.db');
+    _database = await _initDB('mealData63.db');
     return _database!;
   }
 
@@ -23,7 +23,8 @@ class DatabaseHelper {
   _createDB(Database db, int version) async {
     await db.execute("""
     CREATE TABLE user(
-    userID INTEGER PRIMARY KEY
+    userID INTEGER PRIMARY KEY,
+    username TEXT
     );""");
     await db.execute("""
     CREATE TABLE meal(
@@ -60,6 +61,12 @@ class DatabaseHelper {
     FOREIGN KEY(mealID) REFERENCES meal(mealID),
     FOREIGN KEY(ingredientID) REFERENCES ingredient(ingredientID)
     );""");
+  }
+  insertUser(String user) async {
+    final db = await database;
+    await db.rawInsert(
+        """INSERT OR IGNORE INTO user(username) VALUES(?)""",
+        [user]);
   }
 
   insertMeal(String meal, int time) async {
@@ -103,6 +110,19 @@ class DatabaseHelper {
         [mealID, ingredientID, amount]);
   }
 //here
+  getLoginDetails(String username) async {
+    final db = await database;
+    try {
+      List<Map<String, dynamic>> loginDetails = await db.rawQuery(
+          """SELECT * FROM user
+        WHERE username = ?""",
+          [username]);
+      return loginDetails;
+    } catch (e) {
+      return null;
+    }
+  }
+
   getHighestMealID() async {
     final db = await database;
     List<Map<String, dynamic>> lastInsertedMeal = await db.rawQuery(
