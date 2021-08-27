@@ -175,7 +175,7 @@ addMealWithIngredients(String? sqlFormatedDate, String? sqlFormatedTime, List<St
 
 //Multiplikator für die Menge der Zutat berechnen bevor diese mit den Zutaten gelistet werden
 filteredAverageSymptomsListWithAmount(String filterColor) async{
-  var allIngredients = await DatabaseHelper.instance.getIngredients();
+  var allIngredients = await DatabaseHelper.instance.getIngredientsFromUser();
   List<Map<String, dynamic>> ingredientSymptomAmount = [];
 
   double symptomtotalAmount = 0;
