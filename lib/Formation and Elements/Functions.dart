@@ -85,3 +85,55 @@ getSymptomTimeLength(String symptomTime, List<Map<String, dynamic>> mealsFromIng
 amountMultiplicator(double amount){
   return 0.5+amount/10;
 }
+
+//Gibt entsprechend des CustomCheckbox eine Liste von Zutaten zurück
+getIngredients(bool primary, bool secondary1, bool secondary2, bool allIsChecked, List<Map<String, dynamic>> primaryList, List<Map<String, dynamic>> secondaryList1, List<Map<String, dynamic>> secondaryList2, List<Map<String, dynamic>> allIngredientsWithSymptoms,
+    String sort) {
+  if (primary) {
+    allIngredientsWithSymptoms = primaryList;
+    if (allIsChecked) {
+      allIngredientsWithSymptoms =
+          primaryList + secondaryList1 + secondaryList2;
+    } else if (secondary1) {
+      allIngredientsWithSymptoms = primaryList + secondaryList1;
+    } else if (secondary2) {
+      allIngredientsWithSymptoms = primaryList + secondaryList2;
+    }
+  } else if (!primary && secondary1 && secondary2) {
+    allIngredientsWithSymptoms = secondaryList1 + secondaryList2;
+  } else if (!primary && secondary1) {
+    allIngredientsWithSymptoms = secondaryList1;
+  } else if (!primary && secondary2) {
+    allIngredientsWithSymptoms = secondaryList2;
+  } else if (!primary && !secondary1 && !secondary2) {
+    allIngredientsWithSymptoms = [];
+  }
+  allIngredientsWithSymptoms = sortList(sort, allIngredientsWithSymptoms);
+  return allIngredientsWithSymptoms;
+}
+
+//Sortiert die Liste nach Verträglichkeit
+sortList(String sort, List<Map<String, dynamic>> allIngredientsWithSymptoms ) {
+  if (sort == "Unverträglich") {
+    allIngredientsWithSymptoms.sort((a, b) => b["symptomTotal"]
+        .compareTo(a["symptomTotal"]));
+  } else if (sort == "Verträglich") {
+    allIngredientsWithSymptoms.sort((a, b) => a["symptomTotal"]
+        .compareTo(b["symptomTotal"]));
+  }
+  return allIngredientsWithSymptoms;
+}
+
+//Prüft welche Checkboxes angewählt sind und passt allIsChecked an
+setCheckboxState(bool warningsIsChecked, bool digestibleIsChecked, bool symptomFreeIsChecked, bool allIsChecked) {
+  if (warningsIsChecked == false ||
+      digestibleIsChecked == false ||
+      symptomFreeIsChecked == false) {
+    allIsChecked = false;
+  } else if (warningsIsChecked == true &&
+      digestibleIsChecked == true &&
+      symptomFreeIsChecked == true) {
+    allIsChecked = true;
+  }
+  return allIsChecked;
+}

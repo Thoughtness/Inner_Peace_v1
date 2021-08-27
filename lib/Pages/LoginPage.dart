@@ -87,7 +87,7 @@ class _LoginPage extends State<LoginPage> {
               Visibility(
                 visible: falseUser,
                 child: Container(
-                  decoration: thinTeal(),
+                  decoration: thinGrey(),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text('Benutzer existiert nicht',

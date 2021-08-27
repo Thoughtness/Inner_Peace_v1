@@ -63,7 +63,7 @@ class _RecordMeal extends State<RecordMeal> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  decoration: thickTeal(),
+                  decoration: thickDarkGrey(),
                   child: Row(
                     children: [
                       Container(
@@ -132,7 +132,7 @@ class _RecordMeal extends State<RecordMeal> {
                 ),
                 SizedBox(height: boxDistance),
                 Container(
-                  decoration: thickTeal(),
+                  decoration: thickDarkGrey(),
                   //padding: EdgeInsets.fromLTRB(this.left, this.top, this.right, this.bottom),
                   child: CustomRow(
                     title: 'Gericht',
@@ -142,7 +142,7 @@ class _RecordMeal extends State<RecordMeal> {
                 ),
                 SizedBox(height: boxDistance),
                 Container(
-                  decoration: thickTeal(),
+                  decoration: thickDarkGrey(),
                   child: Column(
                     children: [
                       Container(
@@ -249,7 +249,7 @@ class _RecordMeal extends State<RecordMeal> {
                               fit: FlexFit.tight,
                               child: Container(
                                 //height: 40,
-                                decoration: thinTeal(),
+                                decoration: thinGrey(),
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(left, top, right, bottom),
                                   child: Text(
@@ -267,7 +267,7 @@ class _RecordMeal extends State<RecordMeal> {
                                   Flexible(
                                     flex: amountList[index].toInt(),
                                     child: new Container(
-                                      decoration: symptomsBar(index, amountList),
+                                      decoration: ingredientBar(index, amountList),
                                       height: 20.0,
                                     ),
                                   ),
@@ -297,7 +297,7 @@ class _RecordMeal extends State<RecordMeal> {
                                 ingredientList.length > 0 &&
                                 sqlFormatedTime != "" &&
                                 sqlFormatedDate != null) {
-                              int mealID = await addEntry(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amountList);
+                              int mealID = await addMealWithIngredients(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amountList);
                               print(mealID);
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -321,7 +321,7 @@ class _RecordMeal extends State<RecordMeal> {
                                 ingredientList.length > 0 &&
                                 sqlFormatedTime != "" &&
                                 sqlFormatedDate != null) {
-                              addEntry(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amountList);
+                              addMealWithIngredients(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amountList);
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => MyApp(),

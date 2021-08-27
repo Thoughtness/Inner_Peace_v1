@@ -68,12 +68,7 @@ class CustomRow extends StatelessWidget {
           child: Container(
             height: 58,
             child: TextField(
-              decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(),
-                  hintText: description,
-              ),
+              decoration: customInputDecoration(description),
               controller: textController,
             ),
           ),
@@ -114,13 +109,7 @@ class SymptomsRow extends StatelessWidget {
                 Flexible(
                   flex: barLength,
                   child: new Container(
-                    decoration: BoxDecoration(
-                      color: color,
-                      borderRadius:
-                      BorderRadius.all(
-                          Radius.circular(
-                              20.0)),
-                    ),
+                    decoration: symptomsBar(color),
                     height: 20.0,
                   ),
                 ),

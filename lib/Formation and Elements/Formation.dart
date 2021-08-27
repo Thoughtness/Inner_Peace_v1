@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
 
-BoxDecoration thickTeal() {
+BoxDecoration thickGrey() {
   return BoxDecoration(
-    color: Colors.teal[50],
+    color: Colors.grey[50],
     border: Border.all(width: 2.0),
     borderRadius: BorderRadius.all(Radius.circular(7.0)),
   );
 }
 
-BoxDecoration thinTeal() {
+BoxDecoration thickDarkGrey() {
   return BoxDecoration(
-    color: Colors.teal[50],
+    color: Colors.grey[200],
+    border: Border.all(width: 2.0),
+    borderRadius: BorderRadius.all(Radius.circular(7.0)),
+  );
+}
+
+BoxDecoration thinGrey() {
+  return BoxDecoration(
+    color: Colors.grey[50],
     border: Border.all(width: 1.0),
     borderRadius: BorderRadius.all(Radius.circular(5.0)),
   );
 }
 
-BoxDecoration noSquareTeal() {
+BoxDecoration noSquareGrey() {
   return BoxDecoration(
-    color: Colors.teal[50],
+    color: Colors.grey[50],
   );
 }
 
@@ -38,10 +46,18 @@ BoxDecoration thinCyan() {
   );
 }
 
-BoxDecoration symptomsBar(int index, List<double> amountList) {
+BoxDecoration ingredientBar(int index, List<double> amountList) {
   return BoxDecoration(
     color: Colors.blue,
     border: Border.all(width: borderRadius(index, amountList)),
+    borderRadius: BorderRadius.all(
+        Radius.circular(20.0)),
+  );
+}
+
+BoxDecoration symptomsBar(Color color) {
+  return BoxDecoration(
+    color: color,
     borderRadius: BorderRadius.all(
         Radius.circular(20.0)),
   );
@@ -70,6 +86,15 @@ InputDecoration loginWindow(String text){
     filled: true,
     fillColor: Colors.white,
     labelText: text,
+  );
+}
+
+InputDecoration customInputDecoration(String description){
+  return InputDecoration(
+    fillColor: Colors.grey[50],
+    filled: true,
+    border: OutlineInputBorder(),
+    hintText: description,
   );
 }
 
@@ -132,7 +157,7 @@ Theme datePicker(Widget? picker){
         surface: Colors.cyanAccent,
         onSurface: Colors.black,
       ),
-      dialogBackgroundColor: Colors.teal[50],
+      dialogBackgroundColor: Colors.grey[50],
     ),
     child: picker!,
   );

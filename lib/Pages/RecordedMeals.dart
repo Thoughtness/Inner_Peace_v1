@@ -54,7 +54,7 @@ class _RecordedMeals extends State<RecordedMeals> {
                   children: [
                     Flexible(
                       child: Container(
-                        decoration: thickTeal(),
+                        decoration: thickGrey(),
                         child: Column(
                           children: [
                             Container(
@@ -102,7 +102,7 @@ class _RecordedMeals extends State<RecordedMeals> {
                     SizedBox(width: 10),
                     Flexible(
                       child: Container(
-                        decoration: thickTeal(),
+                        decoration: thickGrey(),
                         child: Column(
                           children: [
                             Container(
@@ -157,7 +157,7 @@ class _RecordedMeals extends State<RecordedMeals> {
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Container(
-                        decoration: thickTeal(),
+                        decoration: thickGrey(),
                         child: Column(
                           children: [
                             Container(

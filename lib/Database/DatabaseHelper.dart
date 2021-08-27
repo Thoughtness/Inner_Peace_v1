@@ -14,7 +14,7 @@ class DatabaseHelper {
   get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('mealData65.db');
+    _database = await _initDB('mealData81.db');
     return _database!;
   }
 
@@ -246,7 +246,7 @@ class DatabaseHelper {
     return getIngredientsWithSymptoms;
   }
 
-  getAllIngredientsWithSymptoms2(int ingredientID) async {
+  getAllIngredientsWithSymptoms(int ingredientID) async {
     final db = await database;
     final List<Map<String, dynamic>> allIngredientsWithMeals = await db
         .rawQuery(

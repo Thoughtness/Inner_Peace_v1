@@ -119,7 +119,7 @@ class _Intolerances extends State<Intolerances> {
                                       ),
                                       onChanged: (String? newValue) async {
                                         sort = newValue!;
-                                        sortList();
+                                        sortList(sort, allIngredientsWithSymptoms);
                                         setState(() {});
                                       },
                                       items: <String>[
@@ -166,7 +166,7 @@ class _Intolerances extends State<Intolerances> {
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Container(
-                        decoration: thickTeal(),
+                        decoration: thickGrey(),
                         child: Column(
                           children: [
                             Container(
@@ -337,9 +337,11 @@ class _Intolerances extends State<Intolerances> {
     );
   }
 
+  //die customCheckbox Methode wurde nicht exportiert, da viele Variablen ändern und nicht alles zurückgegeben werden kann
+  //Erstellt die Checkboxes und beinhaltet die Fälle zum Anzeigen der Zutaten
   customCheckbox(String title, bool boolValue) {
     return Container(
-      decoration: noSquareTeal(),
+      decoration: noSquareGrey(),
       child: CheckboxListTile(
         title: Text(title),
         controlAffinity: ListTileControlAffinity.trailing,
@@ -360,78 +362,23 @@ class _Intolerances extends State<Intolerances> {
               break;
             case "Warnungen anzeigen":
               warningsIsChecked = value!;
-              setCheckboxState("Warnungen anzeigen", value);
-              getIngredients(warningsIsChecked, digestibleIsChecked,
-                  symptomFreeIsChecked, warnings, digestible, symptomFree);
+              allIsChecked = setCheckboxState(warningsIsChecked, digestibleIsChecked, symptomFreeIsChecked, allIsChecked);
+              allIngredientsWithSymptoms = getIngredients(warningsIsChecked, digestibleIsChecked, symptomFreeIsChecked, allIsChecked, warnings, digestible, symptomFree, allIngredientsWithSymptoms, sort);
               break;
             case "Verträgliche anzeigen":
               digestibleIsChecked = value!;
-              setCheckboxState("Verträgliche anzeigen", value);
-              getIngredients(digestibleIsChecked, warningsIsChecked,
-                  symptomFreeIsChecked, digestible, warnings, symptomFree);
+              allIsChecked = setCheckboxState(warningsIsChecked, digestibleIsChecked, symptomFreeIsChecked, allIsChecked);
+              allIngredientsWithSymptoms = getIngredients(digestibleIsChecked, warningsIsChecked, symptomFreeIsChecked, allIsChecked, digestible, warnings, symptomFree, allIngredientsWithSymptoms, sort);
               break;
             case "Symptomfreie anzeigen":
               symptomFreeIsChecked = value!;
-              setCheckboxState("Symptomfreie anzeigen", value);
-              getIngredients(symptomFreeIsChecked, warningsIsChecked,
-                  digestibleIsChecked, symptomFree, warnings, digestible);
+              allIsChecked = setCheckboxState(warningsIsChecked, digestibleIsChecked, symptomFreeIsChecked, allIsChecked);
+              allIngredientsWithSymptoms = getIngredients(symptomFreeIsChecked, warningsIsChecked, digestibleIsChecked, allIsChecked, symptomFree, warnings, digestible, allIngredientsWithSymptoms, sort);
               break;
           }
           setState(() {});
         },
       ),
     );
-  }
-
-  getIngredients(
-      bool primary,
-      bool secondary1,
-      secondary2,
-      List<Map<String, dynamic>> primaryList,
-      List<Map<String, dynamic>> secondaryList1,
-      List<Map<String, dynamic>> secondaryList2) {
-    if (primary) {
-      allIngredientsWithSymptoms = primaryList;
-      if (allIsChecked) {
-        allIngredientsWithSymptoms =
-            primaryList + secondaryList1 + secondaryList2;
-      } else if (secondary1) {
-        allIngredientsWithSymptoms = primaryList + secondaryList1;
-      } else if (secondary2) {
-        allIngredientsWithSymptoms = primaryList + secondaryList2;
-      }
-    } else if (!primary && secondary1 && secondary2) {
-      allIngredientsWithSymptoms = secondaryList1 + secondaryList2;
-    } else if (!primary && secondary1) {
-      allIngredientsWithSymptoms = secondaryList1;
-    } else if (!primary && secondary2) {
-      allIngredientsWithSymptoms = secondaryList2;
-    } else if (!primary && !secondary1 && !secondary2) {
-      allIngredientsWithSymptoms = [];
-    }
-    sortList();
-  }
-
-  sortList() {
-    if (sort == "Unverträglich") {
-      allIngredientsWithSymptoms.sort((a, b) => b["symptomTotal"]
-          .compareTo(a["symptomTotal"]));
-    } else if (sort == "Verträglich") {
-      allIngredientsWithSymptoms.sort((a, b) => a["symptomTotal"]
-          .compareTo(b["symptomTotal"]));
-    }
-    return allIngredientsWithSymptoms;
-  }
-
-  setCheckboxState(String title, bool value) {
-    if (warningsIsChecked == false ||
-        digestibleIsChecked == false ||
-        symptomFreeIsChecked == false) {
-      allIsChecked = false;
-    } else if (warningsIsChecked == true &&
-        digestibleIsChecked == true &&
-        symptomFreeIsChecked == true) {
-      allIsChecked = true;
-    }
   }
 }

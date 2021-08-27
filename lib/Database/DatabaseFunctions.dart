@@ -2,6 +2,7 @@ import 'package:inner_peace_v1/Database/DatabaseHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:inner_peace_v1/Formation%20and%20Elements/Functions.dart';
 
+//Benutzername überprüfen, gibt wenn vorhanden true zurück
 checkLogin(String username) async {
   var getLogin = await DatabaseHelper.instance.getLoginDetails(username);
   try {
@@ -13,6 +14,7 @@ checkLogin(String username) async {
   }
 }
 
+//Überprüft, ob ein Benutzername vorhanden ist. Wenn nicht wird er abgespeichert
 ifAvailableSave(String username) async {
   var checkAvailability = await DatabaseHelper.instance.getLoginDetails(username);
   try {
@@ -25,6 +27,7 @@ ifAvailableSave(String username) async {
   }
 }
 
+//Geht die ganze Gericht Liste (mit entsprechender Benutzer ID) und fügt das Gericht der Zutat hinzu
 getMealsForIngredient(int mealCounter, String ingredient, List<Map<String, dynamic>> mealsFromIngredients) {
   var mealsForIngredient = [];
   for (int i = 0; i < mealsFromIngredients.length; i++) {
@@ -35,37 +38,8 @@ getMealsForIngredient(int mealCounter, String ingredient, List<Map<String, dynam
   return mealsForIngredient[mealCounter].toString();
 }
 
-getAverageForSymptoms2(String filter,String filterColor) async{
-  var allIngredients = await DatabaseHelper.instance.getIngredients();
-  List<Map<String, dynamic>> allIngredientsWithSymptoms = [];
-  for(int i = 0; i < allIngredients.length; i++){
-    var singleIngredient = await DatabaseHelper.instance.getAllIngredientsWithSymptoms2(allIngredients[i]['ingredientID']);
-    try {
-      switch (filterColor) {
-        case "green":
-          if (singleIngredient[0]['symptomTotal'] <= 0) {
-            allIngredientsWithSymptoms.add(singleIngredient[0]);
-          }
-          break;
-        case "yellow":
-          if (singleIngredient[0]['symptomTotal'] <= 160 &&
-              singleIngredient[0]['symptomTotal'] > 0) {
-            allIngredientsWithSymptoms.add(singleIngredient[0]);
-          }
-          break;
-        case "red":
-          if (singleIngredient[0]['symptomTotal'] > 160) {
-            allIngredientsWithSymptoms.add(singleIngredient[0]);
-          }
-          break;
-      }
-    } catch (e) {
-
-    }
-  }
-  return allIngredientsWithSymptoms;
-}
-
+//Holt die Informationen um ein Gericht zu löschen und löscht dann das Mahlzeit, die Symptome und MahlzeitZutat.
+//Die Zutaten werden nicht gelöscht für die Zukunft, für Vorschläge zur Erfassung von Mahlzeiten
 Future deleteMeal(int index) async {
   var deleteMealInformation = await DatabaseHelper.instance.getDeleteMealInformation(index);
   print(deleteMealInformation);
@@ -73,6 +47,7 @@ Future deleteMeal(int index) async {
   await DatabaseHelper.instance.deleteMeal(index, deleteMealInformation[0]['symptomsID']);
 }
 
+//Filter und Sortierung für erfasste Mahlzeiten
 getMealList(String? value, String? sort) async {
   List<Map<String, dynamic>> mealList = [];
   double filterNumberLow = 0;
@@ -141,6 +116,7 @@ getMealList(String? value, String? sort) async {
   return mealList;
 }
 
+//Symptome erfassen und diese nach grün, gelb und rot sortieren
 addSymptoms(double wellbeing, double cramps, double flatulence, double bowel, int mealID, String symptomTime) async {
   //Multiplikator für Symptome = je schlimmer die Symptome desto höher der Multiplikator (eine 10 ist wesentlich schlimmer wie 4* eine 3)
   List<double> symptomList = [wellbeing, cramps, flatulence, bowel];
@@ -170,7 +146,8 @@ addSymptoms(double wellbeing, double cramps, double flatulence, double bowel, in
   await DatabaseHelper.instance.addSymptomsToMeal(symptomsID, mealID);
 }
 
-addEntry(String? sqlFormatedDate, String? sqlFormatedTime, List<String> ingredientList, TextEditingController mealName, List<double> amount) async {
+//Mahlzeit mit Zutaten und Menge erfassen
+addMealWithIngredients(String? sqlFormatedDate, String? sqlFormatedTime, List<String> ingredientList, TextEditingController mealName, List<double> amount) async {
   DateTime sqlDate =
   DateTime.parse(sqlFormatedDate! + "T" + sqlFormatedTime!);
   await DatabaseHelper.instance
@@ -196,7 +173,8 @@ addEntry(String? sqlFormatedDate, String? sqlFormatedTime, List<String> ingredie
   return mealID;
 }
 
-averageSymptomWithAmount(String filterColor) async{
+//Multiplikator für die Menge der Zutat berechnen bevor diese mit den Zutaten gelistet werden
+filteredAverageSymptomsListWithAmount(String filterColor) async{
   var allIngredients = await DatabaseHelper.instance.getIngredients();
   List<Map<String, dynamic>> ingredientSymptomAmount = [];
 
@@ -206,9 +184,10 @@ averageSymptomWithAmount(String filterColor) async{
   double crampsAmount = 0;
   double bowelAmount = 0;
 
+//Multiplikator für die Menge der Zutaten anwenden, diese addieren und denn Schnitt berechnen
   for(int i = 0; i < allIngredients.length; i++){
     if(!ingredientSymptomAmount.contains(allIngredients[i]['ingredientID'])){
-      var singleIngredient = await DatabaseHelper.instance.getAllIngredientsWithSymptoms2(allIngredients[i]['ingredientID']);
+      var singleIngredient = await DatabaseHelper.instance.getAllIngredientsWithSymptoms(allIngredients[i]['ingredientID']);
       for(int e = 0; e < singleIngredient.length; e++){
         symptomtotalAmount = symptomtotalAmount + singleIngredient[e]['symptomTotal']*amountMultiplicator(singleIngredient[e]['amount'].toDouble());
         wellbeingAmount = wellbeingAmount + singleIngredient[e]['wellbeing']*amountMultiplicator(singleIngredient[e]['amount'].toDouble());
@@ -223,6 +202,7 @@ averageSymptomWithAmount(String filterColor) async{
       bowelAmount = bowelAmount/singleIngredient.length;
 
       //print(singleIngredient);
+      //Neue Liste generieren
       List<Map<String, dynamic>> updatedIngredient = [{'ingredientID': singleIngredient[0]['ingredientID'], 'ingredient': singleIngredient[0]['ingredient'], 'amount': singleIngredient[0]['amount'], 'meal': singleIngredient[0]['meal'], 'symptomTotal': symptomtotalAmount, 'wellbeing': wellbeingAmount, 'flatulence': flatulenceAmount, 'cramps': crampsAmount, 'bowel': bowelAmount}];
       print(updatedIngredient);
       try {

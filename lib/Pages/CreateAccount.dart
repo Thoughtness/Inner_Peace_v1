@@ -75,7 +75,7 @@ class _CreateAccount extends State<CreateAccount> {
                 child: Container(
                   height: 46,
                   width: double.infinity,
-                  decoration: thinTeal(),
+                  decoration: thinGrey(),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Center(

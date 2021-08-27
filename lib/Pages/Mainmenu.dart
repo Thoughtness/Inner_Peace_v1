@@ -80,9 +80,9 @@ class _Mainmenu extends State<MainMenu> {
               CustomButton(
                   text: "Unverträglichkeiten",
                   onClick: () async {
-                    var warnings = await averageSymptomWithAmount("red");
-                    var digestible = await averageSymptomWithAmount("yellow");
-                    var symptomFree = await averageSymptomWithAmount("green");
+                    var warnings = await filteredAverageSymptomsListWithAmount("red");
+                    var digestible = await filteredAverageSymptomsListWithAmount("yellow");
+                    var symptomFree = await filteredAverageSymptomsListWithAmount("green");
                     var mealsFromIngredients = await DatabaseHelper.instance.getMealsFromIngredients();
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => Intolerances(

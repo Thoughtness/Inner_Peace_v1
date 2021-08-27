@@ -64,7 +64,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                   child: ListView(
                     children: [
                       Container(
-                        decoration: thickTeal(),
+                        decoration: thickGrey(),
                         child: Column(
                           children: [
                             Container(
@@ -171,7 +171,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
   customSlider(String title, double value, String good, String bad) {
     return Container(
       height: 110,
-      decoration: thickTeal(),
+      decoration: thickGrey(),
       child: Column(
         children: [
           Container(
