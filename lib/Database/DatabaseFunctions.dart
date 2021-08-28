@@ -50,54 +50,37 @@ Future deleteMeal(int index) async {
 //Filter und Sortierung für erfasste Mahlzeiten
 getMealList(String? value, String? sort) async {
   List<Map<String, dynamic>> mealList = [];
-  double filterNumberLow = 0;
-  double filterNumberHigh = 0;
-
-  var mealCount = await DatabaseHelper.instance.getHighestMealID();
-  int numbOfMeals = mealCount[0]['mealID'];
-  print(numbOfMeals);
+  List<int> mealChecker = [];
   if (value == 'Alle') {
-    for (int i = 1; i <= numbOfMeals; i++) {
-      try {
-        var meal = await DatabaseHelper.instance.getAllRecordedMeals(i);
-        mealList.add(meal[0]);
-      } catch (e) {
-
+    var meals = await DatabaseHelper.instance.getAllRecordedMeals();
+    for (int i = 0; i < meals.length; i++) {
+      if(!mealChecker.contains(meals[i]['mealID'])){
+        mealList.add(meals[i]);
+        mealChecker.add(meals[i]['mealID']);
       }
     }
   } else if (value == "Symptomfrei") {
-    filterNumberLow = -21;
-    filterNumberHigh = -19;
-    for (int i = 1; i <= numbOfMeals; i++) {
-      try {
-        var meal = await DatabaseHelper.instance
-            .getCertainRecordedMeals(i, filterNumberLow, filterNumberHigh);
-        mealList.add(meal[0]);
-      } catch (e) {
-
+    var meals = await DatabaseHelper.instance.getCertainRecordedMeals(-21, -19);
+    for (int i = 0; i < meals.length; i++) {
+      if(!mealChecker.contains(meals[i]['mealID'])){
+        mealList.add(meals[i]);
+        mealChecker.add(meals[i]['mealID']);
       }
     }
   } else if (value == "Verträglich") {
-    filterNumberLow = 0;
-    filterNumberHigh = 6;
-    for (int i = 1; i <= numbOfMeals; i++) {
-      try {
-        var meal = await DatabaseHelper.instance
-            .getCertainRecordedMeals(i, filterNumberLow, filterNumberHigh);
-        mealList.add(meal[0]);
-      } catch (e) {
-
+    var meals = await DatabaseHelper.instance.getCertainRecordedMeals(0, 6);
+    for (int i = 0; i < meals.length; i++) {
+      if(!mealChecker.contains(meals[i]['mealID'])){
+        mealList.add(meals[i]);
+        mealChecker.add(meals[i]['mealID']);
       }
     }
   } else if (value == "Unverträglich") {
-    filterNumberLow = 7;
-    for (int i = 1; i <= numbOfMeals; i++) {
-      try {
-        var meal = await DatabaseHelper.instance
-            .getIntolerantRecordedMeals(i, filterNumberLow);
-        mealList.add(meal[0]);
-      } catch (e) {
-
+    var meals = await DatabaseHelper.instance.getIntolerantRecordedMeals(7);
+    for (int i = 0; i < meals.length; i++) {
+      if(!mealChecker.contains(meals[i]['mealID'])){
+        mealList.add(meals[i]);
+        mealChecker.add(meals[i]['mealID']);
       }
     }
   }
@@ -196,30 +179,75 @@ filteredAverageSymptomsListWithAmount(String filterColor) async{
         bowelAmount = bowelAmount + singleIngredient[e]['bowel']*amountMultiplicator(singleIngredient[e]['amount'].toDouble());
       }
 
-      wellbeingAmount = wellbeingAmount/singleIngredient.length;
-      flatulenceAmount = flatulenceAmount/singleIngredient.length;
-      crampsAmount = crampsAmount/singleIngredient.length;
-      bowelAmount = bowelAmount/singleIngredient.length;
-
-      //print(singleIngredient);
-      //Neue Liste generieren
-      List<Map<String, dynamic>> updatedIngredient = [{'ingredientID': singleIngredient[0]['ingredientID'], 'ingredient': singleIngredient[0]['ingredient'], 'amount': singleIngredient[0]['amount'], 'meal': singleIngredient[0]['meal'], 'symptomTotal': symptomtotalAmount, 'wellbeing': wellbeingAmount, 'flatulence': flatulenceAmount, 'cramps': crampsAmount, 'bowel': bowelAmount}];
-      print(updatedIngredient);
       try {
         switch (filterColor) {
           case "green":
             if (singleIngredient[0]['symptomTotal'] <= 0) {
+
+              wellbeingAmount = wellbeingAmount/singleIngredient.length;
+              flatulenceAmount = flatulenceAmount/singleIngredient.length;
+              crampsAmount = crampsAmount/singleIngredient.length;
+              bowelAmount = bowelAmount/singleIngredient.length;
+
+              //Neue Liste generieren
+              List<Map<String, dynamic>> updatedIngredient = [{
+                'ingredientID': singleIngredient[0]['ingredientID'],
+                'ingredient': singleIngredient[0]['ingredient'],
+                'amount': singleIngredient[0]['amount'],
+                'meal': singleIngredient[0]['meal'],
+                'symptomTotal': symptomtotalAmount,
+                'wellbeing': wellbeingAmount,
+                'flatulence': flatulenceAmount,
+                'cramps': crampsAmount,
+                'bowel': bowelAmount}];
+
               ingredientSymptomAmount.add(updatedIngredient[0]);
             }
             break;
           case "yellow":
             if (singleIngredient[0]['symptomTotal'] <= 160 &&
                 singleIngredient[0]['symptomTotal'] > 0) {
+
+              wellbeingAmount = wellbeingAmount/singleIngredient.length;
+              flatulenceAmount = flatulenceAmount/singleIngredient.length;
+              crampsAmount = crampsAmount/singleIngredient.length;
+              bowelAmount = bowelAmount/singleIngredient.length;
+
+              //Neue Liste generieren
+              List<Map<String, dynamic>> updatedIngredient = [{
+                'ingredientID': singleIngredient[0]['ingredientID'],
+                'ingredient': singleIngredient[0]['ingredient'],
+                'amount': singleIngredient[0]['amount'],
+                'meal': singleIngredient[0]['meal'],
+                'symptomTotal': symptomtotalAmount,
+                'wellbeing': wellbeingAmount,
+                'flatulence': flatulenceAmount,
+                'cramps': crampsAmount,
+                'bowel': bowelAmount}];
+
               ingredientSymptomAmount.add(updatedIngredient[0]);
             }
             break;
           case "red":
             if (singleIngredient[0]['symptomTotal'] > 160) {
+
+              wellbeingAmount = wellbeingAmount/singleIngredient.length;
+              flatulenceAmount = flatulenceAmount/singleIngredient.length;
+              crampsAmount = crampsAmount/singleIngredient.length;
+              bowelAmount = bowelAmount/singleIngredient.length;
+
+              //Neue Liste generieren
+              List<Map<String, dynamic>> updatedIngredient = [{
+                'ingredientID': singleIngredient[0]['ingredientID'],
+                'ingredient': singleIngredient[0]['ingredient'],
+                'amount': singleIngredient[0]['amount'],
+                'meal': singleIngredient[0]['meal'],
+                'symptomTotal': symptomtotalAmount,
+                'wellbeing': wellbeingAmount,
+                'flatulence': flatulenceAmount,
+                'cramps': crampsAmount,
+                'bowel': bowelAmount}];
+
               ingredientSymptomAmount.add(updatedIngredient[0]);
             }
             break;

@@ -147,8 +147,8 @@ class DatabaseHelper {
     return lastInsertedMeal;
   }
 
-  //Holt eine Mahlzeit des Benutzers
-  getAllRecordedMeals(int mealID) async {
+  //Holt alle Mahlzeiten eines Benutzers
+  getAllRecordedMeals() async {
     final db = await database;
     List<Map<String, dynamic>> allMeals = await db.rawQuery(
         """SELECT meal.mealID, meal.meal, meal.time, symptoms.wellbeing, symptoms.cramps, symptoms.flatulence, symptoms.bowel, symptoms.symptomTotal
@@ -156,13 +156,13 @@ class DatabaseHelper {
         JOIN mealingredient ON meal.mealID = mealingredient.mealID 
         JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID 
         JOIN symptoms ON meal.symptomsID = symptoms.symptomsID 
-        WHERE meal.mealID = ? AND meal.userID = ?""",
-        [mealID, userId]);
+        WHERE  meal.userID = ?""",
+        [userId]);
     return allMeals;
   }
 
-  //Holt eine Mahlzeit des Benutzers wo alle Symptome in einem gewissen Bereich sind
-  getCertainRecordedMeals(int mealID, double filterNumberLow,
+  //Holt alle Mahlzeiten eines Benutzers in einem Bestimmten Symptombereich
+  getCertainRecordedMeals(double filterNumberLow,
       double filterNumberHigh) async {
     final db = await database;
     List<Map<String, dynamic>> allMeals = await db.rawQuery(
@@ -171,15 +171,12 @@ class DatabaseHelper {
         JOIN mealingredient ON meal.mealID = mealingredient.mealID 
         JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID 
         JOIN symptoms ON meal.symptomsID = symptoms.symptomsID 
-        WHERE meal.mealID = ?
-        AND meal.userID = ?
+        WHERE meal.userID = ?
         AND symptoms.wellbeing BETWEEN ? and ?
         AND symptoms.cramps BETWEEN ? and ?
         AND symptoms.flatulence BETWEEN ? and ?
         AND symptoms.bowel BETWEEN ? and ?""",
-        [
-          mealID,
-          userId,
+        [userId,
           filterNumberLow,
           filterNumberHigh,
           filterNumberLow,
@@ -193,7 +190,7 @@ class DatabaseHelper {
   }
 
   //Holt eine Mahlzeit des Benutzers wo ein Symptom über einem Bereich ist
-  getIntolerantRecordedMeals(int mealID, double filterNumberLow) async {
+  getIntolerantRecordedMeals(double filterNumberLow) async {
     final db = await database;
     List<Map<String, dynamic>> allMeals = await db.rawQuery(
         """SELECT meal.mealID, meal.meal, meal.time, symptoms.wellbeing, symptoms.cramps, symptoms.flatulence, symptoms.bowel, symptoms.symptomTotal
@@ -201,14 +198,12 @@ class DatabaseHelper {
         JOIN mealingredient ON meal.mealID = mealingredient.mealID 
         JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID 
         JOIN symptoms ON meal.symptomsID = symptoms.symptomsID 
-        WHERE meal.mealID = ? 
-        AND meal.userID = ? AND (
+        WHERE meal.userID = ? AND (
         symptoms.wellbeing >= ? OR 
         symptoms.cramps >= ? OR 
         symptoms.flatulence >= ? OR 
         symptoms.bowel >= ?)""",
         [
-          mealID,
           userId,
           filterNumberLow,
           filterNumberLow,
