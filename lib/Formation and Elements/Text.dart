@@ -239,3 +239,35 @@ irrBowelSource(){
   String source = 'https://www.toppharm.ch/krankheitsbild/reizdarm';
   return source;
 }
+
+generalInformation(){
+  String information = 'Die App kann keine Unverträglichkeiten bestimmen. Sie dient lediglich zur Unterstützung diese zu ermitteln.'
+      ' Damit dies möglich ist, muss der Benutzer sich ausgwogen ernähren.'
+      ' Wenn jemand immer das gleiche isst, kann es sein, dass Zutaten die eigentlich unproblematisch sind, als Unverträglich kategorisiert werden.'
+      ' Je mehr Daten erfasst werden, umso genauer werden die Ergebnisse sein.';
+  return information;
+}
+
+userAccount(){
+  String user = '- Jeder Benutzername ist einzigartig und kann keine Duplikate haben.\n\n'
+      '- Der Benutzername kann nicht mehr wiedererlangt werden wenn er vergessen wird.';
+  return user;
+}
+
+recordMeal(){
+  String recordMeal = '- Mahlzeiten brauchen Datum, Zeit, Titel und mindestens eine Zutat\n\n'
+      '- Die Menge der Zutat ist auf die Menge der Mahlzeit zu beziehen, sie soll also nicht mit einer anderen Zutat verglichen werden.\n\n'
+      'Bsp: Spaghetti mit Tomatensauce: Die Menge an Reibkäse die dazu kommt ist bei jeder Person anders. Für eine noramle Menge wird die Mitte gewählt.'
+      ' Was als normal angesehen wird ist von Benutzer zu entscheiden, soll jedoch für alle Zutaten den gleichen Massstab haben.\n\n'
+      '- Mahlzeiten werden erst gelistet wenn Symptome hinzugefügt werden. Diese können direkt, oder auch später unter "Symptome erfassen" hinzugefügt werden.\n\n'
+      '- Mahlzeiten können unter "Erfasste Mahlzeiten" bei bedarf gelöscht werden.';
+  return recordMeal;
+}
+
+recordSymptoms(){
+  String recordSymptoms = '- Symptome können ohne Mahlzeit nicht erfasst werden.\n\n'
+      '- Mahlzeiten ohne Symptome werden aufgelistet.\n\n'
+      '- Das Auftreten der Symptome bezieht sich auf den Zeitpunkt, als die Mahlzeit beendet wurde.\n\n'
+      '- Wenn die Mahlzeit ohne Symptome verlief muss zwingend "Keine Symptome" gewählt werden, diese ist für die Berechnung wichtig!';
+  return recordSymptoms;
+}

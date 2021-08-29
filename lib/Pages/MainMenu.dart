@@ -38,6 +38,7 @@ class _MainMenu extends State<MainMenu> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.teal[100],
         endDrawer: Menu(),
         appBar: AppBar(
@@ -150,7 +151,7 @@ class _MainMenu extends State<MainMenu> {
                                       child: FittedBox(
                                         alignment: Alignment.topLeft,
                                         fit: BoxFit.scaleDown,
-                                        child: Text(warnings[index]['meal'],
+                                        child: Text(warnings[index]['ingredient'],
                                             style:
                                                 myTitleCyanAccentTextStyle()),
                                       ),

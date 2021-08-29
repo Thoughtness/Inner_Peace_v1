@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.inner_peace_v1">
    <application
-        android:label="inner_peace_v1"
+        android:label="Inner Peace"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

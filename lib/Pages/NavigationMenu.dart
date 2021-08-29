@@ -9,6 +9,8 @@ import 'package:inner_peace_v1/Pages/Intolerances.dart';
 import 'package:inner_peace_v1/Pages/MainMenu.dart';
 import 'package:inner_peace_v1/Database/DatabaseFunctions.dart';
 
+import 'Instructions.dart';
+
 class Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context){
@@ -88,6 +90,16 @@ class Menu extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 ListTile(
+                    leading: Icon(Icons.menu_book),
+                    title: Text('Bedienungsanleitung'),
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Instructions(),
+                      ));
+                    }
+                ),
+                const SizedBox(height: 15),
+                ListTile(
                     leading: Icon(Icons.logout),
                     title: Text('Ausloggen'),
                     onTap: (){
@@ -96,6 +108,7 @@ class Menu extends StatelessWidget {
                       ));
                     }
                 ),
+
               ],
             ),
           ),

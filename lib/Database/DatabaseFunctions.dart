@@ -208,13 +208,13 @@ filteredAverageSymptomsListWithAmount(String filterColor) async{
             }
             break;
           case "yellow":
-            if (updatedIngredient[0]['symptomTotal'] <= 160 &&
+            if (updatedIngredient[0]['symptomTotal'] <= 200 &&
                 updatedIngredient[0]['symptomTotal'] > 0) {
               ingredientSymptomAmount.add(updatedIngredient[0]);
             }
             break;
           case 'red':
-            if (updatedIngredient[0]['symptomTotal'] > 160) {
+            if (updatedIngredient[0]['symptomTotal'] > 200) {
               ingredientSymptomAmount.add(updatedIngredient[0]);
             }
             break;

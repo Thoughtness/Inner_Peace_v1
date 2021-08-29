@@ -126,7 +126,46 @@ class SymptomsRow extends StatelessWidget {
   }
 }
 
-class InfoEntry extends StatelessWidget{
+class CustomExpansionTile extends StatelessWidget {
+  CustomExpansionTile({
+    required this.title,
+    required this.textToTitle,
+    required this.bot,
+    required this.decoration,
+  });
+
+  final String title;
+  final String textToTitle;
+  final double bot;
+  final Decoration decoration;
+
+  final double left = 10.0;
+  final double top = 10.0;
+  final double right = 10.0;
+  final double bottom = 10.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0, 0, 0, bot),
+      child: Container(
+        decoration: decoration,
+        child: ExpansionTile(
+          title: Text(title),
+          children: [
+            Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+                decoration: topSquareGrey(),
+                child: Text(textToTitle)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class InfoEntry extends StatelessWidget {
   InfoEntry({
     required this.title,
     required this.explanation,
@@ -137,7 +176,7 @@ class InfoEntry extends StatelessWidget{
     required this.titleCure,
     required this.cure,
     required this.source,
-});
+  });
 
   final String title;
   final String explanation;
@@ -162,67 +201,39 @@ class InfoEntry extends StatelessWidget{
         decoration: thickCyan(),
         child: ClipRRect(
           child: ExpansionTile(
-            title: Text(title,
+            title: Text(
+              title,
               style: myTextStyleMedium(),
             ),
             children: [
               Container(
-                  padding: EdgeInsets.fromLTRB(
-                      left, top, right, bottom),
+                  width: double.infinity,
+                  padding: EdgeInsets.fromLTRB(left, top, right, bottom),
                   decoration: topSquareGrey(),
                   child: Text(explanation)),
-              Container(
+              CustomExpansionTile(
+                title: titleCauses,
+                textToTitle: causes,
+                bot: 0,
                 decoration: thinSquare(),
-                child: ExpansionTile(
-                  title: Text(titleCauses),
-                  children: [
-                    Container(
-                        padding: EdgeInsets.fromLTRB(
-                            left, top, right, bottom),
-                        decoration: topSquareGrey(),
-                        child: Text(causes)),
-                  ],
-                ),
               ),
-              Container(
+              CustomExpansionTile(
+                title: titlePrevent,
+                textToTitle: prevent,
+                bot: 0,
                 decoration: thinSquare(),
-                child: ExpansionTile(
-                  title: Text(titlePrevent),
-                  children: [
-                    Container(
-                        padding: EdgeInsets.fromLTRB(
-                            left, top, right, bottom),
-                        decoration: topSquareGrey(),
-                        child: Text(prevent)),
-                  ],
-                ),
               ),
-              Container(
+              CustomExpansionTile(
+                title: titleCure,
+                textToTitle: cure,
+                bot: 0,
                 decoration: thinSquare(),
-                child: ExpansionTile(
-                  title: Text(titleCure),
-                  children: [
-                    Container(
-                        padding: EdgeInsets.fromLTRB(
-                            left, top, right, bottom),
-                        decoration: topSquareGrey(),
-                        child: Text(cure)),
-                  ],
-                ),
               ),
-              Container(
+              CustomExpansionTile(
+                title: 'Quelle',
+                textToTitle: source,
+                bot: 0,
                 decoration: thinSquare(),
-                child: ExpansionTile(
-                  title: Text('Quelle'),
-                  children: [
-                    Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.fromLTRB(
-                            left, top, right, bottom),
-                        decoration: topSquareGrey(),
-                        child: Text(source)),
-                  ],
-                ),
               ),
             ],
           ),

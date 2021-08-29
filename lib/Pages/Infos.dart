@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
 import 'package:inner_peace_v1/Formation%20and%20Elements/GuiElements.dart';
-import 'package:inner_peace_v1/Formation%20and%20Elements/TextInfo.dart';
+import 'package:inner_peace_v1/Formation%20and%20Elements/Text.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 
 // ignore: camel_case_types
