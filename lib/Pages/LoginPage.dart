@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inner_peace_v1/Formation%20and%20Elements/GuiElements.dart';
 import 'package:inner_peace_v1/Database/DatabaseFunctions.dart';
 import 'package:inner_peace_v1/Formation%20and%20Elements/MyUser.dart';
-import 'package:inner_peace_v1/Pages/Mainmenu.dart';
+import 'package:inner_peace_v1/Pages/MainMenu.dart';
 import 'package:flutter/widgets.dart';
 import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
 
@@ -53,16 +53,17 @@ class _LoginPage extends State<LoginPage> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: CustomButton(
                     text: "Einloggen",
                     onClick: () async {
                       var validUser = await checkLogin(username.text);
                         if(validUser != null){
-                          print(validUser[0]['userID']);
+                          //print(validUser[0]['userID']);
                           _saveUserId(validUser[0]['userID']);
+                          var warnings = await filteredAverageSymptomsListWithAmount("red");
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => MainMenu(),
+                            builder: (context) => MainMenu(warnings: warnings),
                           ));
                         }else {
                           setState(() {

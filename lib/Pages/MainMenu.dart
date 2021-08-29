@@ -12,13 +12,24 @@ import 'package:inner_peace_v1/Database/DatabaseFunctions.dart';
 import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
 
 class MainMenu extends StatefulWidget {
+  MainMenu({
+    required this.warnings,
+  });
+
+  final List<Map<String, dynamic>> warnings;
 
   @override
-  _Mainmenu createState() => _Mainmenu();
+  _MainMenu createState() => _MainMenu(warnings: warnings);
 }
 
-class _Mainmenu extends State<MainMenu> {
+class _MainMenu extends State<MainMenu> {
+  _MainMenu({
+    required this.warnings,
+  });
 
+  final List<Map<String, dynamic>> warnings;
+  List<Map<String, dynamic>> digestible = [];
+  List<Map<String, dynamic>> symptomFree = [];
   final double left = 10.0;
   final double right = 10.0;
 
@@ -42,7 +53,7 @@ class _Mainmenu extends State<MainMenu> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(left, 0, right, 0),
+          padding: EdgeInsets.fromLTRB(left, 10, right, 10),
           child: Column(
             children: [
               CustomButton(
@@ -80,9 +91,9 @@ class _Mainmenu extends State<MainMenu> {
               CustomButton(
                   text: "Unverträglichkeiten",
                   onClick: () async {
-                    var warnings = await filteredAverageSymptomsListWithAmount("red");
-                    var digestible = await filteredAverageSymptomsListWithAmount("yellow");
-                    var symptomFree = await filteredAverageSymptomsListWithAmount("green");
+                    //warnings = await filteredAverageSymptomsListWithAmount("red");
+                    digestible = await filteredAverageSymptomsListWithAmount("yellow");
+                    symptomFree = await filteredAverageSymptomsListWithAmount("green");
                     var mealsFromIngredients = await DatabaseHelper.instance.getMealsFromIngredients();
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => Intolerances(
@@ -99,6 +110,46 @@ class _Mainmenu extends State<MainMenu> {
                     ),
                   );
                 },
+              ),
+              Expanded(
+                child: Container(
+                  decoration: thickGrey(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    //mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(
+                            10, 10, 10, 10),
+                        decoration: thinRed(),
+                        child: Text("Warnungen", style: myTextStyleMediumThick()),
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                        itemCount: warnings.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Container(
+                              decoration: thinCyan(),
+                              child: Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(left, 0, 0, 10),
+                                  child: FittedBox(
+                                    alignment: Alignment.topLeft,
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(warnings[index]['meal'],
+                                        style: myTitleCyanAccentTextStyle()),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),

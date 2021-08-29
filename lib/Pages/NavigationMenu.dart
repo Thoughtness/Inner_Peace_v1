@@ -6,6 +6,7 @@ import 'package:inner_peace_v1/Pages/Infos.dart';
 import 'package:inner_peace_v1/Pages/RecordMeal.dart';
 import 'package:inner_peace_v1/Pages/PickMealForSymptoms.dart';
 import 'package:inner_peace_v1/Pages/Intolerances.dart';
+import 'package:inner_peace_v1/Pages/MainMenu.dart';
 import 'package:inner_peace_v1/Database/DatabaseFunctions.dart';
 
 class Menu extends StatelessWidget {
@@ -19,6 +20,17 @@ class Menu extends StatelessWidget {
           Container(
             child: Column(
               children: [
+                const SizedBox(height: 15),
+                ListTile(
+                    leading: Icon(Icons.menu),
+                    title: Text('Hauptmenü'),
+                    onTap: () async {
+                      var warnings = await filteredAverageSymptomsListWithAmount("red");
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => MainMenu(warnings: warnings),
+                      ));
+                    }
+                ),
                 const SizedBox(height: 15),
                 ListTile(
                   leading: Icon(Icons.fastfood),
@@ -55,7 +67,7 @@ class Menu extends StatelessWidget {
                   leading: Icon(Icons.show_chart),
                   title: Text('Unverträglichkeiten'),
                     onTap: () async{
-                      var warnings = await filteredAverageSymptomsListWithAmount( "red");
+                      var warnings = await filteredAverageSymptomsListWithAmount("red");
                       var digestible = await filteredAverageSymptomsListWithAmount("yellow");
                       var symptomFree = await filteredAverageSymptomsListWithAmount("green");
                       var mealsFromIngredients = await DatabaseHelper.instance.getMealsFromIngredients();

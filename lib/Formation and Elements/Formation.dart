@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+BoxDecoration thinSquare() {
+  return BoxDecoration(
+    border: Border.all(width: 1.0),
+  );
+}
 
 BoxDecoration thickGrey() {
   return BoxDecoration(
@@ -24,9 +29,25 @@ BoxDecoration thinGrey() {
   );
 }
 
+BoxDecoration thinSquareGrey() {
+  return BoxDecoration(
+    color: Colors.grey[50],
+    border: Border.all(width: 1.0),
+  );
+}
+
 BoxDecoration noSquareGrey() {
   return BoxDecoration(
     color: Colors.grey[50],
+  );
+}
+
+BoxDecoration topSquareGrey() {
+  return BoxDecoration(
+    color: Colors.grey[50],
+    border: Border(
+      top: BorderSide(width: 1.0),
+    ),
   );
 }
 
@@ -41,6 +62,14 @@ BoxDecoration thickCyan() {
 BoxDecoration thinCyan() {
   return BoxDecoration(
     color: Colors.cyanAccent,
+    border: Border.all(width: 1.0),
+    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+  );
+}
+
+BoxDecoration thinRed() {
+  return BoxDecoration(
+    color: Colors.red,
     border: Border.all(width: 1.0),
     borderRadius: BorderRadius.all(Radius.circular(5.0)),
   );
@@ -126,8 +155,17 @@ TextStyle mySliderTextStyle(){
       color: Colors.black
   );
 }
+
 TextStyle myTextStyleMedium(){
   return TextStyle(
+    fontSize: 16,
+    color: Colors.black,
+  );
+}
+
+TextStyle myTextStyleMediumThick(){
+  return TextStyle(
+    fontWeight: FontWeight.bold,
     fontSize: 16,
     color: Colors.black,
   );

@@ -285,8 +285,8 @@ class DatabaseHelper {
         WHERE ingredient.ingredientID = ?
         AND meal.userID = ?""",
         [ingredientID, userId]);
-    print(allIngredientsWithMeals);
-    print(ingredientID);
+    //print(allIngredientsWithMeals);
+    //print(ingredientID);
     return allIngredientsWithMeals;
   }
 

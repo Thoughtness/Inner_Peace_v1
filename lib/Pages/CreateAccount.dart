@@ -48,12 +48,13 @@ class _CreateAccount extends State<CreateAccount> {
                 ),
               ),
               Container(
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: CustomButton(
                       text: "Benutzerkonto erstellen",
                       onClick: () async {
                         freeUser = await ifAvailableSave(username.text);
                         notVisibleOnStart = true;
-                        print(freeUser);
+                        //print(freeUser);
                         setState(() {
                         });
                       }

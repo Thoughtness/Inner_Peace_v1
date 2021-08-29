@@ -313,11 +313,7 @@ class _Intolerances extends State<Intolerances> {
                                     return Container(
                                       padding: EdgeInsets.fromLTRB(
                                           left, 0, right, bottom),
-                                      child: Text(getMealsForIngredient(
-                                          index2,
-                                          allIngredientsWithSymptoms[index]
-                                              ['ingredient'],
-                                          mealsFromIngredients)),
+                                      child: Text(getMealsForIngredient(index2, allIngredientsWithSymptoms[index]['ingredient'], mealsFromIngredients)),
                                     );
                                   },
                                 ),

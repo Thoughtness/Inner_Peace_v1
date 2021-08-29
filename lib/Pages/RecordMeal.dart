@@ -298,7 +298,7 @@ class _RecordMeal extends State<RecordMeal> {
                                 sqlFormatedTime != "" &&
                                 sqlFormatedDate != null) {
                               int mealID = await addMealWithIngredients(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amountList);
-                              print(mealID);
+                              //print(mealID);
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) =>

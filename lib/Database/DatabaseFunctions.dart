@@ -42,7 +42,7 @@ getMealsForIngredient(int mealCounter, String ingredient, List<Map<String, dynam
 //Die Zutaten werden nicht gelöscht für die Zukunft, für Vorschläge zur Erfassung von Mahlzeiten
 Future deleteMeal(int index) async {
   var deleteMealInformation = await DatabaseHelper.instance.getDeleteMealInformation(index);
-  print(deleteMealInformation);
+  //print(deleteMealInformation);
 
   await DatabaseHelper.instance.deleteMeal(index, deleteMealInformation[0]['symptomsID']);
 }
@@ -160,6 +160,7 @@ addMealWithIngredients(String? sqlFormatedDate, String? sqlFormatedTime, List<St
 filteredAverageSymptomsListWithAmount(String filterColor) async{
   var allIngredients = await DatabaseHelper.instance.getIngredientsFromUser();
   List<Map<String, dynamic>> ingredientSymptomAmount = [];
+  List<int> ingredientChecker = [];
 
   double symptomtotalAmount = 0;
   double wellbeingAmount = 0;
@@ -169,7 +170,7 @@ filteredAverageSymptomsListWithAmount(String filterColor) async{
 
 //Multiplikator für die Menge der Zutaten anwenden, diese addieren und denn Schnitt berechnen
   for(int i = 0; i < allIngredients.length; i++){
-    if(!ingredientSymptomAmount.contains(allIngredients[i]['ingredientID'])){
+    if(!ingredientChecker.contains(allIngredients[i]['ingredientID'])){
       var singleIngredient = await DatabaseHelper.instance.getAllIngredientsWithSymptoms(allIngredients[i]['ingredientID']);
       for(int e = 0; e < singleIngredient.length; e++){
         symptomtotalAmount = symptomtotalAmount + singleIngredient[e]['symptomTotal']*amountMultiplicator(singleIngredient[e]['amount'].toDouble());
@@ -179,75 +180,42 @@ filteredAverageSymptomsListWithAmount(String filterColor) async{
         bowelAmount = bowelAmount + singleIngredient[e]['bowel']*amountMultiplicator(singleIngredient[e]['amount'].toDouble());
       }
 
+      ingredientChecker.add(allIngredients[i]['ingredientID']);
+
+      wellbeingAmount = wellbeingAmount/singleIngredient.length;
+      flatulenceAmount = flatulenceAmount/singleIngredient.length;
+      crampsAmount = crampsAmount/singleIngredient.length;
+      bowelAmount = bowelAmount/singleIngredient.length;
+
+      //Neue Liste generieren
+      List<Map<String, dynamic>> updatedIngredient = [{
+        'ingredientID': singleIngredient[0]['ingredientID'],
+        'ingredient': singleIngredient[0]['ingredient'],
+        'amount': singleIngredient[0]['amount'],
+        'meal': singleIngredient[0]['meal'],
+        'symptomTotal': symptomtotalAmount,
+        'wellbeing': wellbeingAmount,
+        'flatulence': flatulenceAmount,
+        'cramps': crampsAmount,
+        'bowel': bowelAmount}];
+
       try {
+        print("sali");
         switch (filterColor) {
           case "green":
-            if (singleIngredient[0]['symptomTotal'] <= 0) {
-
-              wellbeingAmount = wellbeingAmount/singleIngredient.length;
-              flatulenceAmount = flatulenceAmount/singleIngredient.length;
-              crampsAmount = crampsAmount/singleIngredient.length;
-              bowelAmount = bowelAmount/singleIngredient.length;
-
-              //Neue Liste generieren
-              List<Map<String, dynamic>> updatedIngredient = [{
-                'ingredientID': singleIngredient[0]['ingredientID'],
-                'ingredient': singleIngredient[0]['ingredient'],
-                'amount': singleIngredient[0]['amount'],
-                'meal': singleIngredient[0]['meal'],
-                'symptomTotal': symptomtotalAmount,
-                'wellbeing': wellbeingAmount,
-                'flatulence': flatulenceAmount,
-                'cramps': crampsAmount,
-                'bowel': bowelAmount}];
+            if (updatedIngredient[0]['symptomTotal'] <= 0) {
 
               ingredientSymptomAmount.add(updatedIngredient[0]);
             }
             break;
           case "yellow":
-            if (singleIngredient[0]['symptomTotal'] <= 160 &&
-                singleIngredient[0]['symptomTotal'] > 0) {
-
-              wellbeingAmount = wellbeingAmount/singleIngredient.length;
-              flatulenceAmount = flatulenceAmount/singleIngredient.length;
-              crampsAmount = crampsAmount/singleIngredient.length;
-              bowelAmount = bowelAmount/singleIngredient.length;
-
-              //Neue Liste generieren
-              List<Map<String, dynamic>> updatedIngredient = [{
-                'ingredientID': singleIngredient[0]['ingredientID'],
-                'ingredient': singleIngredient[0]['ingredient'],
-                'amount': singleIngredient[0]['amount'],
-                'meal': singleIngredient[0]['meal'],
-                'symptomTotal': symptomtotalAmount,
-                'wellbeing': wellbeingAmount,
-                'flatulence': flatulenceAmount,
-                'cramps': crampsAmount,
-                'bowel': bowelAmount}];
-
+            if (updatedIngredient[0]['symptomTotal'] <= 160 &&
+                updatedIngredient[0]['symptomTotal'] > 0) {
               ingredientSymptomAmount.add(updatedIngredient[0]);
             }
             break;
-          case "red":
-            if (singleIngredient[0]['symptomTotal'] > 160) {
-
-              wellbeingAmount = wellbeingAmount/singleIngredient.length;
-              flatulenceAmount = flatulenceAmount/singleIngredient.length;
-              crampsAmount = crampsAmount/singleIngredient.length;
-              bowelAmount = bowelAmount/singleIngredient.length;
-
-              //Neue Liste generieren
-              List<Map<String, dynamic>> updatedIngredient = [{
-                'ingredientID': singleIngredient[0]['ingredientID'],
-                'ingredient': singleIngredient[0]['ingredient'],
-                'amount': singleIngredient[0]['amount'],
-                'meal': singleIngredient[0]['meal'],
-                'symptomTotal': symptomtotalAmount,
-                'wellbeing': wellbeingAmount,
-                'flatulence': flatulenceAmount,
-                'cramps': crampsAmount,
-                'bowel': bowelAmount}];
-
+          case 'red':
+            if (updatedIngredient[0]['symptomTotal'] > 160) {
               ingredientSymptomAmount.add(updatedIngredient[0]);
             }
             break;
