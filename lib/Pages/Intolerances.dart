@@ -63,272 +63,275 @@ class _Intolerances extends State<Intolerances> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.teal[100],
-      endDrawer: Menu(),
-      appBar: AppBar(
-        title: Text(
-          'Unverträglichkeiten',
-          style: myAppBarTextStyle(),
-        ),
-        backgroundColor: Colors.cyanAccent,
-      ),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image(
-              image: AssetImage('assets/Inner_Peace.png'),
-              fit: BoxFit.fill,
-            ),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: Colors.teal[100],
+        endDrawer: Menu(),
+        appBar: AppBar(
+          title: Text(
+            'Unverträglichkeiten',
+            style: myAppBarTextStyle(),
           ),
-          Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(left, top, right, 0),
-                child: Container(
-                  decoration: thickCyan(),
-                  //ClipRRect damit wenn ExpansionTile aufgeklappt ist, dass die Ecken noch abgerundet sind. Nur mit Container sind diese aussen rund, jedoch innen eckig
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5.0),
-                    child: ExpansionTile(
-                      title: Text(
-                        "Filter und Sortierung",
-                        style: myTextStyleMedium(),
-                      ),
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(16, 0, right, 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Flexible(
-                                child: Row(
-                                  children: [
-                                    Text("Sortieren nach",
-                                        style: myTextStyleMedium()),
-                                    Spacer(),
-                                    DropdownButton<String>(
-                                      value: sort,
-                                      icon: Icon(Icons.arrow_downward),
-                                      iconSize: 24,
-                                      elevation: 16,
-                                      style: myTextStyleSmall(),
-                                      underline: Container(
-                                        height: 2,
-                                        color: Colors.black,
-                                      ),
-                                      onChanged: (String? newValue) async {
-                                        sort = newValue!;
-                                        sortList(sort, allIngredientsWithSymptoms);
-                                        setState(() {});
-                                      },
-                                      items: <String>[
-                                        'Unverträglich',
-                                        'Verträglich',
-                                      ].map<DropdownMenuItem<String>>((String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child:
-                                          Text(value, style: myTextStyleMedium()),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(5.0),
-                          child: ExpansionTile(
-                            title: Text(
-                              "Suchfilter",
-                              style: myTextStyleMedium(),
-                            ),
-                            children: [
-                              customCheckbox("Alle anzeigen", allIsChecked),
-                              customCheckbox("Warnungen anzeigen", warningsIsChecked),
-                              customCheckbox("Verträgliche anzeigen", digestibleIsChecked),
-                              customCheckbox("Symptomfreie anzeigen", symptomFreeIsChecked),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+          backgroundColor: Colors.cyanAccent,
+        ),
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: Image(
+                image: AssetImage('assets/Inner_Peace.png'),
+                fit: BoxFit.fill,
               ),
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                  itemCount: allIngredientsWithSymptoms.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Container(
-                        decoration: thickGrey(),
-                        child: Column(
-                          children: [
-                            Container(
-                              decoration: thinCyan(),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.fromLTRB(left, 0, right, bottom),
-                                      child: FittedBox(
-                                        alignment: Alignment.topLeft,
-                                        fit: BoxFit.scaleDown,
-                                        child: Text(
-                                          allIngredientsWithSymptoms[index]
-                                              ['ingredient'],
-                                          style: myTitleCyanAccentTextStyle(),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-                              child: Column(
-                                children: [
-                                  SymptomsRow(
-                                    barName: 'Wohlbefinden',
-                                    color: barColor(allIngredientsWithSymptoms[index]['wellbeing']),
-                                    allIngredientsWithSymptoms:
-                                        allIngredientsWithSymptoms,
-                                    barLength: barLengthSymptoms(
-                                        allIngredientsWithSymptoms[index]
-                                            ['wellbeing']),
-                                    opposingBarLength:
-                                        opposingBarLengthSymptoms(
-                                            allIngredientsWithSymptoms[index]
-                                                ['wellbeing']),
-                                  ),
-                                  SymptomsRow(
-                                    barName: 'Krämpfe',
-                                    color: barColor(allIngredientsWithSymptoms[index]['cramps']),
-                                    allIngredientsWithSymptoms:
-                                        allIngredientsWithSymptoms,
-                                    barLength: barLengthSymptoms(
-                                        allIngredientsWithSymptoms[index]
-                                            ['cramps']),
-                                    opposingBarLength:
-                                        opposingBarLengthSymptoms(
-                                            allIngredientsWithSymptoms[index]
-                                                ['cramps']),
-                                  ),
-                                  SymptomsRow(
-                                    barName: 'Blähungen',
-                                    color:
-                                    barColor(allIngredientsWithSymptoms[index]['flatulence']),
-                                    allIngredientsWithSymptoms: allIngredientsWithSymptoms,
-                                    barLength: barLengthSymptoms(allIngredientsWithSymptoms[index]['flatulence']),
-                                    opposingBarLength:
-                                        opposingBarLengthSymptoms(
-                                            allIngredientsWithSymptoms[index]
-                                                ['flatulence']),
-                                  ),
-                                  SymptomsRow(
-                                    barName: 'Stuhlgang',
-                                    color:
-                                    barColor(allIngredientsWithSymptoms[index]['bowel']),
-                                    allIngredientsWithSymptoms:
-                                        allIngredientsWithSymptoms,
-                                    barLength: barLengthSymptoms(
-                                        allIngredientsWithSymptoms[index]
-                                            ['bowel']),
-                                    opposingBarLength:
-                                        opposingBarLengthSymptoms(
-                                            allIngredientsWithSymptoms[index]
-                                                ['bowel']),
-                                  ),
-                                  SymptomsRow(
-                                    barName: 'Menge',
-                                    color: Colors.grey,
-                                    allIngredientsWithSymptoms: allIngredientsWithSymptoms,
-                                    barLength: barLengthSymptoms(allIngredientsWithSymptoms[index]['amount'].toDouble()),
-                                    opposingBarLength: opposingBarLengthSymptoms(allIngredientsWithSymptoms[index]['amount'].toDouble()),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            ExpansionTile(
-                              title: Text(
-                                "Auftreten der Symptome",
-                                style: mySliderTextStyle(),
-                              ),
+            ),
+            Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(left, top, right, 0),
+                  child: Container(
+                    decoration: thickCyan(),
+                    //ClipRRect damit wenn ExpansionTile aufgeklappt ist, dass die Ecken noch abgerundet sind. Nur mit Container sind diese aussen rund, jedoch innen eckig
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5.0),
+                      child: ExpansionTile(
+                        title: Text(
+                          "Filter und Sortierung",
+                          style: myTextStyleMedium(),
+                        ),
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(16, 0, right, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(
-                                      this.left, 0, this.right, this.bottom),
-                                  child: Column(
+                                Flexible(
+                                  child: Row(
                                     children: [
-                                      SymptomsRow(
-                                        barName: 'Sofort',
-                                        color: Colors.grey,
-                                      allIngredientsWithSymptoms: allIngredientsWithSymptoms,
-                                      barLength: symptomTimeLength = getSymptomTimeLength('Während der Mahlzeit', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
-                                      opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
-                                      ),
-                                      SymptomsRow(
-                                        barName: '<1 Stunde',
-                                        color: Colors.grey,
-                                        allIngredientsWithSymptoms: allIngredientsWithSymptoms,
-                                        barLength: symptomTimeLength = getSymptomTimeLength('In der ersten Stunde', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
-                                        opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
-                                      ),
-                                      SymptomsRow(
-                                        barName: '2-5 Stunden',
-                                        color: Colors.grey,
-                                        allIngredientsWithSymptoms: allIngredientsWithSymptoms,
-                                        barLength: symptomTimeLength = getSymptomTimeLength('Nach 2-5 Stunden', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
-                                        opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
-                                      ),
-                                      SymptomsRow(
-                                        barName: '>5 Stunden',
-                                        color: Colors.grey,
-                                        allIngredientsWithSymptoms: allIngredientsWithSymptoms,
-                                        barLength: symptomTimeLength = getSymptomTimeLength('Nach 5 Stunden', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
-                                        opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
+                                      Text("Sortieren nach",
+                                          style: myTextStyleMedium()),
+                                      Spacer(),
+                                      DropdownButton<String>(
+                                        value: sort,
+                                        icon: Icon(Icons.arrow_downward),
+                                        iconSize: 24,
+                                        elevation: 16,
+                                        style: myTextStyleSmall(),
+                                        underline: Container(
+                                          height: 2,
+                                          color: Colors.black,
+                                        ),
+                                        onChanged: (String? newValue) async {
+                                          sort = newValue!;
+                                          sortList(sort, allIngredientsWithSymptoms);
+                                          setState(() {});
+                                        },
+                                        items: <String>[
+                                          'Unverträglich',
+                                          'Verträglich',
+                                        ].map<DropdownMenuItem<String>>((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child:
+                                            Text(value, style: myTextStyleMedium()),
+                                          );
+                                        }).toList(),
                                       ),
                                     ],
                                   ),
                                 ),
                               ],
                             ),
-                            ExpansionTile(
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(5.0),
+                            child: ExpansionTile(
                               title: Text(
-                                "Mahlzeiten mit dieser Zutat",
-                                style: mySliderTextStyle(),
+                                "Suchfilter",
+                                style: myTextStyleMedium(),
                               ),
                               children: [
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: getMealListLength(allIngredientsWithSymptoms[index]['ingredient'], mealsFromIngredients),
-                                  itemBuilder: (context, index2) {
-                                    return Container(
-                                      padding: EdgeInsets.fromLTRB(
-                                          left, 0, right, bottom),
-                                      child: Text(getMealsForIngredient(index2, allIngredientsWithSymptoms[index]['ingredient'], mealsFromIngredients)),
-                                    );
-                                  },
-                                ),
+                                customCheckbox("Alle anzeigen", allIsChecked),
+                                customCheckbox("Warnungen anzeigen", warningsIsChecked),
+                                customCheckbox("Verträgliche anzeigen", digestibleIsChecked),
+                                customCheckbox("Symptomfreie anzeigen", symptomFreeIsChecked),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                    itemCount: allIngredientsWithSymptoms.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Container(
+                          decoration: thickGrey(),
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: thinCyan(),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsets.fromLTRB(left, 0, right, bottom),
+                                        child: FittedBox(
+                                          alignment: Alignment.topLeft,
+                                          fit: BoxFit.scaleDown,
+                                          child: Text(
+                                            allIngredientsWithSymptoms[index]
+                                                ['ingredient'],
+                                            style: myTitleCyanAccentTextStyle(),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+                                child: Column(
+                                  children: [
+                                    SymptomsRow(
+                                      barName: 'Wohlbefinden',
+                                      color: barColor(allIngredientsWithSymptoms[index]['wellbeing']),
+                                      allIngredientsWithSymptoms:
+                                          allIngredientsWithSymptoms,
+                                      barLength: barLengthSymptoms(
+                                          allIngredientsWithSymptoms[index]
+                                              ['wellbeing']),
+                                      opposingBarLength:
+                                          opposingBarLengthSymptoms(
+                                              allIngredientsWithSymptoms[index]
+                                                  ['wellbeing']),
+                                    ),
+                                    SymptomsRow(
+                                      barName: 'Krämpfe',
+                                      color: barColor(allIngredientsWithSymptoms[index]['cramps']),
+                                      allIngredientsWithSymptoms:
+                                          allIngredientsWithSymptoms,
+                                      barLength: barLengthSymptoms(
+                                          allIngredientsWithSymptoms[index]
+                                              ['cramps']),
+                                      opposingBarLength:
+                                          opposingBarLengthSymptoms(
+                                              allIngredientsWithSymptoms[index]
+                                                  ['cramps']),
+                                    ),
+                                    SymptomsRow(
+                                      barName: 'Blähungen',
+                                      color:
+                                      barColor(allIngredientsWithSymptoms[index]['flatulence']),
+                                      allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                      barLength: barLengthSymptoms(allIngredientsWithSymptoms[index]['flatulence']),
+                                      opposingBarLength:
+                                          opposingBarLengthSymptoms(
+                                              allIngredientsWithSymptoms[index]
+                                                  ['flatulence']),
+                                    ),
+                                    SymptomsRow(
+                                      barName: 'Stuhlgang',
+                                      color:
+                                      barColor(allIngredientsWithSymptoms[index]['bowel']),
+                                      allIngredientsWithSymptoms:
+                                          allIngredientsWithSymptoms,
+                                      barLength: barLengthSymptoms(
+                                          allIngredientsWithSymptoms[index]
+                                              ['bowel']),
+                                      opposingBarLength:
+                                          opposingBarLengthSymptoms(
+                                              allIngredientsWithSymptoms[index]
+                                                  ['bowel']),
+                                    ),
+                                    SymptomsRow(
+                                      barName: 'Menge',
+                                      color: Colors.grey,
+                                      allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                      barLength: barLengthSymptoms(allIngredientsWithSymptoms[index]['amount'].toDouble()),
+                                      opposingBarLength: opposingBarLengthSymptoms(allIngredientsWithSymptoms[index]['amount'].toDouble()),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ExpansionTile(
+                                title: Text(
+                                  "Auftreten der Symptome",
+                                  style: mySliderTextStyle(),
+                                ),
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(
+                                        this.left, 0, this.right, this.bottom),
+                                    child: Column(
+                                      children: [
+                                        SymptomsRow(
+                                          barName: 'Sofort',
+                                          color: Colors.grey,
+                                        allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                        barLength: symptomTimeLength = getSymptomTimeLength('Während der Mahlzeit', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
+                                        opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
+                                        ),
+                                        SymptomsRow(
+                                          barName: '<1 Stunde',
+                                          color: Colors.grey,
+                                          allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                          barLength: symptomTimeLength = getSymptomTimeLength('In der ersten Stunde', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
+                                          opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
+                                        ),
+                                        SymptomsRow(
+                                          barName: '2-5 Stunden',
+                                          color: Colors.grey,
+                                          allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                          barLength: symptomTimeLength = getSymptomTimeLength('Nach 2-5 Stunden', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
+                                          opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
+                                        ),
+                                        SymptomsRow(
+                                          barName: '>5 Stunden',
+                                          color: Colors.grey,
+                                          allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                          barLength: symptomTimeLength = getSymptomTimeLength('Nach 5 Stunden', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
+                                          opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              ExpansionTile(
+                                title: Text(
+                                  "Mahlzeiten mit dieser Zutat",
+                                  style: mySliderTextStyle(),
+                                ),
+                                children: [
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: getMealListLength(allIngredientsWithSymptoms[index]['ingredient'], mealsFromIngredients),
+                                    itemBuilder: (context, index2) {
+                                      return Container(
+                                        padding: EdgeInsets.fromLTRB(
+                                            left, 0, right, bottom),
+                                        child: Text(getMealsForIngredient(index2, allIngredientsWithSymptoms[index]['ingredient'], mealsFromIngredients)),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

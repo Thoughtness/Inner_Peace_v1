@@ -38,309 +38,312 @@ class _RecordMeal extends State<RecordMeal> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.teal[100],
-      endDrawer: Menu(),
-      appBar: AppBar(
-        title: Text(
-          'Mahlzeit erfassen',
-          style: myAppBarTextStyle(),
-        ),
-        backgroundColor: Colors.cyanAccent,
-      ),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image(
-              image: AssetImage('assets/Inner_Peace.png'),
-              fit: BoxFit.fill,
-            ),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.teal[100],
+        endDrawer: Menu(),
+        appBar: AppBar(
+          title: Text(
+            'Mahlzeit erfassen',
+            style: myAppBarTextStyle(),
           ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  decoration: thickDarkGrey(),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: containerWidth,
-                        decoration: thinCyan(),
-                        child: ListTile(
-                          title: Text("Datum"),
-                        ),
-                      ),
-                      SizedBox(width: width),
-                      Expanded(
-                        child: Container(
+          backgroundColor: Colors.cyanAccent,
+        ),
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: Image(
+                image: AssetImage('assets/Inner_Peace.png'),
+                fit: BoxFit.fill,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    decoration: thickDarkGrey(),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: containerWidth,
                           decoration: thinCyan(),
-                          height: 58,
-                          child: TextField(
-                            enabled: false,
-                            decoration: InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                border: OutlineInputBorder(),
-                                hintText: "Datum und Uhrzeit wählen"),
-                            controller: controller,
+                          child: ListTile(
+                            title: Text("Datum"),
                           ),
                         ),
-                      ),
-                      IconButton(
-                          icon: Icon(Icons.calendar_today),
-                          iconSize: 24.0,
-                          color: Colors.grey,
-                          onPressed: () async {
-                            showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2019, 1),
-                                lastDate: DateTime(2021, 12),
-                                builder: (context, picker) {
-                                  return datePicker(picker!);
-                                }).then((selectedDate) {
-                              if (selectedDate != null) {
-                                formatedDate = DateFormat('dd.MM.yyyy')
-                                    .format(selectedDate);
-                                sqlFormatedDate = DateFormat('yyyy-MM-dd')
-                                    .format(selectedDate);
-                                controller.text =
-                                    formatedDate + " " + getText();
-                              }
-                            });
-                          }),
-                      IconButton(
-                          icon: Icon(Icons.access_time_outlined),
-                          iconSize: 24.0,
-                          color: Colors.grey,
-                          onPressed: () async {
-                            final initialTime = TimeOfDay(hour: 9, minute: 0);
-                            final newTime = await showTimePicker(
-                              context: context,
-                              initialTime: time ?? initialTime,
-                            );
-                            if (newTime == null) return;
-                            setState(() => time = newTime);
-                            sqlFormatedTime = getText();
-                            controller.text = formatedDate + " " + getText();
-                          }),
-                    ],
-                  ),
-                ),
-                SizedBox(height: boxDistance),
-                Container(
-                  decoration: thickDarkGrey(),
-                  //padding: EdgeInsets.fromLTRB(this.left, this.top, this.right, this.bottom),
-                  child: CustomRow(
-                    title: 'Gericht',
-                    description: 'Gericht hier benennen',
-                    textController: mealName,
-                  ),
-                ),
-                SizedBox(height: boxDistance),
-                Container(
-                  decoration: thickDarkGrey(),
-                  child: Column(
-                    children: [
-                      Container(
-                        //padding: EdgeInsets.fromLTRB(this.left, this.top, this.right, this.bottom),
-                        child: CustomRow(
-                          title: 'Zutaten',
-                          description: 'Zutaten einzeln hinzufügen',
-                          textController: ingredients,
-                        ),
-                      ),
-                      SizedBox(height: height),
-                      Row(
-                        children: [
-                          Container(
-                            width: containerWidth,
+                        SizedBox(width: width),
+                        Expanded(
+                          child: Container(
                             decoration: thinCyan(),
-                            child: ListTile(
-                              title: Text("Menge"),
+                            height: 58,
+                            child: TextField(
+                              enabled: false,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  border: OutlineInputBorder(),
+                                  hintText: "Datum und Uhrzeit wählen"),
+                              controller: controller,
                             ),
                           ),
-                          SizedBox(width: width),
-                          Flexible(
-                            flex: 29,
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  flex: 3,
-                                  child: new Text(
-                                    "-",
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      height: 1,
-                                      fontSize: 40,
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  flex: 100,
-                                  child: Slider.adaptive(
-                                    value: amount,
-                                    min: 0,
-                                    max: 10,
-                                    divisions: 10,
-                                    activeColor: Colors.blue,
-                                    onChanged: (double changedValue) {
-                                      setState(() {
-                                        amount = changedValue;
-                                      });
-                                    },
-                                    label: amount.toString(),
-                                  ),
-                                ),
-                                Flexible(
-                                  flex: 3,
-                                  child: new Text(
-                                    "+",
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                      height: 1,
-                                      fontSize: 25,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                        ),
+                        IconButton(
+                            icon: Icon(Icons.calendar_today),
+                            iconSize: 24.0,
+                            color: Colors.grey,
+                            onPressed: () async {
+                              showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2019, 1),
+                                  lastDate: DateTime(2021, 12),
+                                  builder: (context, picker) {
+                                    return datePicker(picker!);
+                                  }).then((selectedDate) {
+                                if (selectedDate != null) {
+                                  formatedDate = DateFormat('dd.MM.yyyy')
+                                      .format(selectedDate);
+                                  sqlFormatedDate = DateFormat('yyyy-MM-dd')
+                                      .format(selectedDate);
+                                  controller.text =
+                                      formatedDate + " " + getText();
+                                }
+                              });
+                            }),
+                        IconButton(
+                            icon: Icon(Icons.access_time_outlined),
+                            iconSize: 24.0,
+                            color: Colors.grey,
+                            onPressed: () async {
+                              final initialTime = TimeOfDay(hour: 9, minute: 0);
+                              final newTime = await showTimePicker(
+                                context: context,
+                                initialTime: time ?? initialTime,
+                              );
+                              if (newTime == null) return;
+                              setState(() => time = newTime);
+                              sqlFormatedTime = getText();
+                              controller.text = formatedDate + " " + getText();
+                            }),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: boxDistance),
+                  Container(
+                    decoration: thickDarkGrey(),
+                    //padding: EdgeInsets.fromLTRB(this.left, this.top, this.right, this.bottom),
+                    child: CustomRow(
+                      title: 'Gericht',
+                      description: 'Gericht hier benennen',
+                      textController: mealName,
+                    ),
+                  ),
+                  SizedBox(height: boxDistance),
+                  Container(
+                    decoration: thickDarkGrey(),
+                    child: Column(
+                      children: [
+                        Container(
+                          //padding: EdgeInsets.fromLTRB(this.left, this.top, this.right, this.bottom),
+                          child: CustomRow(
+                            title: 'Zutaten',
+                            description: 'Zutaten einzeln hinzufügen',
+                            textController: ingredients,
                           ),
-                          Flexible(flex: 1, child: SizedBox(width: width)),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: boxDistance),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (ingredients.text.length > 1) {
-                      if (!ingredientList.contains(ingredients.text)) {
-                        ingredientList.insert(0, ingredients.text);
-                        amountList.insert(0, amount);
-                      }
-                    }
-                    ingredients.clear();
-                    setState(() {});
-                  },
-                  child: Text("Zutat hinzufügen"),
-                  style: TextButton.styleFrom(
-                    side: BorderSide(width: 2.0, color: Colors.black),
-                    backgroundColor: Colors.cyanAccent,
-                    minimumSize: Size(0, 45),
-                    primary: Colors.black,
-                  ),
-                ),
-                Flexible(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(1),
-                    itemCount: ingredientList.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                        child: Row(
+                        ),
+                        SizedBox(height: height),
+                        Row(
                           children: [
-                            Flexible(
-                              flex: 18,
-                              fit: FlexFit.tight,
-                              child: Container(
-                                //height: 40,
-                                decoration: thinGrey(),
-                                child: Padding(
-                                  padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-                                  child: Text(
-                                    ingredientList[index].toString(),
-                                    style: TextStyle(fontSize: 20),
-                                    maxLines: 2,
-                                  ),
-                                ),
+                            Container(
+                              width: containerWidth,
+                              decoration: thinCyan(),
+                              child: ListTile(
+                                title: Text("Menge"),
                               ),
                             ),
+                            SizedBox(width: width),
                             Flexible(
-                              flex: 30,
+                              flex: 29,
                               child: Row(
                                 children: [
                                   Flexible(
-                                    flex: amountList[index].toInt(),
-                                    child: new Container(
-                                      decoration: ingredientBar(index, amountList),
-                                      height: 20.0,
+                                    flex: 3,
+                                    child: new Text(
+                                      "-",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        height: 1,
+                                        fontSize: 40,
+                                      ),
                                     ),
                                   ),
                                   Flexible(
-                                    flex: 10 - amountList[index].toInt(),
-                                    child: SizedBox(),
+                                    flex: 100,
+                                    child: Slider.adaptive(
+                                      value: amount,
+                                      min: 0,
+                                      max: 10,
+                                      divisions: 10,
+                                      activeColor: Colors.blue,
+                                      onChanged: (double changedValue) {
+                                        setState(() {
+                                          amount = changedValue;
+                                        });
+                                      },
+                                      label: amount.toString(),
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 3,
+                                    child: new Text(
+                                      "+",
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        height: 1,
+                                        fontSize: 25,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
+                            Flexible(flex: 1, child: SizedBox(width: width)),
                           ],
                         ),
-                      );
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: boxDistance),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (ingredients.text.length > 1) {
+                        if (!ingredientList.contains(ingredients.text)) {
+                          ingredientList.insert(0, ingredients.text);
+                          amountList.insert(0, amount);
+                        }
+                      }
+                      ingredients.clear();
+                      setState(() {});
                     },
+                    child: Text("Zutat hinzufügen"),
+                    style: TextButton.styleFrom(
+                      side: BorderSide(width: 2.0, color: Colors.black),
+                      backgroundColor: Colors.cyanAccent,
+                      minimumSize: Size(0, 45),
+                      primary: Colors.black,
+                    ),
                   ),
-                ),
-                Container(
-                  child: Row(
-                    children: [
-                      Flexible(
-                        flex: 20,
-                        child: CustomButton(
-                          text: 'Symptome hinzufügen',
-                          onClick: () async {
-                            //Damit keine leeren Einträge gemacht werden können
-                            if (mealName.text.length > 0 &&
-                                ingredientList.length > 0 &&
-                                sqlFormatedTime != "" &&
-                                sqlFormatedDate != null) {
-                              int mealID = await addMealWithIngredients(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amountList);
-                              //print(mealID);
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      RecordSymptoms(mealID: mealID),
+                  Flexible(
+                    child: ListView.builder(
+                      padding: const EdgeInsets.all(1),
+                      itemCount: ingredientList.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          child: Row(
+                            children: [
+                              Flexible(
+                                flex: 18,
+                                fit: FlexFit.tight,
+                                child: Container(
+                                  //height: 40,
+                                  decoration: thinGrey(),
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+                                    child: Text(
+                                      ingredientList[index].toString(),
+                                      style: TextStyle(fontSize: 20),
+                                      maxLines: 2,
+                                    ),
+                                  ),
                                 ),
-                              );
-                            }
-                            //todo: Meldung machen, dass keine Zutat gespeichert ist
-                          },
-                        ),
-                      ),
-                      SizedBox(width: width),
-                      Flexible(
-                        flex: 20,
-                        child: CustomButton(
-                          text: 'Mahlzeit speichern',
-                          onClick: () async {
-                            //Damit keine leeren Einträge gemacht werden können
-                            if (mealName.text.length > 0 &&
-                                ingredientList.length > 0 &&
-                                sqlFormatedTime != "" &&
-                                sqlFormatedDate != null) {
-                              addMealWithIngredients(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amountList);
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => MyApp(),
+                              ),
+                              Flexible(
+                                flex: 30,
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      flex: amountList[index].toInt(),
+                                      child: new Container(
+                                        decoration: ingredientBar(index, amountList),
+                                        height: 20.0,
+                                      ),
+                                    ),
+                                    Flexible(
+                                      flex: 10 - amountList[index].toInt(),
+                                      child: SizedBox(),
+                                    ),
+                                  ],
                                 ),
-                              );
-                              //todo: "Mahlzeit gespeichert" meldung erstellen
-                            }
-                            //todo: Meldung machen, dass keine Zutat gespeichert ist
-                          },
-                        ),
-                      ),
-                    ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(height: height),
-              ],
+                  Container(
+                    child: Row(
+                      children: [
+                        Flexible(
+                          flex: 20,
+                          child: CustomButton(
+                            text: 'Symptome hinzufügen',
+                            onClick: () async {
+                              //Damit keine leeren Einträge gemacht werden können
+                              if (mealName.text.length > 0 &&
+                                  ingredientList.length > 0 &&
+                                  sqlFormatedTime != "" &&
+                                  sqlFormatedDate != null) {
+                                int mealID = await addMealWithIngredients(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amountList);
+                                //print(mealID);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        RecordSymptoms(mealID: mealID),
+                                  ),
+                                );
+                              }
+                              //todo: Meldung machen, dass keine Zutat gespeichert ist
+                            },
+                          ),
+                        ),
+                        SizedBox(width: width),
+                        Flexible(
+                          flex: 20,
+                          child: CustomButton(
+                            text: 'Mahlzeit speichern',
+                            onClick: () async {
+                              //Damit keine leeren Einträge gemacht werden können
+                              if (mealName.text.length > 0 &&
+                                  ingredientList.length > 0 &&
+                                  sqlFormatedTime != "" &&
+                                  sqlFormatedDate != null) {
+                                addMealWithIngredients(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amountList);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => MyApp(),
+                                  ),
+                                );
+                                //todo: "Mahlzeit gespeichert" meldung erstellen
+                              }
+                              //todo: Meldung machen, dass keine Zutat gespeichert ist
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: height),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

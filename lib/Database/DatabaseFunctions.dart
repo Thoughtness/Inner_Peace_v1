@@ -200,7 +200,6 @@ filteredAverageSymptomsListWithAmount(String filterColor) async{
         'bowel': bowelAmount}];
 
       try {
-        print("sali");
         switch (filterColor) {
           case "green":
             if (updatedIngredient[0]['symptomTotal'] <= 0) {

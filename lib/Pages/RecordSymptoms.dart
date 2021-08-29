@@ -35,137 +35,141 @@ class _RecordSymptoms extends State<RecordSymptoms> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.teal[100],
-      endDrawer: Menu(),
-      appBar: AppBar(
-        title: Text(
-          'Symptome erfassen',
-          style: myAppBarTextStyle(),
-        ),
-        backgroundColor: Colors.cyanAccent,
-      ),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image(
-              image: AssetImage('assets/Inner_Peace.png'),
-              fit: BoxFit.fill,
+    //WillPopScope: verhindert das der Back button verwendet werden kann
+  return WillPopScope(
+    onWillPop: () async => false,
+    child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Colors.teal[100],
+          endDrawer: Menu(),
+          appBar: AppBar(
+            title: Text(
+              'Symptome erfassen',
+              style: myAppBarTextStyle(),
             ),
+            backgroundColor: Colors.cyanAccent,
           ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-                left, top, right, bottom),
-            child: Column(
-              children: [
-                Expanded(
-                  //für kleinere Bildschirme, damit die Slider nicht über den Bildschirm hinausgehen
-                  child: ListView(
-                    children: [
-                      Container(
-                        decoration: thickGrey(),
-                        child: Column(
-                          children: [
-                            Container(
-                              decoration: thinCyan(),
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(left, 0, 0, 0),
-                                    child: Text("Auftreten der Symptome",
-                                        style: myTitleCyanAccentTextStyle()),
+          body: Stack(
+            children: [
+              Positioned.fill(
+                child: Image(
+                  image: AssetImage('assets/Inner_Peace.png'),
+                  fit: BoxFit.fill,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                    left, top, right, bottom),
+                child: Column(
+                  children: [
+                    Expanded(
+                      //für kleinere Bildschirme, damit die Slider nicht über den Bildschirm hinausgehen
+                      child: ListView(
+                        children: [
+                          Container(
+                            decoration: thickGrey(),
+                            child: Column(
+                              children: [
+                                Container(
+                                  decoration: thinCyan(),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.fromLTRB(left, 0, 0, 0),
+                                        child: Text("Auftreten der Symptome",
+                                            style: myTitleCyanAccentTextStyle()),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                                DropdownButton<String>(
+                                  value: sort,
+                                  icon: Icon(Icons.arrow_downward),
+                                  iconSize: 24,
+                                  elevation: 16,
+                                  style: myTextStyleSmall(),
+                                  underline: Container(
+                                    height: 2,
+                                    color: Colors.black,
+                                  ),
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      sort = newValue!;
+                                    });
+                                  },
+                                  items: <String>[
+                                    'Während der Mahlzeit',
+                                    'In der ersten Stunde',
+                                    'Nach 2-5 Stunden',
+                                    'Nach 5 Stunden',
+                                  ].map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(
+                                        value,
+                                        style: mySliderTextStyle(),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
                             ),
-                            DropdownButton<String>(
-                              value: sort,
-                              icon: Icon(Icons.arrow_downward),
-                              iconSize: 24,
-                              elevation: 16,
-                              style: myTextStyleSmall(),
-                              underline: Container(
-                                height: 2,
-                                color: Colors.black,
-                              ),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  sort = newValue!;
-                                });
-                              },
-                              items: <String>[
-                                'Während der Mahlzeit',
-                                'In der ersten Stunde',
-                                'Nach 2-5 Stunden',
-                                'Nach 5 Stunden',
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style: mySliderTextStyle(),
+                          ),
+                          SizedBox(height: boxDistance),
+                          customSlider("Wohlbefinden", wellbeing, "Gut", "Schlecht"),
+                          SizedBox(height: boxDistance),
+                          customSlider("Krämpfe", cramps, "Keine", "Extrem"),
+                          SizedBox(height: boxDistance),
+                          customSlider("Blähungen", flatulence, "Keine", "Extrem"),
+                          SizedBox(height: boxDistance),
+                          customSlider("Stuhlgang", bowel, "Fest", "Flüssig"),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Row(
+                        children: [
+                          Flexible(
+                            flex: 20,
+                            child: CustomButton(
+                              text: 'Keine Symptome',
+                              onClick: () {
+                                addSymptoms(negativeCounter, negativeCounter,
+                                    negativeCounter, negativeCounter, mealID, "Keine");
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => RecordedMeals(),
                                   ),
                                 );
-                              }).toList(),
+                              },
                             ),
-                          ],
-                        ),
+                          ),
+                          SizedBox(width: width),
+                          Flexible(
+                            flex: 20,
+                            child: CustomButton(
+                              text: 'Symptome speichern',
+                              onClick: () async {
+                                addSymptoms(wellbeing, cramps, flatulence,
+                                    bowel, mealID, sort);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => RecordedMeals(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: boxDistance),
-                      customSlider("Wohlbefinden", wellbeing, "Gut", "Schlecht"),
-                      SizedBox(height: boxDistance),
-                      customSlider("Krämpfe", cramps, "Keine", "Extrem"),
-                      SizedBox(height: boxDistance),
-                      customSlider("Blähungen", flatulence, "Keine", "Extrem"),
-                      SizedBox(height: boxDistance),
-                      customSlider("Stuhlgang", bowel, "Fest", "Flüssig"),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Container(
-                  child: Row(
-                    children: [
-                      Flexible(
-                        flex: 20,
-                        child: CustomButton(
-                          text: 'Keine Symptome',
-                          onClick: () {
-                            addSymptoms(negativeCounter, negativeCounter,
-                                negativeCounter, negativeCounter, mealID, "Keine");
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => RecordedMeals(),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      SizedBox(width: width),
-                      Flexible(
-                        flex: 20,
-                        child: CustomButton(
-                          text: 'Symptome speichern',
-                          onClick: () async {
-                            addSymptoms(wellbeing, cramps, flatulence,
-                                bowel, mealID, sort);
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => RecordedMeals(),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ),
+);
   }
 
   customSlider(String title, double value, String good, String bad) {
