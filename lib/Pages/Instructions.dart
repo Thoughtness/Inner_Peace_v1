@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:inner_peace_v1/Formation%20and%20Elements/Formation.dart';
 import 'package:inner_peace_v1/Formation%20and%20Elements/GuiElements.dart';
 import 'package:inner_peace_v1/Formation%20and%20Elements/Text.dart';
-
 import 'NavigationMenu.dart';
 
 class Instructions extends StatelessWidget {

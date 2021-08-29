@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
 
-// ignore: camel_case_types
 class CustomButton extends StatelessWidget {
   final VoidCallback onClick;
   final String text;

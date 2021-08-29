@@ -3,12 +3,11 @@ import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 import 'package:inner_peace_v1/Pages/RecordSymptoms.dart';
 
-//import 'package:inner_peace/GuiElements.dart';
-// ignore: camel_case_types
 class PickMealForSymptoms extends StatefulWidget {
   PickMealForSymptoms({
     required this.symptomlessMeals,
   });
+
   final List<Map<String, dynamic>> symptomlessMeals;
 
   @override
@@ -68,7 +67,7 @@ class _PickMealForSymptoms extends State<PickMealForSymptoms> {
                       );
                     },
                     title: Container(
-                      padding: EdgeInsets.fromLTRB(this.left, 0, 0, this.bottom),
+                      padding: EdgeInsets.fromLTRB(left, 0, 0, bottom),
                       decoration: thinCyan(),
                       child: Text(
                         symptomlessMeals[index]['meal'],

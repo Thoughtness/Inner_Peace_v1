@@ -8,7 +8,6 @@ import 'package:inner_peace_v1/Pages/PickMealForSymptoms.dart';
 import 'package:inner_peace_v1/Pages/Intolerances.dart';
 import 'package:inner_peace_v1/Pages/MainMenu.dart';
 import 'package:inner_peace_v1/Database/DatabaseFunctions.dart';
-
 import 'Instructions.dart';
 
 class Menu extends StatelessWidget {
@@ -27,7 +26,7 @@ class Menu extends StatelessWidget {
                     leading: Icon(Icons.menu),
                     title: Text('Hauptmenü'),
                     onTap: () async {
-                      var warnings = await filteredAverageSymptomsListWithAmount("red");
+                      var warnings = await filteredAverageSymptomsListWithAmount('red');
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => MainMenu(warnings: warnings),
                       ));
@@ -69,12 +68,12 @@ class Menu extends StatelessWidget {
                   leading: Icon(Icons.show_chart),
                   title: Text('Unverträglichkeiten'),
                     onTap: () async{
-                      var warnings = await filteredAverageSymptomsListWithAmount("red");
-                      var digestible = await filteredAverageSymptomsListWithAmount("yellow");
-                      var symptomFree = await filteredAverageSymptomsListWithAmount("green");
+                      var warnings = await filteredAverageSymptomsListWithAmount('red');
+                      var digestible = await filteredAverageSymptomsListWithAmount('yellow');
+                      var symptomFree = await filteredAverageSymptomsListWithAmount('green');
                       var mealsFromIngredients = await DatabaseHelper.instance.getMealsFromIngredients();
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Intolerances(warnings: warnings, digestible: digestible, symptomFree: symptomFree, mealsFromIngredients: mealsFromIngredients),
+                        builder: (context) => Intolerance(warnings: warnings, digestible: digestible, symptomFree: symptomFree, mealsFromIngredients: mealsFromIngredients),
                       ));
                     }
                 ),
@@ -84,7 +83,7 @@ class Menu extends StatelessWidget {
                   title: Text('Infos'),
                     onTap: (){
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Infos(),
+                        builder: (context) => Info(),
                       ));
                     }
                 ),
@@ -108,7 +107,6 @@ class Menu extends StatelessWidget {
                       ));
                     }
                 ),
-
               ],
             ),
           ),

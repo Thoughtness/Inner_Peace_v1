@@ -6,9 +6,7 @@ import 'package:inner_peace_v1/Formation%20and%20Elements/GuiElements.dart';
 import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
 
 class RecordSymptoms extends StatefulWidget {
-  RecordSymptoms({
-    required this.mealID,
-  });
+  RecordSymptoms({required this.mealID,});
   final int mealID;
 
   @override
@@ -58,8 +56,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.fromLTRB(
-                    left, top, right, bottom),
+                padding: EdgeInsets.fromLTRB(left, top, right, bottom),
                 child: Column(
                   children: [
                     Expanded(
@@ -76,7 +73,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsets.fromLTRB(left, 0, 0, 0),
-                                        child: Text("Auftreten der Symptome",
+                                        child: Text('Auftreten der Symptome',
                                             style: myTitleCyanAccentTextStyle()),
                                       ),
                                     ],
@@ -116,13 +113,13 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                             ),
                           ),
                           SizedBox(height: boxDistance),
-                          customSlider("Wohlbefinden", wellbeing, "Gut", "Schlecht"),
+                          customSlider('Wohlbefinden', wellbeing, 'Gut', 'Schlecht'),
                           SizedBox(height: boxDistance),
-                          customSlider("Krämpfe", cramps, "Keine", "Extrem"),
+                          customSlider('Krämpfe', cramps, 'Keine', 'Extrem'),
                           SizedBox(height: boxDistance),
-                          customSlider("Blähungen", flatulence, "Keine", "Extrem"),
+                          customSlider('Blähungen', flatulence, 'Keine', 'Extrem'),
                           SizedBox(height: boxDistance),
-                          customSlider("Stuhlgang", bowel, "Fest", "Flüssig"),
+                          customSlider('Stuhlgang', bowel, 'Fest', 'Flüssig'),
                         ],
                       ),
                     ),
@@ -134,8 +131,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                             child: CustomButton(
                               text: 'Keine Symptome',
                               onClick: () {
-                                addSymptoms(negativeCounter, negativeCounter,
-                                    negativeCounter, negativeCounter, mealID, "Keine");
+                                addSymptoms(negativeCounter, negativeCounter, negativeCounter, negativeCounter, mealID, 'Keine');
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => RecordedMeals(),
@@ -150,8 +146,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                             child: CustomButton(
                               text: 'Symptome speichern',
                               onClick: () async {
-                                addSymptoms(wellbeing, cramps, flatulence,
-                                    bowel, mealID, sort);
+                                addSymptoms(wellbeing, cramps, flatulence, bowel, mealID, sort);
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => RecordedMeals(),
@@ -204,16 +199,16 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                   onChanged: (double changedValue) {
                     setState(() {
                       switch (title){
-                        case "Wohlbefinden":
+                        case 'Wohlbefinden':
                           wellbeing = changedValue;
                           break;
-                        case "Krämpfe":
+                        case 'Krämpfe':
                           cramps = changedValue;
                           break;
-                        case "Blähungen":
+                        case 'Blähungen':
                           flatulence = changedValue;
                           break;
-                        case "Stuhlgang":
+                        case 'Stuhlgang':
                           bowel = changedValue;
                           break;
                       }

@@ -6,8 +6,8 @@ import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
 import 'package:inner_peace_v1/Formation and Elements/Functions.dart';
 import 'package:inner_peace_v1/Database/DatabaseFunctions.dart';
 
-class Intolerances extends StatefulWidget {
-  Intolerances({
+class Intolerance extends StatefulWidget {
+  Intolerance({
     required this.warnings,
     required this.digestible,
     required this.symptomFree,
@@ -20,15 +20,15 @@ class Intolerances extends StatefulWidget {
   final List<Map<String, dynamic>> mealsFromIngredients;
 
   @override
-  _Intolerances createState() => _Intolerances(
+  _Intolerance createState() => _Intolerance(
       warnings: warnings,
       digestible: digestible,
       symptomFree: symptomFree,
       mealsFromIngredients: mealsFromIngredients);
 }
 
-class _Intolerances extends State<Intolerances> {
-  _Intolerances({
+class _Intolerance extends State<Intolerance> {
+  _Intolerance({
     required this.warnings,
     required this.digestible,
     required this.symptomFree,
@@ -46,7 +46,7 @@ class _Intolerances extends State<Intolerances> {
   final double right = 10.0;
   final double bottom = 10.0;
 
-  String sortByFilter = "";
+  String sortByFilter = '';
   String sort = 'Unverträglich';
 
   int symptomTimeLength = 0;
@@ -56,13 +56,8 @@ class _Intolerances extends State<Intolerances> {
   bool symptomFreeIsChecked = true;
 
   @override
-  // ignore: must_call_super
-  void initState() {
-    allIngredientsWithSymptoms = warnings + digestible + symptomFree;
-  }
-
-  @override
   Widget build(BuildContext context) {
+    allIngredientsWithSymptoms = warnings + digestible + symptomFree;
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -94,7 +89,7 @@ class _Intolerances extends State<Intolerances> {
                       borderRadius: BorderRadius.circular(5.0),
                       child: ExpansionTile(
                         title: Text(
-                          "Filter und Sortierung",
+                          'Filter und Sortierung',
                           style: myTextStyleMedium(),
                         ),
                         children: [
@@ -106,7 +101,7 @@ class _Intolerances extends State<Intolerances> {
                                 Flexible(
                                   child: Row(
                                     children: [
-                                      Text("Sortieren nach",
+                                      Text('Sortieren nach',
                                           style: myTextStyleMedium()),
                                       Spacer(),
                                       DropdownButton<String>(
@@ -145,14 +140,14 @@ class _Intolerances extends State<Intolerances> {
                             borderRadius: BorderRadius.circular(5.0),
                             child: ExpansionTile(
                               title: Text(
-                                "Suchfilter",
+                                'Suchfilter',
                                 style: myTextStyleMedium(),
                               ),
                               children: [
-                                customCheckbox("Alle anzeigen", allIsChecked),
-                                customCheckbox("Warnungen anzeigen", warningsIsChecked),
-                                customCheckbox("Verträgliche anzeigen", digestibleIsChecked),
-                                customCheckbox("Symptomfreie anzeigen", symptomFreeIsChecked),
+                                customCheckbox('Alle anzeigen', allIsChecked),
+                                customCheckbox('Warnungen anzeigen', warningsIsChecked),
+                                customCheckbox('Verträgliche anzeigen', digestibleIsChecked),
+                                customCheckbox('Symptomfreie anzeigen', symptomFreeIsChecked),
                               ],
                             ),
                           ),
@@ -182,8 +177,7 @@ class _Intolerances extends State<Intolerances> {
                                           alignment: Alignment.topLeft,
                                           fit: BoxFit.scaleDown,
                                           child: Text(
-                                            allIngredientsWithSymptoms[index]
-                                                ['ingredient'],
+                                            allIngredientsWithSymptoms[index]['ingredient'],
                                             style: myTitleCyanAccentTextStyle(),
                                           ),
                                         ),
@@ -199,28 +193,16 @@ class _Intolerances extends State<Intolerances> {
                                     SymptomsRow(
                                       barName: 'Wohlbefinden',
                                       color: barColor(allIngredientsWithSymptoms[index]['wellbeing']),
-                                      allIngredientsWithSymptoms:
-                                          allIngredientsWithSymptoms,
-                                      barLength: barLengthSymptoms(
-                                          allIngredientsWithSymptoms[index]
-                                              ['wellbeing']),
-                                      opposingBarLength:
-                                          opposingBarLengthSymptoms(
-                                              allIngredientsWithSymptoms[index]
-                                                  ['wellbeing']),
+                                      allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                      barLength: barLengthSymptoms(allIngredientsWithSymptoms[index]['wellbeing']),
+                                      opposingBarLength: opposingBarLengthSymptoms(allIngredientsWithSymptoms[index]['wellbeing']),
                                     ),
                                     SymptomsRow(
                                       barName: 'Krämpfe',
                                       color: barColor(allIngredientsWithSymptoms[index]['cramps']),
-                                      allIngredientsWithSymptoms:
-                                          allIngredientsWithSymptoms,
-                                      barLength: barLengthSymptoms(
-                                          allIngredientsWithSymptoms[index]
-                                              ['cramps']),
-                                      opposingBarLength:
-                                          opposingBarLengthSymptoms(
-                                              allIngredientsWithSymptoms[index]
-                                                  ['cramps']),
+                                      allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                      barLength: barLengthSymptoms(allIngredientsWithSymptoms[index]['cramps']),
+                                      opposingBarLength: opposingBarLengthSymptoms(allIngredientsWithSymptoms[index]['cramps']),
                                     ),
                                     SymptomsRow(
                                       barName: 'Blähungen',
@@ -228,24 +210,15 @@ class _Intolerances extends State<Intolerances> {
                                       barColor(allIngredientsWithSymptoms[index]['flatulence']),
                                       allIngredientsWithSymptoms: allIngredientsWithSymptoms,
                                       barLength: barLengthSymptoms(allIngredientsWithSymptoms[index]['flatulence']),
-                                      opposingBarLength:
-                                          opposingBarLengthSymptoms(
-                                              allIngredientsWithSymptoms[index]
-                                                  ['flatulence']),
+                                      opposingBarLength: opposingBarLengthSymptoms(allIngredientsWithSymptoms[index]['flatulence']),
                                     ),
                                     SymptomsRow(
                                       barName: 'Stuhlgang',
                                       color:
                                       barColor(allIngredientsWithSymptoms[index]['bowel']),
-                                      allIngredientsWithSymptoms:
-                                          allIngredientsWithSymptoms,
-                                      barLength: barLengthSymptoms(
-                                          allIngredientsWithSymptoms[index]
-                                              ['bowel']),
-                                      opposingBarLength:
-                                          opposingBarLengthSymptoms(
-                                              allIngredientsWithSymptoms[index]
-                                                  ['bowel']),
+                                      allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                      barLength: barLengthSymptoms(allIngredientsWithSymptoms[index]['bowel']),
+                                      opposingBarLength: opposingBarLengthSymptoms(allIngredientsWithSymptoms[index]['bowel']),
                                     ),
                                     SymptomsRow(
                                       barName: 'Menge',
@@ -259,7 +232,7 @@ class _Intolerances extends State<Intolerances> {
                               ),
                               ExpansionTile(
                                 title: Text(
-                                  "Auftreten der Symptome",
+                                  'Auftreten der Symptome',
                                   style: mySliderTextStyle(),
                                 ),
                                 children: [
@@ -271,9 +244,9 @@ class _Intolerances extends State<Intolerances> {
                                         SymptomsRow(
                                           barName: 'Sofort',
                                           color: Colors.grey,
-                                        allIngredientsWithSymptoms: allIngredientsWithSymptoms,
-                                        barLength: symptomTimeLength = getSymptomTimeLength('Während der Mahlzeit', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
-                                        opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
+                                          allIngredientsWithSymptoms: allIngredientsWithSymptoms,
+                                          barLength: symptomTimeLength = getSymptomTimeLength('Während der Mahlzeit', mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']),
+                                          opposingBarLength: getSymptomTimeTotalLength(mealsFromIngredients, allIngredientsWithSymptoms[index]['ingredient']) - symptomTimeLength,
                                         ),
                                         SymptomsRow(
                                           barName: '<1 Stunde',
@@ -303,7 +276,7 @@ class _Intolerances extends State<Intolerances> {
                               ),
                               ExpansionTile(
                                 title: Text(
-                                  "Mahlzeiten mit dieser Zutat",
+                                  'Mahlzeiten mit dieser Zutat',
                                   style: mySliderTextStyle(),
                                 ),
                                 children: [
@@ -313,8 +286,7 @@ class _Intolerances extends State<Intolerances> {
                                     itemCount: getMealListLength(allIngredientsWithSymptoms[index]['ingredient'], mealsFromIngredients),
                                     itemBuilder: (context, index2) {
                                       return Container(
-                                        padding: EdgeInsets.fromLTRB(
-                                            left, 0, right, bottom),
+                                        padding: EdgeInsets.fromLTRB(left, 0, right, bottom),
                                         child: Text(getMealsForIngredient(index2, allIngredientsWithSymptoms[index]['ingredient'], mealsFromIngredients)),
                                       );
                                     },
@@ -347,7 +319,7 @@ class _Intolerances extends State<Intolerances> {
         value: boolValue,
         onChanged: (bool? value) {
           switch (title) {
-            case "Alle anzeigen":
+            case 'Alle anzeigen':
               allIsChecked = value!;
               warningsIsChecked = value;
               digestibleIsChecked = value;
@@ -359,17 +331,17 @@ class _Intolerances extends State<Intolerances> {
               }
               allIngredientsWithSymptoms = [];
               break;
-            case "Warnungen anzeigen":
+            case 'Warnungen anzeigen':
               warningsIsChecked = value!;
               allIsChecked = setCheckboxState(warningsIsChecked, digestibleIsChecked, symptomFreeIsChecked, allIsChecked);
               allIngredientsWithSymptoms = getIngredients(warningsIsChecked, digestibleIsChecked, symptomFreeIsChecked, allIsChecked, warnings, digestible, symptomFree, allIngredientsWithSymptoms, sort);
               break;
-            case "Verträgliche anzeigen":
+            case 'Verträgliche anzeigen':
               digestibleIsChecked = value!;
               allIsChecked = setCheckboxState(warningsIsChecked, digestibleIsChecked, symptomFreeIsChecked, allIsChecked);
               allIngredientsWithSymptoms = getIngredients(digestibleIsChecked, warningsIsChecked, symptomFreeIsChecked, allIsChecked, digestible, warnings, symptomFree, allIngredientsWithSymptoms, sort);
               break;
-            case "Symptomfreie anzeigen":
+            case 'Symptomfreie anzeigen':
               symptomFreeIsChecked = value!;
               allIsChecked = setCheckboxState(warningsIsChecked, digestibleIsChecked, symptomFreeIsChecked, allIsChecked);
               allIngredientsWithSymptoms = getIngredients(symptomFreeIsChecked, warningsIsChecked, digestibleIsChecked, allIsChecked, symptomFree, warnings, digestible, allIngredientsWithSymptoms, sort);

@@ -242,7 +242,7 @@ irrBowelSource(){
 
 generalInformation(){
   String information = 'Die App kann keine Unverträglichkeiten bestimmen. Sie dient lediglich zur Unterstützung diese zu ermitteln.'
-      ' Damit dies möglich ist, muss der Benutzer sich ausgwogen ernähren.'
+      ' Damit dies möglich ist, muss der Benutzer sich ausgewogen ernähren.'
       ' Wenn jemand immer das gleiche isst, kann es sein, dass Zutaten die eigentlich unproblematisch sind, als Unverträglich kategorisiert werden.'
       ' Je mehr Daten erfasst werden, umso genauer werden die Ergebnisse sein.';
   return information;

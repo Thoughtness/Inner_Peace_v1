@@ -42,7 +42,6 @@ getMealsForIngredient(int mealCounter, String ingredient, List<Map<String, dynam
 //Die Zutaten werden nicht gelöscht für die Zukunft, für Vorschläge zur Erfassung von Mahlzeiten
 Future deleteMeal(int index) async {
   var deleteMealInformation = await DatabaseHelper.instance.getDeleteMealInformation(index);
-  //print(deleteMealInformation);
 
   await DatabaseHelper.instance.deleteMeal(index, deleteMealInformation[0]['symptomsID']);
 }
@@ -59,7 +58,7 @@ getMealList(String? value, String? sort) async {
         mealChecker.add(meals[i]['mealID']);
       }
     }
-  } else if (value == "Symptomfrei") {
+  } else if (value == 'Symptomfrei') {
     var meals = await DatabaseHelper.instance.getCertainRecordedMeals(-21, -19);
     for (int i = 0; i < meals.length; i++) {
       if(!mealChecker.contains(meals[i]['mealID'])){
@@ -67,7 +66,7 @@ getMealList(String? value, String? sort) async {
         mealChecker.add(meals[i]['mealID']);
       }
     }
-  } else if (value == "Verträglich") {
+  } else if (value == 'Verträglich') {
     var meals = await DatabaseHelper.instance.getCertainRecordedMeals(0, 6);
     for (int i = 0; i < meals.length; i++) {
       if(!mealChecker.contains(meals[i]['mealID'])){
@@ -75,7 +74,7 @@ getMealList(String? value, String? sort) async {
         mealChecker.add(meals[i]['mealID']);
       }
     }
-  } else if (value == "Unverträglich") {
+  } else if (value == 'Unverträglich') {
     var meals = await DatabaseHelper.instance.getIntolerantRecordedMeals(7);
     for (int i = 0; i < meals.length; i++) {
       if(!mealChecker.contains(meals[i]['mealID'])){
@@ -85,16 +84,16 @@ getMealList(String? value, String? sort) async {
     }
   }
 
-  if (sort == "Mahlzeitdatum") {
-    mealList.sort((a, b) => a["time"].compareTo(b["time"]));
-  } else if (sort == "Name A-Z") {
-    mealList.sort((a, b) => a["meal"].compareTo(b["meal"]));
-  } else if (sort == "Name Z-A") {
-    mealList.sort((a, b) => b["meal"].compareTo(a["meal"]));
-  } else if (sort == "Verträglichkeit") {
-    mealList.sort((a, b) => a["symptomTotal"].compareTo(b["symptomTotal"]));
-  } else if (sort == "Unverträglichkeit") {
-    mealList.sort((a, b) => b["symptomTotal"].compareTo(a["symptomTotal"]));
+  if (sort == 'Mahlzeitdatum') {
+    mealList.sort((a, b) => a['time'].compareTo(b['time']));
+  } else if (sort == 'Name A-Z') {
+    mealList.sort((a, b) => a['meal'].compareTo(b['meal']));
+  } else if (sort == 'Name Z-A') {
+    mealList.sort((a, b) => b['meal'].compareTo(a['meal']));
+  } else if (sort == 'Verträglichkeit') {
+    mealList.sort((a, b) => a['symptomTotal'].compareTo(b['symptomTotal']));
+  } else if (sort == 'Unverträglichkeit') {
+    mealList.sort((a, b) => b['symptomTotal'].compareTo(a['symptomTotal']));
   }
   return mealList;
 }
@@ -122,8 +121,7 @@ addSymptoms(double wellbeing, double cramps, double flatulence, double bowel, in
   await DatabaseHelper.instance.insertSymptoms(wellbeing, cramps, flatulence, bowel, symptomTotal, symptomTime);
 
   //letze symptomsID herausholen
-  var lastInsertedSymptoms =
-  await DatabaseHelper.instance.getHighestSymptomsID();
+  var lastInsertedSymptoms = await DatabaseHelper.instance.getHighestSymptomsID();
   int symptomsID = lastInsertedSymptoms[0]['symptomsID'];
 
   await DatabaseHelper.instance.addSymptomsToMeal(symptomsID, mealID);
@@ -132,9 +130,8 @@ addSymptoms(double wellbeing, double cramps, double flatulence, double bowel, in
 //Mahlzeit mit Zutaten und Menge erfassen
 addMealWithIngredients(String? sqlFormatedDate, String? sqlFormatedTime, List<String> ingredientList, TextEditingController mealName, List<double> amount) async {
   DateTime sqlDate =
-  DateTime.parse(sqlFormatedDate! + "T" + sqlFormatedTime!);
-  await DatabaseHelper.instance
-      .insertMeal(mealName.text, sqlDate.millisecondsSinceEpoch);
+  DateTime.parse(sqlFormatedDate! + 'T' + sqlFormatedTime!);
+  await DatabaseHelper.instance.insertMeal(mealName.text, sqlDate.millisecondsSinceEpoch);
 
   var lastInsertedMeal = await DatabaseHelper.instance.getHighestMealID();
   int mealID = lastInsertedMeal[0]['mealID'];
@@ -201,15 +198,13 @@ filteredAverageSymptomsListWithAmount(String filterColor) async{
 
       try {
         switch (filterColor) {
-          case "green":
+          case 'green':
             if (updatedIngredient[0]['symptomTotal'] <= 0) {
-
               ingredientSymptomAmount.add(updatedIngredient[0]);
             }
             break;
-          case "yellow":
-            if (updatedIngredient[0]['symptomTotal'] <= 200 &&
-                updatedIngredient[0]['symptomTotal'] > 0) {
+          case 'yellow':
+            if (updatedIngredient[0]['symptomTotal'] <= 200 && updatedIngredient[0]['symptomTotal'] > 0) {
               ingredientSymptomAmount.add(updatedIngredient[0]);
             }
             break;

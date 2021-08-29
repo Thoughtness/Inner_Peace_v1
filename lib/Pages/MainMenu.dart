@@ -30,8 +30,11 @@ class _MainMenu extends State<MainMenu> {
   final List<Map<String, dynamic>> warnings;
   List<Map<String, dynamic>> digestible = [];
   List<Map<String, dynamic>> symptomFree = [];
+
   final double left = 10.0;
+  final double top = 10.0;
   final double right = 10.0;
+  final double bottom = 10.0;
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +60,11 @@ class _MainMenu extends State<MainMenu> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(left, 10, right, 10),
+              padding: EdgeInsets.fromLTRB(left, top, right, bottom),
               child: Column(
                 children: [
                   CustomButton(
-                    text: "Mahlzeit erfassen",
+                    text: 'Mahlzeit erfassen',
                     onClick: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -71,7 +74,7 @@ class _MainMenu extends State<MainMenu> {
                     },
                   ),
                   CustomButton(
-                    text: "Erfasste Mahlzeiten",
+                    text: 'Erfasste Mahlzeiten',
                     onClick: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -81,10 +84,9 @@ class _MainMenu extends State<MainMenu> {
                     },
                   ),
                   CustomButton(
-                    text: "Symptome erfassen",
+                    text: 'Symptome erfassen',
                     onClick: () async {
-                      var symptomlessMeals =
-                          await DatabaseHelper.instance.getSymptomlessMeals();
+                      var symptomlessMeals = await DatabaseHelper.instance.getSymptomlessMeals();
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => PickMealForSymptoms(
@@ -94,19 +96,14 @@ class _MainMenu extends State<MainMenu> {
                     },
                   ),
                   CustomButton(
-                      text: "Unverträglichkeiten",
+                      text: 'Unverträglichkeiten',
                       onClick: () async {
-                        //warnings = await filteredAverageSymptomsListWithAmount("red");
-                        digestible =
-                            await filteredAverageSymptomsListWithAmount(
-                                "yellow");
-                        symptomFree =
-                            await filteredAverageSymptomsListWithAmount(
-                                "green");
-                        var mealsFromIngredients = await DatabaseHelper.instance
-                            .getMealsFromIngredients();
+                        //warnings = await filteredAverageSymptomsListWithAmount('red');
+                        digestible = await filteredAverageSymptomsListWithAmount('yellow');
+                        symptomFree = await filteredAverageSymptomsListWithAmount('green');
+                        var mealsFromIngredients = await DatabaseHelper.instance.getMealsFromIngredients();
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Intolerances(
+                          builder: (context) => Intolerance(
                               warnings: warnings,
                               digestible: digestible,
                               symptomFree: symptomFree,
@@ -114,11 +111,11 @@ class _MainMenu extends State<MainMenu> {
                         ));
                       }),
                   CustomButton(
-                    text: "Infos",
+                    text: 'Infos',
                     onClick: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => Infos(),
+                          builder: (context) => Info(),
                         ),
                       );
                     },
@@ -128,12 +125,11 @@ class _MainMenu extends State<MainMenu> {
                       decoration: thickGrey(),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                        //mainAxisSize: MainAxisSize.max,
                         children: [
                           Container(
-                            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            padding: EdgeInsets.fromLTRB(left, top, right, bottom),
                             decoration: thinRed(),
-                            child: Text("Warnungen",
+                            child: Text('Warnungen',
                                 style: myTextStyleMediumThick()),
                           ),
                           ListView.builder(
@@ -147,13 +143,12 @@ class _MainMenu extends State<MainMenu> {
                                   child: Expanded(
                                     child: Padding(
                                       padding:
-                                          EdgeInsets.fromLTRB(left, 0, 0, 10),
+                                          EdgeInsets.fromLTRB(left, 0, 0, bottom),
                                       child: FittedBox(
                                         alignment: Alignment.topLeft,
                                         fit: BoxFit.scaleDown,
                                         child: Text(warnings[index]['ingredient'],
-                                            style:
-                                                myTitleCyanAccentTextStyle()),
+                                            style: myTitleCyanAccentTextStyle()),
                                       ),
                                     ),
                                   ),

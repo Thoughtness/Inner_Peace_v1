@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 freeOrUsed(bool isAvailable){
   if(isAvailable){
-    return "Benutzerkonto wurde erstellt";
+    return 'Benutzerkonto wurde erstellt';
   }else {
-    return "Benutzername ist vergeben";
+    return 'Benutzername ist vergeben';
   }
 }
 barColorMeal(double index) {
@@ -87,8 +87,8 @@ amountMultiplicator(double amount){
 }
 
 //Gibt entsprechend des CustomCheckbox eine Liste von Zutaten zurück
-getIngredients(bool primary, bool secondary1, bool secondary2, bool allIsChecked, List<Map<String, dynamic>> primaryList, List<Map<String, dynamic>> secondaryList1, List<Map<String, dynamic>> secondaryList2, List<Map<String, dynamic>> allIngredientsWithSymptoms,
-    String sort) {
+getIngredients(bool primary, bool secondary1, bool secondary2, bool allIsChecked, List<Map<String, dynamic>> primaryList, List<Map<String,
+    dynamic>> secondaryList1, List<Map<String, dynamic>> secondaryList2, List<Map<String, dynamic>> allIngredientsWithSymptoms, String sort) {
   if (primary) {
     allIngredientsWithSymptoms = primaryList;
     if (allIsChecked) {
@@ -114,12 +114,10 @@ getIngredients(bool primary, bool secondary1, bool secondary2, bool allIsChecked
 
 //Sortiert die Liste nach Verträglichkeit
 sortList(String sort, List<Map<String, dynamic>> allIngredientsWithSymptoms ) {
-  if (sort == "Unverträglich") {
-    allIngredientsWithSymptoms.sort((a, b) => b["symptomTotal"]
-        .compareTo(a["symptomTotal"]));
-  } else if (sort == "Verträglich") {
-    allIngredientsWithSymptoms.sort((a, b) => a["symptomTotal"]
-        .compareTo(b["symptomTotal"]));
+  if (sort == 'Unverträglich') {
+    allIngredientsWithSymptoms.sort((a, b) => b['symptomTotal'].compareTo(a['symptomTotal']));
+  } else if (sort == 'Verträglich') {
+    allIngredientsWithSymptoms.sort((a, b) => a['symptomTotal'].compareTo(b['symptomTotal']));
   }
   return allIngredientsWithSymptoms;
 }

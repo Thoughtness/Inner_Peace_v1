@@ -15,7 +15,7 @@ class DatabaseHelper {
   get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('mealData83.db');
+    _database = await _initDB('mealData86.db');
     return _database!;
   }
 
@@ -27,12 +27,12 @@ class DatabaseHelper {
 
   //Alle Tabellen erstellen
   _createDB(Database db, int version) async {
-    await db.execute("""
+    await db.execute('''
     CREATE TABLE user(
     userID INTEGER PRIMARY KEY,
     username TEXT
-    );""");
-    await db.execute("""
+    );''');
+    await db.execute('''
     CREATE TABLE meal(
     mealID INTEGER PRIMARY KEY,
     symptomsID INTEGER,
@@ -41,14 +41,14 @@ class DatabaseHelper {
     time INTEGER,
     FOREIGN KEY(symptomsID) REFERENCES symptoms(symptomsID),
     FOREIGN KEY(userID) REFERENCES user(userID)
-    );""");
-    await db.execute("""
+    );''');
+    await db.execute('''
     CREATE TABLE ingredient(
     ingredientID INTEGER PRIMARY KEY,
     ingredient TEXT,
     UNIQUE(ingredient)    
-    )""");
-    await db.execute("""
+    )''');
+    await db.execute('''
     CREATE TABLE symptoms(
     symptomsID INTEGER PRIMARY KEY,
     symptomTotal REAL,
@@ -57,8 +57,8 @@ class DatabaseHelper {
     flatulence REAL,
     bowel REAL,
     symptomTime INTEGER
-    );""");
-    await db.execute("""
+    );''');
+    await db.execute('''
     CREATE TABLE mealingredient(
     mealingredientID INTEGER PRIMARY KEY,
     amount INTEGER,
@@ -66,14 +66,14 @@ class DatabaseHelper {
     ingredientID INTEGER,
     FOREIGN KEY(mealID) REFERENCES meal(mealID),
     FOREIGN KEY(ingredientID) REFERENCES ingredient(ingredientID)
-    );""");
+    );''');
   }
 
   //Benutzer hinzufügen
   insertUser(String user) async {
     final db = await database;
     await db.rawInsert(
-        """INSERT OR IGNORE INTO user(username) VALUES(?)""",
+        '''INSERT OR IGNORE INTO user(username) VALUES(?)''',
         [user]);
   }
 
@@ -81,8 +81,8 @@ class DatabaseHelper {
   insertMeal(String meal, int time) async {
     final db = await database;
     await db.rawInsert(
-        """INSERT OR IGNORE INTO meal(userID, meal, time)
-        VALUES(?, ?, ?)""",
+        '''INSERT OR IGNORE INTO meal(userID, meal, time)
+        VALUES(?, ?, ?)''',
         [userId, meal, time]);
   }
 
@@ -90,7 +90,7 @@ class DatabaseHelper {
   insertIngredient(String ingredient) async {
     final db = await database;
     await db.rawInsert(
-        """INSERT OR IGNORE INTO ingredient(ingredient) VALUES(?)""",
+        '''INSERT OR IGNORE INTO ingredient(ingredient) VALUES(?)''',
         [ingredient]);
   }
 
@@ -100,7 +100,7 @@ class DatabaseHelper {
       String symptomTime) async {
     final db = await database;
     await db.rawInsert(
-        """INSERT OR REPLACE INTO symptoms(wellbeing, cramps, flatulence, bowel, symptomTotal, symptomTime) VALUES(?,?,?,?,?,?)""",
+        '''INSERT OR REPLACE INTO symptoms(wellbeing, cramps, flatulence, bowel, symptomTotal, symptomTime) VALUES(?,?,?,?,?,?)''',
         [wellbeing, cramps, flatulence, bowel, symptomTotal, symptomTime]);
   }
 
@@ -108,9 +108,9 @@ class DatabaseHelper {
   addSymptomsToMeal(int symptomsID, int mealID) async {
     final db = await database;
     await db.rawUpdate(
-        """UPDATE meal
+        '''UPDATE meal
         SET symptomsID = ?
-        WHERE mealID = ?""",
+        WHERE mealID = ?''',
         [symptomsID, mealID]);
   }
 
@@ -119,7 +119,7 @@ class DatabaseHelper {
       double amount) async {
     final db = await database;
     await db.rawInsert(
-        """INSERT OR IGNORE INTO mealingredient(mealID, ingredientID, amount) VALUES(?,?,?)""",
+        '''INSERT OR IGNORE INTO mealingredient(mealID, ingredientID, amount) VALUES(?,?,?)''',
         [mealID, ingredientID, amount]);
   }
 
@@ -128,8 +128,8 @@ class DatabaseHelper {
     final db = await database;
     try {
       List<Map<String, dynamic>> loginDetails = await db.rawQuery(
-          """SELECT * FROM user
-        WHERE username = ?""",
+          '''SELECT * FROM user
+        WHERE username = ?''',
           [username]);
       return loginDetails;
     } catch (e) {
@@ -141,9 +141,9 @@ class DatabaseHelper {
   getHighestMealID() async {
     final db = await database;
     List<Map<String, dynamic>> lastInsertedMeal = await db.rawQuery(
-        """SELECT * FROM meal 
+        '''SELECT * FROM meal 
         ORDER BY mealID DESC 
-        LIMIT 1""");
+        LIMIT 1''');
     return lastInsertedMeal;
   }
 
@@ -151,12 +151,12 @@ class DatabaseHelper {
   getAllRecordedMeals() async {
     final db = await database;
     List<Map<String, dynamic>> allMeals = await db.rawQuery(
-        """SELECT meal.mealID, meal.meal, meal.time, symptoms.wellbeing, symptoms.cramps, symptoms.flatulence, symptoms.bowel, symptoms.symptomTotal
+        '''SELECT meal.mealID, meal.meal, meal.time, symptoms.wellbeing, symptoms.cramps, symptoms.flatulence, symptoms.bowel, symptoms.symptomTotal
         FROM meal 
         JOIN mealingredient ON meal.mealID = mealingredient.mealID 
         JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID 
         JOIN symptoms ON meal.symptomsID = symptoms.symptomsID 
-        WHERE  meal.userID = ?""",
+        WHERE  meal.userID = ?''',
         [userId]);
     return allMeals;
   }
@@ -166,7 +166,7 @@ class DatabaseHelper {
       double filterNumberHigh) async {
     final db = await database;
     List<Map<String, dynamic>> allMeals = await db.rawQuery(
-        """SELECT meal.mealID, meal.meal, meal.time, symptoms.wellbeing, symptoms.cramps, symptoms.flatulence, symptoms.bowel, symptoms.symptomTotal
+        '''SELECT meal.mealID, meal.meal, meal.time, symptoms.wellbeing, symptoms.cramps, symptoms.flatulence, symptoms.bowel, symptoms.symptomTotal
         FROM meal 
         JOIN mealingredient ON meal.mealID = mealingredient.mealID 
         JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID 
@@ -175,17 +175,8 @@ class DatabaseHelper {
         AND symptoms.wellbeing BETWEEN ? and ?
         AND symptoms.cramps BETWEEN ? and ?
         AND symptoms.flatulence BETWEEN ? and ?
-        AND symptoms.bowel BETWEEN ? and ?""",
-        [userId,
-          filterNumberLow,
-          filterNumberHigh,
-          filterNumberLow,
-          filterNumberHigh,
-          filterNumberLow,
-          filterNumberHigh,
-          filterNumberLow,
-          filterNumberHigh
-        ]);
+        AND symptoms.bowel BETWEEN ? and ?''',
+        [userId, filterNumberLow, filterNumberHigh, filterNumberLow, filterNumberHigh, filterNumberLow, filterNumberHigh, filterNumberLow, filterNumberHigh]);
     return allMeals;
   }
 
@@ -193,7 +184,7 @@ class DatabaseHelper {
   getIntolerantRecordedMeals(double filterNumberLow) async {
     final db = await database;
     List<Map<String, dynamic>> allMeals = await db.rawQuery(
-        """SELECT meal.mealID, meal.meal, meal.time, symptoms.wellbeing, symptoms.cramps, symptoms.flatulence, symptoms.bowel, symptoms.symptomTotal
+        '''SELECT meal.mealID, meal.meal, meal.time, symptoms.wellbeing, symptoms.cramps, symptoms.flatulence, symptoms.bowel, symptoms.symptomTotal
         FROM meal 
         JOIN mealingredient ON meal.mealID = mealingredient.mealID 
         JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID 
@@ -202,14 +193,8 @@ class DatabaseHelper {
         symptoms.wellbeing >= ? OR 
         symptoms.cramps >= ? OR 
         symptoms.flatulence >= ? OR 
-        symptoms.bowel >= ?)""",
-        [
-          userId,
-          filterNumberLow,
-          filterNumberLow,
-          filterNumberLow,
-          filterNumberLow
-        ]);
+        symptoms.bowel >= ?)''',
+        [userId, filterNumberLow, filterNumberLow, filterNumberLow, filterNumberLow]);
     return allMeals;
   }
 
@@ -217,10 +202,10 @@ class DatabaseHelper {
   getDeleteMealInformation(int mealID) async {
     final db = await database;
     List<Map<String, dynamic>> deleteMealInformation = await db.rawQuery(
-        """SELECT meal.mealID, symptoms.symptomsID
+        '''SELECT meal.mealID, symptoms.symptomsID
             FROM meal
             JOIN symptoms ON meal.symptomsID = symptoms.symptomsID
-            WHERE meal.mealID = ?""",
+            WHERE meal.mealID = ?''',
         [mealID]);
     return deleteMealInformation;
   }
@@ -229,9 +214,9 @@ class DatabaseHelper {
   getSymptomlessMeals() async {
     final db = await database;
     List<Map<String, dynamic>> symptomlessMeals = await db.rawQuery(
-        """SELECT * FROM meal
+        '''SELECT * FROM meal
         WHERE symptomsID IS NULL
-        AND meal.userID = ?""",
+        AND meal.userID = ?''',
         [userId]);
     return symptomlessMeals;
   }
@@ -240,12 +225,12 @@ class DatabaseHelper {
   getMealsFromIngredients() async {
     final db = await database;
     List<Map<String, dynamic>> mealsFromIngredients = await db.rawQuery(
-        """SELECT meal.meal, ingredient.ingredientID, ingredient.ingredient, symptoms.symptomTime
+        '''SELECT meal.meal, ingredient.ingredientID, ingredient.ingredient, symptoms.symptomTime
         FROM meal
         JOIN symptoms ON meal.symptomsID = symptoms.symptomsID
         JOIN mealingredient ON meal.mealID = mealingredient.mealID 
         JOIN ingredient ON mealingredient.ingredientID = ingredient.ingredientID
-        WHERE meal.userID = ?""",
+        WHERE meal.userID = ?''',
         [userId]);
     return mealsFromIngredients;
   }
@@ -255,7 +240,7 @@ class DatabaseHelper {
     final db = await database;
     final List<Map<String, dynamic>> getIngredientsWithSymptoms = await db
         .rawQuery(
-        """SELECT ingredient.ingredientID, ingredient.ingredient FROM ingredient""");
+        '''SELECT ingredient.ingredientID, ingredient.ingredient FROM ingredient''');
     return getIngredientsWithSymptoms;
   }
 
@@ -264,10 +249,10 @@ class DatabaseHelper {
     final db = await database;
     final List<Map<String, dynamic>> getIngredientsWithSymptoms = await db
         .rawQuery(
-        """SELECT * FROM ingredient
+        '''SELECT * FROM ingredient
         JOIN mealingredient ON ingredient.ingredientID = mealingredient.ingredientID
         JOIN meal ON mealingredient.mealID = meal.mealID
-        WHERE meal.userID = ?""",
+        WHERE meal.userID = ? AND meal.symptomsID IS NOT NULL''',
         [userId]);
     return getIngredientsWithSymptoms;
   }
@@ -277,16 +262,14 @@ class DatabaseHelper {
     final db = await database;
     final List<Map<String, dynamic>> allIngredientsWithMeals = await db
         .rawQuery(
-        """SELECT ingredient.ingredientID, ingredient.ingredient, mealingredient.amount, meal.meal, symptoms.symptomTotal, symptoms.wellbeing, symptoms.flatulence, symptoms.cramps, symptoms.bowel
+        '''SELECT ingredient.ingredientID, ingredient.ingredient, mealingredient.amount, meal.meal, symptoms.symptomTotal, symptoms.wellbeing, symptoms.flatulence, symptoms.cramps, symptoms.bowel
         FROM ingredient
         JOIN mealingredient ON ingredient.ingredientID = mealingredient.ingredientID
         JOIN meal ON mealingredient.mealID = meal.mealID
         JOIN symptoms ON meal.symptomsID = symptoms.symptomsID
         WHERE ingredient.ingredientID = ?
-        AND meal.userID = ?""",
+        AND meal.userID = ?''',
         [ingredientID, userId]);
-    //print(allIngredientsWithMeals);
-    //print(ingredientID);
     return allIngredientsWithMeals;
   }
 
@@ -294,10 +277,10 @@ class DatabaseHelper {
   getHighestSymptomsID() async {
     final db = await database;
     List<Map<String, dynamic>> lastInsertedSymptoms = await db.rawQuery(
-        """SELECT *
+        '''SELECT *
         FROM symptoms
         ORDER BY symptomsID DESC
-        LIMIT 1""");
+        LIMIT 1''');
     return lastInsertedSymptoms;
   }
 
@@ -305,16 +288,16 @@ class DatabaseHelper {
   deleteMeal(int mealID, int symptomsID) async {
     final db = await database;
     await db.rawDelete(
-        """DELETE FROM meal
-        WHERE mealID = ?""",
+        '''DELETE FROM meal
+        WHERE mealID = ?''',
         [mealID]);
     await db.rawDelete(
-        """DELETE FROM mealingredient
-        WHERE mealID = ?""",
+        '''DELETE FROM mealingredient
+        WHERE mealID = ?''',
         [mealID]);
     await db.rawDelete(
-        """DELETE FROM symptoms
-        WHERE symptomsID = ?""",
+        '''DELETE FROM symptoms
+        WHERE symptomsID = ?''',
         [symptomsID]);
   }
 }

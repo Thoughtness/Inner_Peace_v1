@@ -52,20 +52,19 @@ class _LoginPage extends State<LoginPage> {
                     alignment: Alignment.center,
                     child: TextField(
                       controller: username,
-                      decoration: loginWindow("Benutzername"),
+                      decoration: loginWindow('Benutzername'),
                     ),
                   ),
                   Container(
                       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: CustomButton(
-                          text: "Einloggen",
+                          text: 'Einloggen',
                           onClick: () async {
                             var validUser = await checkLogin(username.text);
                             if (validUser != null) {
-                              //print(validUser[0]['userID']);
                               _saveUserId(validUser[0]['userID']);
                               var warnings = await filteredAverageSymptomsListWithAmount(
-                                  "red");
+                                  'red');
                               Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) =>
                                     MainMenu(warnings: warnings),

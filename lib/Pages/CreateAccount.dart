@@ -14,7 +14,6 @@ class CreateAccount extends StatefulWidget {
 
 class _CreateAccount extends State<CreateAccount> {
   TextEditingController username = TextEditingController();
-  TextEditingController password = TextEditingController();
   var notVisibleOnStart = false;
   var freeUser = false;
 
@@ -47,17 +46,16 @@ class _CreateAccount extends State<CreateAccount> {
                     alignment: Alignment.center,
                     child: TextField(
                       controller: username,
-                      decoration: loginWindow("Benutzername"),
+                      decoration: loginWindow('Benutzername'),
                     ),
                   ),
                   Container(
                       padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: CustomButton(
-                          text: "Benutzerkonto erstellen",
+                          text: 'Benutzerkonto erstellen',
                           onClick: () async {
                             freeUser = await ifAvailableSave(username.text);
                             notVisibleOnStart = true;
-                            //print(freeUser);
                             setState(() {});
                           }
                       )
@@ -65,7 +63,7 @@ class _CreateAccount extends State<CreateAccount> {
                   Container(
                       padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
                       child: CustomButton(
-                          text: "Zurück zum Login",
+                          text: 'Zurück zum Login',
                           onClick: () async {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => LoginPage(),

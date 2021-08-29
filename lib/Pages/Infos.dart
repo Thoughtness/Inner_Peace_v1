@@ -4,8 +4,7 @@ import 'package:inner_peace_v1/Formation%20and%20Elements/GuiElements.dart';
 import 'package:inner_peace_v1/Formation%20and%20Elements/Text.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
 
-// ignore: camel_case_types
-class Infos extends StatelessWidget{
+class Info extends StatelessWidget{
 
   final double left = 10.0;
   final double top = 10.0;

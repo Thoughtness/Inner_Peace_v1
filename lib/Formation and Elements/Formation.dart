@@ -29,13 +29,6 @@ BoxDecoration thinGrey() {
   );
 }
 
-BoxDecoration thinSquareGrey() {
-  return BoxDecoration(
-    color: Colors.grey[50],
-    border: Border.all(width: 1.0),
-  );
-}
-
 BoxDecoration noSquareGrey() {
   return BoxDecoration(
     color: Colors.grey[50],
@@ -98,14 +91,6 @@ buttonStyle(){
     backgroundColor: Colors.cyanAccent,
     minimumSize: Size(0, 45),
     primary: Colors.black,
-  );
-}
-
-BoxDecoration myIngredientBoxDecoration() {
-  return BoxDecoration(
-    color: Colors.cyanAccent,
-    border: Border.all(width: 1.0),
-    borderRadius: BorderRadius.only(topLeft: Radius.circular(5.0), topRight: Radius.circular(5.0)),
   );
 }
 
@@ -201,7 +186,7 @@ Theme datePicker(Widget? picker){
   );
 }
 
-//damit wenn die Menge "0" beträgt kein schwarzer Strich entsteht
+//damit wenn die Menge '0' beträgt kein schwarzer Strich entsteht
 borderRadius(int index, List<double> amountList) {
   if (amountList[index].toInt() == 0) {
     return 0.0;

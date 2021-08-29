@@ -7,6 +7,8 @@ import 'package:inner_peace_v1/Pages/RecordSymptoms.dart';
 import 'package:intl/intl.dart';
 import 'package:inner_peace_v1/Formation and Elements/Formation.dart';
 
+import 'RecordedMeals.dart';
+
 class RecordMeal extends StatefulWidget {
   @override
   State createState() => new _RecordMeal();
@@ -21,8 +23,8 @@ class _RecordMeal extends State<RecordMeal> {
   List<double> amountList = [];
 
   TimeOfDay? time;
-  String dateAndTime = "";
-  String formatedDate = "";
+  String dateAndTime = '';
+  String formatedDate = '';
   String? sqlFormatedDate;
   String? sqlFormatedTime;
 
@@ -72,7 +74,7 @@ class _RecordMeal extends State<RecordMeal> {
                           width: containerWidth,
                           decoration: thinCyan(),
                           child: ListTile(
-                            title: Text("Datum"),
+                            title: Text('Datum'),
                           ),
                         ),
                         SizedBox(width: width),
@@ -82,11 +84,7 @@ class _RecordMeal extends State<RecordMeal> {
                             height: 58,
                             child: TextField(
                               enabled: false,
-                              decoration: InputDecoration(
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  border: OutlineInputBorder(),
-                                  hintText: "Datum und Uhrzeit wählen"),
+                              decoration: customInputDecoration('Datum / Uhrzeit'),
                               controller: controller,
                             ),
                           ),
@@ -105,12 +103,9 @@ class _RecordMeal extends State<RecordMeal> {
                                     return datePicker(picker!);
                                   }).then((selectedDate) {
                                 if (selectedDate != null) {
-                                  formatedDate = DateFormat('dd.MM.yyyy')
-                                      .format(selectedDate);
-                                  sqlFormatedDate = DateFormat('yyyy-MM-dd')
-                                      .format(selectedDate);
-                                  controller.text =
-                                      formatedDate + " " + getText();
+                                  formatedDate = DateFormat('dd.MM.yyyy').format(selectedDate);
+                                  sqlFormatedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+                                  controller.text = formatedDate + ' ' + getText();
                                 }
                               });
                             }),
@@ -127,7 +122,7 @@ class _RecordMeal extends State<RecordMeal> {
                               if (newTime == null) return;
                               setState(() => time = newTime);
                               sqlFormatedTime = getText();
-                              controller.text = formatedDate + " " + getText();
+                              controller.text = formatedDate + ' ' + getText();
                             }),
                       ],
                     ),
@@ -135,7 +130,6 @@ class _RecordMeal extends State<RecordMeal> {
                   SizedBox(height: boxDistance),
                   Container(
                     decoration: thickDarkGrey(),
-                    //padding: EdgeInsets.fromLTRB(this.left, this.top, this.right, this.bottom),
                     child: CustomRow(
                       title: 'Gericht',
                       description: 'Gericht hier benennen',
@@ -148,7 +142,6 @@ class _RecordMeal extends State<RecordMeal> {
                     child: Column(
                       children: [
                         Container(
-                          //padding: EdgeInsets.fromLTRB(this.left, this.top, this.right, this.bottom),
                           child: CustomRow(
                             title: 'Zutaten',
                             description: 'Zutaten einzeln hinzufügen',
@@ -162,7 +155,7 @@ class _RecordMeal extends State<RecordMeal> {
                               width: containerWidth,
                               decoration: thinCyan(),
                               child: ListTile(
-                                title: Text("Menge"),
+                                title: Text('Menge'),
                               ),
                             ),
                             SizedBox(width: width),
@@ -173,7 +166,7 @@ class _RecordMeal extends State<RecordMeal> {
                                   Flexible(
                                     flex: 3,
                                     child: new Text(
-                                      "-",
+                                      '-',
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         height: 1,
@@ -200,7 +193,7 @@ class _RecordMeal extends State<RecordMeal> {
                                   Flexible(
                                     flex: 3,
                                     child: new Text(
-                                      "+",
+                                      '+',
                                       textAlign: TextAlign.right,
                                       style: TextStyle(
                                         height: 1,
@@ -229,13 +222,8 @@ class _RecordMeal extends State<RecordMeal> {
                       ingredients.clear();
                       setState(() {});
                     },
-                    child: Text("Zutat hinzufügen"),
-                    style: TextButton.styleFrom(
-                      side: BorderSide(width: 2.0, color: Colors.black),
-                      backgroundColor: Colors.cyanAccent,
-                      minimumSize: Size(0, 45),
-                      primary: Colors.black,
-                    ),
+                    child: Text('Zutat hinzufügen'),
+                    style: buttonStyle(),
                   ),
                   Flexible(
                     child: ListView.builder(
@@ -297,10 +285,9 @@ class _RecordMeal extends State<RecordMeal> {
                               //Damit keine leeren Einträge gemacht werden können
                               if (mealName.text.length > 0 &&
                                   ingredientList.length > 0 &&
-                                  sqlFormatedTime != "" &&
+                                  sqlFormatedTime != '' &&
                                   sqlFormatedDate != null) {
                                 int mealID = await addMealWithIngredients(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amountList);
-                                //print(mealID);
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) =>
@@ -321,15 +308,15 @@ class _RecordMeal extends State<RecordMeal> {
                               //Damit keine leeren Einträge gemacht werden können
                               if (mealName.text.length > 0 &&
                                   ingredientList.length > 0 &&
-                                  sqlFormatedTime != "" &&
+                                  sqlFormatedTime != '' &&
                                   sqlFormatedDate != null) {
                                 addMealWithIngredients(sqlFormatedDate, sqlFormatedTime, ingredientList, mealName, amountList);
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => MyApp(),
+                                    builder: (context) => RecordedMeals(),
                                   ),
                                 );
-                                //todo: "Mahlzeit gespeichert" meldung erstellen
+                                //todo: 'Mahlzeit gespeichert' meldung erstellen
                               }
                               //todo: Meldung machen, dass keine Zutat gespeichert ist
                             },
@@ -354,7 +341,7 @@ class _RecordMeal extends State<RecordMeal> {
       final minutes = time!.minute.toString().padLeft(2, '0');
       return '$hours:$minutes';
     } catch (e) {
-      return "";
+      return '';
     }
   }
 }

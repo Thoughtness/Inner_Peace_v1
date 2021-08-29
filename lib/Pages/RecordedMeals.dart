@@ -14,7 +14,7 @@ class _RecordedMeals extends State<RecordedMeals> {
   List<Map<String, dynamic>> mealList = [];
 
   String sort = 'Mahlzeitdatum';
-  String sortByFilter = "";
+  String sortByFilter = '';
   String filter = 'Keine';
   double filterNumberLow = 0;
   double filterNumberHigh = 0;
@@ -65,7 +65,7 @@ class _RecordedMeals extends State<RecordedMeals> {
                                 decoration: thinCyan(),
                                 child: Row(
                                   children: [
-                                    Text("Mahlzeittyp wählen", style: myTextStyleMedium()),
+                                    Text('Mahlzeittyp wählen', style: myTextStyleMedium()),
                                   ],
                                 ),
                               ),
@@ -108,12 +108,11 @@ class _RecordedMeals extends State<RecordedMeals> {
                           child: Column(
                             children: [
                               Container(
-                                padding: EdgeInsets.fromLTRB(
-                                    this.left, this.top, this.right, this.bottom),
+                                padding: EdgeInsets.fromLTRB(this.left, this.top, this.right, this.bottom),
                                 decoration: thinCyan(),
                                 child: Row(
                                   children: [
-                                    Text("Sortierung wählen", style: myTextStyleMedium()),
+                                    Text('Sortierung wählen', style: myTextStyleMedium()),
                                   ],
                                 ),
                               ),
@@ -183,7 +182,7 @@ class _RecordedMeals extends State<RecordedMeals> {
                                         iconSize: 24.0,
                                         color: Colors.grey,
                                         onPressed: () async {
-                                          //todo: make popup "are you sure" to delete meal (make separate mehtod with the popup, when select yes then call deleteMeal
+                                          //todo: make popup 'are you sure' to delete meal (make separate mehtod with the popup, when select yes then call deleteMeal
                                           await deleteMeal(
                                               mealList[index]['mealID']);
                                           setState(() async {
