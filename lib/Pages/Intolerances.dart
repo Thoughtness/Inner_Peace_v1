@@ -56,8 +56,14 @@ class _Intolerance extends State<Intolerance> {
   bool symptomFreeIsChecked = true;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
     allIngredientsWithSymptoms = warnings + digestible + symptomFree;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -335,16 +341,20 @@ class _Intolerance extends State<Intolerance> {
               warningsIsChecked = value!;
               allIsChecked = setCheckboxState(warningsIsChecked, digestibleIsChecked, symptomFreeIsChecked, allIsChecked);
               allIngredientsWithSymptoms = getIngredients(warningsIsChecked, digestibleIsChecked, symptomFreeIsChecked, allIsChecked, warnings, digestible, symptomFree, allIngredientsWithSymptoms, sort);
+              print(allIngredientsWithSymptoms);
               break;
             case 'Verträgliche anzeigen':
               digestibleIsChecked = value!;
               allIsChecked = setCheckboxState(warningsIsChecked, digestibleIsChecked, symptomFreeIsChecked, allIsChecked);
               allIngredientsWithSymptoms = getIngredients(digestibleIsChecked, warningsIsChecked, symptomFreeIsChecked, allIsChecked, digestible, warnings, symptomFree, allIngredientsWithSymptoms, sort);
+              print(allIngredientsWithSymptoms);
               break;
             case 'Symptomfreie anzeigen':
               symptomFreeIsChecked = value!;
               allIsChecked = setCheckboxState(warningsIsChecked, digestibleIsChecked, symptomFreeIsChecked, allIsChecked);
               allIngredientsWithSymptoms = getIngredients(symptomFreeIsChecked, warningsIsChecked, digestibleIsChecked, allIsChecked, symptomFree, warnings, digestible, allIngredientsWithSymptoms, sort);
+              print(allIngredientsWithSymptoms);
+              setState(() {});
               break;
           }
           setState(() {});
