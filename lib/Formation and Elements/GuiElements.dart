@@ -17,10 +17,9 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, this.top, 0, this.bottom),
+      padding: EdgeInsets.fromLTRB(0, top, 0, bottom),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           ElevatedButton(
             onPressed: onClick,
@@ -37,11 +36,9 @@ class CustomRow extends StatelessWidget {
   final textController;
   final String description;
   final String title;
-  final double left = 10.0;
-  final double top = 10.0;
-  final double right = 10.0;
-  final double bottom = 0.0;
   final double width = 10.0;
+  final double height = 58;
+  final double right = 10.0;
   final double containerWidth = 100.0;
 
   CustomRow({
@@ -55,17 +52,17 @@ class CustomRow extends StatelessWidget {
     return Row(
       children: [
         Container(
+          margin: EdgeInsets.fromLTRB(0, 0, right, 0),
           width: containerWidth,
           decoration: thinCyan(),
           child: ListTile(
             title: Text(title),
           ),
         ),
-        SizedBox(width: width),
         Flexible(
           flex: 30,
           child: Container(
-            height: 58,
+            height: height,
             child: TextField(
               decoration: customInputDecoration(description),
               controller: textController,
@@ -145,9 +142,7 @@ class CustomExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, bot),
-      child: Container(
+    return Container(
         decoration: decoration,
         child: ExpansionTile(
           title: Text(title),
@@ -159,7 +154,6 @@ class CustomExpansionTile extends StatelessWidget {
                 child: Text(textToTitle)),
           ],
         ),
-      ),
     );
   }
 }
@@ -194,9 +188,8 @@ class InfoEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, bottom),
-      child: Container(
+    return Container(
+        margin: EdgeInsets.fromLTRB(0, 0, 0, bottom),
         decoration: thickCyan(),
         child: ClipRRect(
           child: ExpansionTile(
@@ -237,7 +230,6 @@ class InfoEntry extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }

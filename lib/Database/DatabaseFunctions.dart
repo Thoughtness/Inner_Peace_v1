@@ -107,13 +107,13 @@ addSymptoms(double wellbeing, double cramps, double flatulence, double bowel, in
     if (symptomList[i] == 6) {
       symptomList[i] = symptomList[i] * 1.25;
     } else if (symptomList[i] == 7) {
-      symptomList[i] = symptomList[i] * 1.5;
+      symptomList[i] = symptomList[i] * 1.75;
     } else if (symptomList[i] == 8) {
-      symptomList[i] = symptomList[i] * 2;
+      symptomList[i] = symptomList[i] * 2.5;
     } else if (symptomList[i] == 9) {
-      symptomList[i] = symptomList[i] * 2.75;
+      symptomList[i] = symptomList[i] * 3.25;
     } else if (symptomList[i] == 10) {
-      symptomList[i] = symptomList[i] * 4;
+      symptomList[i] = symptomList[i] * 4.25;
     }
   }
 

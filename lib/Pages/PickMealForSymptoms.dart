@@ -50,33 +50,31 @@ class _PickMealForSymptoms extends State<PickMealForSymptoms> {
                 fit: BoxFit.fill,
               ),
             ),
-            Container(
-              child: ListView.builder(
-                padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                itemCount: symptomlessMeals.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    //todo: make a ExpansionTile that shows ingredients to the meal
-                    onTap: () async {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => RecordSymptoms(
-                            mealID: symptomlessMeals[index]['mealID'],
-                          ),
+            ListView.builder(
+              padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+              itemCount: symptomlessMeals.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  //todo: make a ExpansionTile that shows ingredients to the meal
+                  onTap: () async {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => RecordSymptoms(
+                          mealID: symptomlessMeals[index]['mealID'],
                         ),
-                      );
-                    },
-                    title: Container(
-                      padding: EdgeInsets.fromLTRB(left, 0, 0, bottom),
-                      decoration: thinCyan(),
-                      child: Text(
-                        symptomlessMeals[index]['meal'],
-                        style: myTitleCyanAccentTextStyle(),
                       ),
+                    );
+                  },
+                  title: Container(
+                    padding: EdgeInsets.fromLTRB(left, 0, 0, bottom),
+                    decoration: thinCyan(),
+                    child: Text(
+                      symptomlessMeals[index]['meal'],
+                      style: myTitleCyanAccentTextStyle(),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ],
         ),

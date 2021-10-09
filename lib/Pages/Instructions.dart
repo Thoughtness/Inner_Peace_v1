@@ -48,18 +48,21 @@ class Instructions extends StatelessWidget {
                           bot: 10,
                           decoration: thickCyan(),
                         ),
+                        SizedBox(height: bottom),
                         CustomExpansionTile(
                             title: 'Benutzerkonto',
                             textToTitle: userAccount(),
                           bot: 10,
                             decoration: thickCyan(),
                         ),
+                        SizedBox(height: bottom),
                         CustomExpansionTile(
                           title: 'Mahlzeit erfassen',
                           textToTitle: recordMeal(),
                           bot: 10,
                           decoration: thickCyan(),
                         ),
+                        SizedBox(height: bottom),
                         CustomExpansionTile(
                           title: 'Symptome erfassen',
                           textToTitle: recordSymptoms(),

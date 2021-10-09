@@ -18,97 +18,91 @@ class Menu extends StatelessWidget {
         color: Colors.cyanAccent,
         child: ListView(
           children: [
-          Container(
-            child: Column(
-              children: [
-                const SizedBox(height: 15),
-                ListTile(
-                    leading: Icon(Icons.menu),
-                    title: Text('Hauptmenü'),
-                    onTap: () async {
-                      var warnings = await filteredAverageSymptomsListWithAmount('red');
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => MainMenu(warnings: warnings),
-                      ));
-                    }
-                ),
-                const SizedBox(height: 15),
-                ListTile(
-                  leading: Icon(Icons.fastfood),
-                  title: Text('Mahlzeit erfassen'),
-                  onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => RecordMeal(),
-                    ));
-                  }
-                ),
-                const SizedBox(height: 15),
-                ListTile(
-                  leading: Icon(Icons.fastfood),
-                  title: Text('Erfasste Mahlzeiten'),
-                    onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => RecordedMeals(),
-                      ));
-                    }
-                ),
-                const SizedBox(height: 15),
-                ListTile(
-                  leading: Icon(Icons.air),
-                  title: Text('Symptome erfassen'),
-                    onTap: () async{
-                      var symptomlessMeals = await DatabaseHelper.instance.getSymptomlessMeals();
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => PickMealForSymptoms(symptomlessMeals: symptomlessMeals),
-                      ));
-                    }
-                ),
-                const SizedBox(height: 15),
-                ListTile(
-                  leading: Icon(Icons.show_chart),
-                  title: Text('Unverträglichkeiten'),
-                    onTap: () async{
-                      var warnings = await filteredAverageSymptomsListWithAmount('red');
-                      var digestible = await filteredAverageSymptomsListWithAmount('yellow');
-                      var symptomFree = await filteredAverageSymptomsListWithAmount('green');
-                      var mealsFromIngredients = await DatabaseHelper.instance.getMealsFromIngredients();
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Intolerance(warnings: warnings, digestible: digestible, symptomFree: symptomFree, mealsFromIngredients: mealsFromIngredients),
-                      ));
-                    }
-                ),
-                const SizedBox(height: 15),
-                ListTile(
-                  leading: Icon(Icons.format_list_bulleted),
-                  title: Text('Infos'),
-                    onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Info(),
-                      ));
-                    }
-                ),
-                const SizedBox(height: 15),
-                ListTile(
-                    leading: Icon(Icons.menu_book),
-                    title: Text('Bedienungsanleitung'),
-                    onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Instructions(),
-                      ));
-                    }
-                ),
-                const SizedBox(height: 15),
-                ListTile(
-                    leading: Icon(Icons.logout),
-                    title: Text('Ausloggen'),
-                    onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => LoginPage(),
-                      ));
-                    }
-                ),
-              ],
-            ),
+          SizedBox(height: 15),
+          ListTile(
+              leading: Icon(Icons.menu),
+              title: Text('Hauptmenü'),
+              onTap: () async {
+                var warnings = await filteredAverageSymptomsListWithAmount('red');
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => MainMenu(warnings: warnings),
+                ));
+              }
+          ),
+          SizedBox(height: 15),
+          ListTile(
+            leading: Icon(Icons.fastfood),
+            title: Text('Mahlzeit erfassen'),
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => RecordMeal(),
+              ));
+            }
+          ),
+          SizedBox(height: 15),
+          ListTile(
+            leading: Icon(Icons.fastfood),
+            title: Text('Erfasste Mahlzeiten'),
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => RecordedMeals(),
+                ));
+              }
+          ),
+          SizedBox(height: 15),
+          ListTile(
+            leading: Icon(Icons.air),
+            title: Text('Symptome erfassen'),
+              onTap: () async{
+                var symptomlessMeals = await DatabaseHelper.instance.getSymptomlessMeals();
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => PickMealForSymptoms(symptomlessMeals: symptomlessMeals),
+                ));
+              }
+          ),
+          SizedBox(height: 15),
+          ListTile(
+            leading: Icon(Icons.show_chart),
+            title: Text('Unverträglichkeiten'),
+              onTap: () async{
+                var warnings = await filteredAverageSymptomsListWithAmount('red');
+                var digestible = await filteredAverageSymptomsListWithAmount('yellow');
+                var symptomFree = await filteredAverageSymptomsListWithAmount('green');
+                var mealsFromIngredients = await DatabaseHelper.instance.getMealsFromIngredients();
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => Intolerance(warnings: warnings, digestible: digestible, symptomFree: symptomFree, mealsFromIngredients: mealsFromIngredients),
+                ));
+              }
+          ),
+          SizedBox(height: 15),
+          ListTile(
+            leading: Icon(Icons.format_list_bulleted),
+            title: Text('Infos'),
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => Info(),
+                ));
+              }
+          ),
+          SizedBox(height: 15),
+          ListTile(
+              leading: Icon(Icons.menu_book),
+              title: Text('Bedienungsanleitung'),
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => Instructions(),
+                ));
+              }
+          ),
+          SizedBox(height: 15),
+          ListTile(
+              leading: Icon(Icons.logout),
+              title: Text('Ausloggen'),
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => LoginPage(),
+                ));
+              }
           ),
           ],
         ),

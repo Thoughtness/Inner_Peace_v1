@@ -243,8 +243,7 @@ class _Intolerance extends State<Intolerance> {
                                 ),
                                 children: [
                                   Container(
-                                    padding: EdgeInsets.fromLTRB(
-                                        this.left, 0, this.right, this.bottom),
+                                    padding: EdgeInsets.fromLTRB(left, 0, right, bottom),
                                     child: Column(
                                       children: [
                                         SymptomsRow(
@@ -341,20 +340,16 @@ class _Intolerance extends State<Intolerance> {
               warningsIsChecked = value!;
               allIsChecked = setCheckboxState(warningsIsChecked, digestibleIsChecked, symptomFreeIsChecked, allIsChecked);
               allIngredientsWithSymptoms = getIngredients(warningsIsChecked, digestibleIsChecked, symptomFreeIsChecked, allIsChecked, warnings, digestible, symptomFree, allIngredientsWithSymptoms, sort);
-              print(allIngredientsWithSymptoms);
               break;
             case 'Verträgliche anzeigen':
               digestibleIsChecked = value!;
               allIsChecked = setCheckboxState(warningsIsChecked, digestibleIsChecked, symptomFreeIsChecked, allIsChecked);
               allIngredientsWithSymptoms = getIngredients(digestibleIsChecked, warningsIsChecked, symptomFreeIsChecked, allIsChecked, digestible, warnings, symptomFree, allIngredientsWithSymptoms, sort);
-              print(allIngredientsWithSymptoms);
               break;
             case 'Symptomfreie anzeigen':
               symptomFreeIsChecked = value!;
               allIsChecked = setCheckboxState(warningsIsChecked, digestibleIsChecked, symptomFreeIsChecked, allIsChecked);
               allIngredientsWithSymptoms = getIngredients(symptomFreeIsChecked, warningsIsChecked, digestibleIsChecked, allIsChecked, symptomFree, warnings, digestible, allIngredientsWithSymptoms, sort);
-              print(allIngredientsWithSymptoms);
-              setState(() {});
               break;
           }
           setState(() {});

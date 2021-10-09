@@ -49,8 +49,7 @@ class _RecordedMeals extends State<RecordedMeals> {
             Column(
               children: [
                 Container(
-                  padding: EdgeInsets.fromLTRB(
-                      this.left, this.top, this.right, this.bottom),
+                  padding: EdgeInsets.fromLTRB(left, top, right, bottom),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -60,8 +59,7 @@ class _RecordedMeals extends State<RecordedMeals> {
                           child: Column(
                             children: [
                               Container(
-                                padding: EdgeInsets.fromLTRB(
-                                    this.left, this.top, this.right, this.bottom),
+                                padding: EdgeInsets.fromLTRB(left, top, right, bottom),
                                 decoration: thinCyan(),
                                 child: Row(
                                   children: [
@@ -108,7 +106,7 @@ class _RecordedMeals extends State<RecordedMeals> {
                           child: Column(
                             children: [
                               Container(
-                                padding: EdgeInsets.fromLTRB(this.left, this.top, this.right, this.bottom),
+                                padding: EdgeInsets.fromLTRB(left, top, right, bottom),
                                 decoration: thinCyan(),
                                 child: Row(
                                   children: [
@@ -195,8 +193,7 @@ class _RecordedMeals extends State<RecordedMeals> {
                                 ),
                               ),
                               Container(
-                                padding: EdgeInsets.fromLTRB(
-                                    this.left, this.top, this.right, this.bottom),
+                                padding: EdgeInsets.fromLTRB(left, top, right, bottom),
                                 child: Column(
                                   children: [
                                     SymptomsRow(

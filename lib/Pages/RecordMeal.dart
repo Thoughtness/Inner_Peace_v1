@@ -34,7 +34,7 @@ class _RecordMeal extends State<RecordMeal> {
   final double left = 10.0;
   final double top = 10.0;
   final double right = 10.0;
-  final double bottom = 0.0;
+  final double bottom = 10.0;
   double amount = 5;
 
   @override
@@ -66,17 +66,18 @@ class _RecordMeal extends State<RecordMeal> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, bottom),
                     decoration: thickDarkGrey(),
                     child: Row(
                       children: [
                         Container(
+                          margin: EdgeInsets.fromLTRB(0, 0, right, 0),
                           width: containerWidth,
                           decoration: thinCyan(),
                           child: ListTile(
                             title: Text('Datum'),
                           ),
                         ),
-                        SizedBox(width: width),
                         Expanded(
                           child: Container(
                             decoration: thinCyan(),
@@ -126,8 +127,8 @@ class _RecordMeal extends State<RecordMeal> {
                       ],
                     ),
                   ),
-                  SizedBox(height: boxDistance),
                   Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, bottom),
                     decoration: thickDarkGrey(),
                     child: CustomRow(
                       title: 'Gericht',
@@ -135,29 +136,27 @@ class _RecordMeal extends State<RecordMeal> {
                       textController: mealName,
                     ),
                   ),
-                  SizedBox(height: boxDistance),
                   Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, bottom),
                     decoration: thickDarkGrey(),
                     child: Column(
                       children: [
-                        Container(
-                          child: CustomRow(
-                            title: 'Zutaten',
-                            description: 'Zutaten einzeln hinzufügen',
-                            textController: ingredients,
-                          ),
+                        CustomRow(
+                          title: 'Zutaten',
+                          description: 'Zutaten einzeln hinzufügen',
+                          textController: ingredients,
                         ),
                         SizedBox(height: height),
                         Row(
                           children: [
                             Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, right, 0),
                               width: containerWidth,
                               decoration: thinCyan(),
                               child: ListTile(
                                 title: Text('Menge'),
                               ),
                             ),
-                            SizedBox(width: width),
                             Flexible(
                               flex: 29,
                               child: Row(
@@ -209,7 +208,6 @@ class _RecordMeal extends State<RecordMeal> {
                       ],
                     ),
                   ),
-                  SizedBox(height: boxDistance),
                   ElevatedButton(
                     onPressed: () async {
                       if (ingredients.text.length > 1) {
@@ -226,18 +224,16 @@ class _RecordMeal extends State<RecordMeal> {
                   ),
                   Flexible(
                     child: ListView.builder(
-                      padding: const EdgeInsets.all(1),
                       itemCount: ingredientList.length,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Row(
                             children: [
                               Flexible(
                                 flex: 18,
                                 fit: FlexFit.tight,
                                 child: Container(
-                                  //height: 40,
                                   decoration: thinGrey(),
                                   child: Padding(
                                     padding: EdgeInsets.fromLTRB(left, top, right, bottom),
@@ -324,7 +320,6 @@ class _RecordMeal extends State<RecordMeal> {
                       ],
                     ),
                   ),
-                  SizedBox(height: height),
                 ],
               ),
             ),

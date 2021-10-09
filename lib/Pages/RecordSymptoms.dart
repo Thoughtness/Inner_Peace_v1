@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:inner_peace_v1/Database/DatabaseFunctions.dart';
 import 'package:inner_peace_v1/Pages/NavigationMenu.dart';
@@ -66,48 +67,46 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                           Container(
                             decoration: thickGrey(),
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Container(
+                                  padding: EdgeInsets.fromLTRB(left, 0, 0, 0),
                                   decoration: thinCyan(),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.fromLTRB(left, 0, 0, 0),
-                                        child: Text('Auftreten der Symptome',
-                                            style: myTitleCyanAccentTextStyle()),
-                                      ),
-                                    ],
-                                  ),
+                                  child: Text('Auftreten der Symptome',
+                                      style: myTitleCyanAccentTextStyle()),
                                 ),
-                                DropdownButton<String>(
-                                  value: sort,
-                                  icon: Icon(Icons.arrow_downward),
-                                  iconSize: 24,
-                                  elevation: 16,
-                                  style: myTextStyleSmall(),
-                                  underline: Container(
-                                    height: 2,
-                                    color: Colors.black,
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: DropdownButton<String>(
+                                    value: sort,
+                                    icon: Icon(Icons.arrow_downward),
+                                    iconSize: 24,
+                                    elevation: 16,
+                                    style: myTextStyleSmall(),
+                                    underline: Container(
+                                      height: 2,
+                                      color: Colors.black,
+                                    ),
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        sort = newValue!;
+                                      });
+                                    },
+                                    items: <String>[
+                                      'Während der Mahlzeit',
+                                      'In der ersten Stunde',
+                                      'Nach 2-5 Stunden',
+                                      'Nach 5 Stunden',
+                                    ].map<DropdownMenuItem<String>>((String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(
+                                          value,
+                                          style: mySliderTextStyle(),
+                                        ),
+                                      );
+                                    }).toList(),
                                   ),
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      sort = newValue!;
-                                    });
-                                  },
-                                  items: <String>[
-                                    'Während der Mahlzeit',
-                                    'In der ersten Stunde',
-                                    'Nach 2-5 Stunden',
-                                    'Nach 5 Stunden',
-                                  ].map<DropdownMenuItem<String>>((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(
-                                        value,
-                                        style: mySliderTextStyle(),
-                                      ),
-                                    );
-                                  }).toList(),
                                 ),
                               ],
                             ),
@@ -123,40 +122,38 @@ class _RecordSymptoms extends State<RecordSymptoms> {
                         ],
                       ),
                     ),
-                    Container(
-                      child: Row(
-                        children: [
-                          Flexible(
-                            flex: 20,
-                            child: CustomButton(
-                              text: 'Keine Symptome',
-                              onClick: () {
-                                addSymptoms(negativeCounter, negativeCounter, negativeCounter, negativeCounter, mealID, 'Keine');
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => RecordedMeals(),
-                                  ),
-                                );
-                              },
-                            ),
+                    Row(
+                      children: [
+                        Flexible(
+                          flex: 20,
+                          child: CustomButton(
+                            text: 'Keine Symptome',
+                            onClick: () {
+                              addSymptoms(negativeCounter, negativeCounter, negativeCounter, negativeCounter, mealID, 'Keine');
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => RecordedMeals(),
+                                ),
+                              );
+                            },
                           ),
-                          SizedBox(width: width),
-                          Flexible(
-                            flex: 20,
-                            child: CustomButton(
-                              text: 'Symptome speichern',
-                              onClick: () async {
-                                addSymptoms(wellbeing, cramps, flatulence, bowel, mealID, sort);
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => RecordedMeals(),
-                                  ),
-                                );
-                              },
-                            ),
+                        ),
+                        SizedBox(width: width),
+                        Flexible(
+                          flex: 20,
+                          child: CustomButton(
+                            text: 'Symptome speichern',
+                            onClick: () async {
+                              addSymptoms(wellbeing, cramps, flatulence, bowel, mealID, sort);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => RecordedMeals(),
+                                ),
+                              );
+                            },
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -164,7 +161,7 @@ class _RecordSymptoms extends State<RecordSymptoms> {
             ],
           ),
         ),
-);
+  );
   }
 
   customSlider(String title, double value, String good, String bad) {
@@ -172,19 +169,14 @@ class _RecordSymptoms extends State<RecordSymptoms> {
       height: 110,
       decoration: thickGrey(),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
+            padding: EdgeInsets.fromLTRB(left, 0, 0, 0),
             decoration: thinCyan(),
-            child: Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(left, 0, 0, 0),
-                  child: Text(
-                    title,
-                    style: myTitleCyanAccentTextStyle(),
-                  ),
-                ),
-              ],
+            child: Text(
+              title,
+              style: myTitleCyanAccentTextStyle(),
             ),
           ),
           Row(
